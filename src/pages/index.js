@@ -55,7 +55,7 @@ export default function Home({ meta, bg }) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const meta = {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
@@ -68,7 +68,7 @@ export async function getStaticProps() {
     '/images/animated-2.gif',
     '/images/animated-3.gif',
   ]
-  
+
   let bg = bgs[Math.floor(Math.random() * bgs.length)]
 
   return { props: { bg, meta } }
