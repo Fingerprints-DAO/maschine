@@ -10,6 +10,7 @@ export default function Home({ meta }) {
         <meta name="description" content={meta.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.png" />
+        <meta property="og:image" content={meta.image} />
       </Head>
 
       <main className="w-full min-h-screen">
@@ -58,6 +59,7 @@ export async function getStaticProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
+    image: '/images/seo.jpg',
   }
 
   return {
