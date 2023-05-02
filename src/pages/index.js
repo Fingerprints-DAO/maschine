@@ -59,7 +59,7 @@ export async function getStaticProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
-    image: '/images/seo.jpg',
+    image: '/images/seo.png',
   }
 
   return {
