@@ -60,7 +60,7 @@ export async function getServerSideProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
-    image: '/images/seo-2.png',
+    image: '/images/seo-5.png',
   }
 
   let bgs = [
