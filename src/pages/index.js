@@ -1,4 +1,3 @@
-import Layout from '@/components/Layout'
 import Head from 'next/head';
 import Navbar from "../components/Navbar";
 
@@ -27,15 +26,13 @@ export default function Home({ meta }) {
             <div className='flex flex-col gap-8 mt-24'>
               <h1 className='font-mercedes text-[42px] 2xl:text-5xl'>Maschine</h1>
               <h2 className='font-aktiv-light text-2xl'>
-                A collection about velocity and perception.
-                <br />
-                Coming soon.
+                Coming soon — a collection about velocity and perception.
               </h2>
             </div>
 
             {/* 2nd item */}
             <div className='flex flex-col md:flex-row gap-4 md:items-center mb-12'>
-              <h2 className='font-aktiv-light text-xl'>
+              <h2 className='font-aktiv-light text-lg md:text-xl'>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </h2>
               <div className='flex flex-row gap-5 items-center'>

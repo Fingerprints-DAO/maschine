@@ -38,7 +38,7 @@ export default function Navbar() {
                 </button>
             </div>
 
-            <div id='mobile' className={`bg-white text-black w-[50%] flex flex-col gap-8 p-6 text-left z-30 fixed min-h-full top-0 ${showMobileMenu ? '' : 'hidden'}`}>
+            <div id='mobile' className={`bg-white text-black w-[60%] flex flex-col gap-8 py-10 px-8 text-left z-30 fixed min-h-full top-0 ${showMobileMenu ? '' : 'hidden'}`}>
                 <a href="/" className="">
                     <img src="FP logo black.svg" alt="" className='w-16'/>
                 </a>
