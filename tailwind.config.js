@@ -13,6 +13,13 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    fontFamily: {
+      'aktiv-grotesk': ['aktiv-grotesk'],
+      'aktiv-bold': ['aktiv-bold'],
+      'aktiv-light': ['aktiv-light'],
+      'mercedes': ['mercedes'],
+      'mercedes-bold': ['mercedes-bold'],
+    },
   },
   plugins: [],
 }
