@@ -14,7 +14,7 @@ export default function Home({ meta }) {
       </Head>
 
       <main className="w-full min-h-screen">
-        <img className="fixed -z-20 min-w-full min-h-full max-w-none max-h-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src='\images\bg.jpg'>
+        <img className="fixed -z-20 min-w-full min-h-full max-w-none max-h-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src='\images\gifbg-3.gif'>
         </img>
 
         <div className="w-full h-full bg-black/60 -z-10 fixed">
@@ -36,6 +36,7 @@ export default function Home({ meta }) {
               <h2 className='font-aktiv-light text-lg md:text-xl'>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </h2>
+              <div className='hidden md:block flex-grow'></div>
               <div className='flex flex-row gap-5 items-center'>
                 <a href="https://harm.work/">
                   <img src="Harm Studio.svg" alt="" className='w-12' />
