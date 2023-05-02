@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Navbar from "../components/Navbar";
 
 
-export default function Home({ meta }) {
+export default function Home({ meta, bg }) {
   return (
     <div>
       <Head>
@@ -14,7 +14,7 @@ export default function Home({ meta }) {
       </Head>
 
       <main className="w-full min-h-screen">
-        <img className="fixed -z-20 min-w-full min-h-full max-w-none max-h-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src='\images\gifbg-3.gif'>
+        <img className="fixed -z-20 min-w-full min-h-full max-w-none max-h-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src={bg}>
         </img>
 
         <div className="w-full h-full bg-black/60 -z-10 fixed">
@@ -60,12 +60,16 @@ export async function getStaticProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
-    image: '/images/seo.png',
+    image: '/images/seo-2.png',
   }
 
-  return {
-    props: {
-      meta,
-    },
-  }
+  let bgs = [
+    '/images/animated-1.gif',
+    '/images/animated-2.gif',
+    '/images/animated-3.gif',
+  ]
+  
+  let bg = bgs[Math.floor(Math.random() * bgs.length)]
+
+  return { props: { bg, meta } }
 }
