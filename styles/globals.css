@@ -2,29 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+
 @font-face {
-  font-family: "aktiv-grotesk";
-  src: url("../../public/fonts/AktivGrotesk-Regular.otf");
+  font-family: 'aktiv-grotesk';
+  src: url('../../public/fonts/AktivGrotesk-Regular.otf');
 }
 
 @font-face {
-  font-family: "aktiv-light";
-  src: url("../../public/fonts/AktivGrotesk-Light.otf");
+  font-family: 'aktiv-light';
+  src: url('../../public/fonts/AktivGrotesk-Light.otf');
 }
 
 @font-face {
-  font-family: "aktiv-bold";
-  src: url("../../public/fonts/AktivGrotesk-Bold.otf");
+  font-family: 'aktiv-bold';
+  src: url('../../public/fonts/AktivGrotesk-Bold.otf');
 }
 
 @font-face {
-  font-family: "mercedes";
-  src: url("../../public/fonts/Corporate A Light.ttf");
+  font-family: 'mercedes';
+  src: url('../../public/fonts/Corporate A Light.ttf');
 }
 @font-face {
-  font-family: "mercedes-bold";
-  src: url("../../public/fonts/Corporate A Bold.otf");
+  font-family: 'mercedes-bold';
+  src: url('../../public/fonts/Corporate A Bold.otf');
 }
+*/
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -42,8 +45,7 @@
 
 body {
   /* color: rgb(var(--foreground-rgb)); */
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer base {
