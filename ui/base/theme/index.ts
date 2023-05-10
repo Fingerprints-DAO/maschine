@@ -12,14 +12,29 @@ const colors = {
     50: '#FFFFFF33',
     500: '#FFF',
   },
+  secondary: {
+    500: '#F76B8B',
+  },
 }
 
 const theme = extendTheme({
   config,
-  semanticTokens: {},
   colors,
   styles,
   fonts,
+  components: {
+    Container: {
+      baseStyle: {
+        maxWidth: {
+          sm: '100%',
+          md: '90%',
+          lg: '90%',
+          xl: '1160px',
+          '2xl': '1280px',
+        },
+      },
+    },
+  },
 })
 
 export default theme

@@ -1,11 +1,10 @@
 import Head from 'next/head'
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-mercedes.png'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 import Footer from '@ui/components/organisms/footer'
-import Container from '@ui/components/molecules/container'
 
 type HomeProps = {
   meta: {
@@ -26,7 +25,7 @@ export default function Home({ meta, bg }: HomeProps) {
         <meta property="og:image" content={meta.image} />
       </Head>
       <Box as="main" bg={`url('${bg}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat" w="full" h="full" position="relative">
-        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.700" />
+        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
         <Flex as="div" position="relative" zIndex={2} flexDir="column" h="full">
           <Header />
           <Container as={Flex} py={['8', '20']} flex={1} flexDir="column" justifyContent="space-between">
@@ -38,8 +37,13 @@ export default function Home({ meta, bg }: HomeProps) {
                 Coming soon — a collection about velocity and perception.
               </Text>
             </Box>
-            <Box>
-              <Text fontSize={['xl', '2xl']} fontWeight="200" lineHeight="7" mb={[4, 6]}>
+            <Flex
+              alignItems={['unset', 'unset', 'unset', 'unset', 'center']}
+              justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}
+              flexDir={['column', 'column', 'column', 'column', 'row']}
+              mb={[0, 0, 0, 0, 6]}
+            >
+              <Text fontSize={['xl', '2xl']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
@@ -50,7 +54,7 @@ export default function Home({ meta, bg }: HomeProps) {
                   <Image src={logoMercedes} alt="Harm Studio" width={42} height={42} />
                 </Box>
               </Flex>
-            </Box>
+            </Flex>
           </Container>
           <Footer />
         </Flex>
