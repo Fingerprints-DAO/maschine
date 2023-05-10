@@ -1,4 +1,5 @@
 import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+import fonts from './fonts'
 import styles from './styles'
 
 const config: ThemeConfig = {
@@ -18,6 +19,7 @@ const theme = extendTheme({
   semanticTokens: {},
   colors,
   styles,
+  fonts,
 })
 
 export default theme

@@ -7,9 +7,6 @@ const styles: Theme['styles'] = {
       color: theme.colors.white,
       fontWeight: 400,
     },
-    fonts: {
-      body: `'Inter', sans-serif`,
-    },
   }),
 }
 
