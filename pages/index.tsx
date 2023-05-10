@@ -33,7 +33,7 @@ export default function Home({ meta, bg }: HomeProps) {
               <Heading as="h1" fontSize={['3rem', '4rem']} fontWeight="normal" mb={[4, 6]}>
                 Maschine
               </Heading>
-              <Text as="h2" fontSize={['xl', '2xl']} fontWeight="200" lineHeight="7">
+              <Text as="h2" fontSize={['xl', '2xl']} fontWeight="light" lineHeight="7">
                 Coming soon — a collection about velocity and perception.
               </Text>
             </Box>
@@ -43,7 +43,7 @@ export default function Home({ meta, bg }: HomeProps) {
               flexDir={['column', 'column', 'column', 'column', 'row']}
               mb={[0, 0, 0, 0, 6]}
             >
-              <Text fontSize={['xl', '2xl']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
@@ -75,5 +75,10 @@ export async function getServerSideProps() {
 
   let bg = bgs[Math.floor(Math.random() * bgs.length)]
 
-  return { props: { bg, meta } }
+  return {
+    props: {
+      bg,
+      meta,
+    },
+  }
 }
