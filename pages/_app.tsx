@@ -17,6 +17,8 @@ type MaschineProps = AppProps & {
   }
 }
 
+NProgress.configure({ showSpinner: false })
+
 function Maschine({ Component, pageProps }: MaschineProps) {
   const router = useRouter()
 
