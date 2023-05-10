@@ -19,6 +19,7 @@ import Link from 'next/link'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import Footer from '../footer'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
+import { useRouter } from 'next/router'
 
 const nav = [
   { value: '/', label: 'home' },
@@ -27,6 +28,7 @@ const nav = [
 ]
 
 const Header = () => {
+  const router = useRouter()
   const isBrowser = useIsBrowser()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const isMobile = useMediaQuery('(max-width: 767px)')
@@ -46,6 +48,7 @@ const Header = () => {
             <Flex as="nav">
               {nav.map((item, index) => {
                 const isLastChild = nav.length - 1 === index
+                const isActive = router.pathname === item.value
 
                 return (
                   <Box
@@ -55,6 +58,7 @@ const Header = () => {
                     title={item.label}
                     mr={!isLastChild ? 14 : 0}
                     _hover={{ color: 'secondary.500' }}
+                    color={isActive ? 'secondary.500' : 'white'}
                     transition="ease"
                     transitionProperty="color"
                     transitionDuration="0.2s"
@@ -80,6 +84,7 @@ const Header = () => {
           <DrawerBody>
             {nav.map((item, index) => {
               const isLastChild = nav.length - 1 === index
+              const isActive = router.pathname === item.value
 
               return (
                 <Box
@@ -88,7 +93,7 @@ const Header = () => {
                   href={item.value}
                   title={item.label}
                   mb={!isLastChild ? 12 : 0}
-                  color="gray.900"
+                  color={isActive ? 'secondary.500' : 'gray.900'}
                   display="block"
                   onClick={onClose}
                 >

@@ -10,7 +10,7 @@ const helvetica = localFont({
   src: [
     {
       path: '../../../public/fonts/helvetica-light.ttf',
-      weight: '200',
+      weight: '300',
       style: 'normal',
     },
     {
