@@ -17,7 +17,16 @@ const colors = {
   },
 }
 
+const breakpoints = {
+  sm: '30em',
+  md: '48em',
+  lg: '62em',
+  xl: '80em',
+  '2xl': '96em',
+}
+
 const theme = extendTheme({
+  breakpoints,
   config,
   colors,
   styles,
@@ -26,7 +35,7 @@ const theme = extendTheme({
     Container: {
       baseStyle: {
         maxWidth: {
-          sm: '100%',
+          sm: '90%',
           md: '90%',
           lg: '90%',
           xl: '1160px',
