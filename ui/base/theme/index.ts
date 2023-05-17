@@ -17,7 +17,7 @@ const colors = {
   },
 }
 
-const baseStyle = {
+const containerBaseStyle = {
   maxWidth: {
     base: '80%',
     sm: '90%',
@@ -27,7 +27,7 @@ const baseStyle = {
 }
 
 // export the component theme
-export const containerTheme = defineStyleConfig({ baseStyle })
+export const containerTheme = defineStyleConfig({ baseStyle: containerBaseStyle })
 
 const theme = extendTheme({
   config,
