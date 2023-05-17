@@ -1,4 +1,4 @@
-import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { defineStyleConfig, extendTheme, ThemeConfig } from '@chakra-ui/react'
 import fonts from './fonts'
 import styles from './styles'
 
@@ -17,32 +17,25 @@ const colors = {
   },
 }
 
-const breakpoints = {
-  sm: '30em',
-  md: '48em',
-  lg: '62em',
-  xl: '80em',
-  '2xl': '96em',
+const baseStyle = {
+  maxWidth: {
+    base: '80%',
+    sm: '90%',
+    xl: '1160px',
+    '2xl': '1280px',
+  },
 }
 
+// export the component theme
+export const containerTheme = defineStyleConfig({ baseStyle })
+
 const theme = extendTheme({
-  breakpoints,
   config,
   colors,
   styles,
   fonts,
   components: {
-    Container: {
-      baseStyle: {
-        maxWidth: {
-          sm: '90%',
-          md: '90%',
-          lg: '90%',
-          xl: '1160px',
-          '2xl': '1280px',
-        },
-      },
-    },
+    Container: containerTheme,
   },
 })
 
