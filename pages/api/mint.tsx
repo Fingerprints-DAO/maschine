@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { createClient } from '@supabase/supabase-js'
+import { Contract, ContractCall, Provider } from 'ethers-multicall'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
@@ -38,11 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
+  let country: string
   try {
     const location = await ipToLocation(ip as string)
-
-    // store to supabase
-    await supabase.from('countries').insert({ address, qty, ip: ip as string, country: location.addressCountry })
+    country = location.addressCountry
 
     if (!isAllowed(location.addressCountry)) {
       return res.status(400).json({
@@ -58,11 +58,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL, parseInt(process.env.CHAIN_ID as string))
-  const auction = new ethers.Contract(process.env.AUCTION_CONTRACT as string, ABI, provider)
+  const ethCallProvider = new Provider(provider)
+  await ethCallProvider.init()
+
+  const auction = new Contract(process.env.AUCTION_CONTRACT as string, ABI)
+
+  const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
+
   let nonce = 0
   try {
-    const rawNonce = await auction.getNonce(address)
+    const [rawNonce, currentPrice, userData, config] = await ethCallProvider.all(multiCalls)
+    const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
+    if (totalAfterMint.gt(config.limitInWei)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Can not purchase more than limit',
+      })
+    }
     nonce = parseInt(rawNonce.toString())
+
+    // store to supabase
+    await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
   } catch {}
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)

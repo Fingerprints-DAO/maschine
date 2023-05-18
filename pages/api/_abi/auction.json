@@ -3,12 +3,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_nft",
+        "name": "_nftAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "_signer",
+        "name": "_signerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasuryAddress",
         "type": "address"
       }
     ],
@@ -29,6 +34,16 @@
   {
     "inputs": [],
     "name": "ClaimRefundNotReady",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ConfigAlreadySet",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ConfigNotSet",
     "type": "error"
   },
   {
@@ -305,7 +320,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "amount",
+        "type": "uint32"
+      }
+    ],
     "name": "claimTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -319,6 +340,25 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getClaimableTokens",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "claimable",
+        "type": "uint32"
       }
     ],
     "stateMutability": "view",
@@ -436,6 +476,42 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "getUserData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint216",
+            "name": "contribution",
+            "type": "uint216"
+          },
+          {
+            "internalType": "uint32",
+            "name": "tokensBidded",
+            "type": "uint32"
+          },
+          {
+            "internalType": "bool",
+            "name": "refundClaimed",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IDutchAuction.User",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -477,7 +553,7 @@
   },
   {
     "inputs": [],
-    "name": "nft",
+    "name": "nftContractAddress",
     "outputs": [
       {
         "internalType": "contract INFT",
@@ -486,6 +562,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -589,8 +672,47 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setNftContractAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setSignerAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_treasuryAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setTreasuryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "signer",
+    "name": "signerAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -618,6 +740,26 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasuryAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
