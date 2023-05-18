@@ -24,7 +24,7 @@ export default function Home({ meta, bg }: HomeProps) {
         <meta property="og:image" content={meta.image} />
       </Head>
       <Box as="main" bg={`url('${bg}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat" w="full" h="full" position="relative">
-        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
+        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.600" />
         <Flex as="div" position="relative" zIndex={2} flexDir="column" h="full">
           <Header />
           <Container as={Flex} pt={['8', '20']} pb={['14', '20']} flex={1} flexDir="column" justifyContent="space-between">

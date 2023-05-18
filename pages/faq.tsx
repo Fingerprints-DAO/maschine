@@ -53,7 +53,7 @@ const FaqPage = () => {
               FAQ
             </Text>
             <Text fontSize="lg" fontWeight="light" lineHeight="7" mb="72px">
-              Here you can find common questions about the project.
+              Here you can find common questions about the upcoming auction.
             </Text>
             <Box>
               {questions.map((item, index) => {

@@ -43,7 +43,7 @@ const Header = () => {
             </Link>
           </Box>
           {isMobile && isBrowser ? (
-            <Box as="button" boxSize={[5, 25]} onClick={onOpen}>
+            <Box as="button" boxSize={[6, 25]} onClick={onOpen}>
               <HamburgerIcon display="block" boxSize="100%" />
             </Box>
           ) : (
@@ -77,7 +77,7 @@ const Header = () => {
       </Box>
       <Drawer isOpen={isOpen} placement="left" size="full" isFullHeight={true} onClose={onClose}>
         <DrawerContent h="full" bgColor="#F5F5F5">
-          <DrawerHeader px={4} py={8} display="flex" flexDir="row" alignItems="center" justifyContent="space-between">
+          <DrawerHeader p={8} display="flex" flexDir="row" alignItems="center" justifyContent="space-between">
             <Box boxSize={[35, 45]}>
               <Link href="/">
                 <Image src={logoFPDark} alt="Fingerprints DAO" width={54} height={64} />
@@ -85,7 +85,7 @@ const Header = () => {
             </Box>
             <DrawerCloseButton position="static" color="gray.900" />
           </DrawerHeader>
-          <DrawerBody mt={8}>
+          <DrawerBody mt={8} px={8}>
             {nav.map((item, index) => {
               const isLastChild = nav.length - 1 === index
               const isActive = router.pathname === item.value
@@ -108,7 +108,7 @@ const Header = () => {
               )
             })}
           </DrawerBody>
-          <DrawerFooter p={0}>
+          <DrawerFooter>
             <Footer />
           </DrawerFooter>
         </DrawerContent>
