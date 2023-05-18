@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
+import { isAllowed, ipToLocation } from './helpers/_ip'
 import ABI from './_abi/auction.json'
 
 type MintData = {
@@ -15,14 +16,29 @@ type MintResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<MintResponse>) {
-  let ip = req.headers["x-real-ip"];
+  let ip = req.headers['x-real-ip']
   if (!ip) {
-    const forwardedFor = req.headers["x-forwarded-for"];
+    const forwardedFor = req.headers['x-forwarded-for']
     if (Array.isArray(forwardedFor)) {
-      ip = forwardedFor.at(0);
+      ip = forwardedFor.at(0)
     } else {
-      ip = forwardedFor?.split(",").at(0) ?? "Unknown";
+      ip = forwardedFor?.split(',').at(0) ?? 'Unknown'
     }
+  }
+
+  try {
+    const location = await ipToLocation(ip as string)
+    if (!isAllowed(location.addressCountry)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Mint is not allowed in your country',
+      })
+    }
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      message: 'Failed to get geo location',
+    })
   }
 
   let { address, qty } = req.body

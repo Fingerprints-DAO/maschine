@@ -27,7 +27,7 @@ export const signBid = async (signer: Wallet, verifier: string, bid: any) => {
 };
 
 const sign = async (signer: Wallet, verifier: string, types: any, obj: any) => {
-  const chainId = BigNumber.from(await signer.getChainId());
+  const chainId = BigNumber.from(process.env.CHAIN_ID);
   const domain = {
     name: "Fingerprints DAO Dutch Auction",
     version: "1",
