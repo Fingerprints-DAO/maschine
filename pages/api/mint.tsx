@@ -1,8 +1,11 @@
 import { ethers } from 'ethers'
+import { createClient } from '@supabase/supabase-js'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
 import ABI from './_abi/auction.json'
+
+const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 type MintData = {
   deadline: number
@@ -26,8 +29,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
   }
 
+  let { address, qty } = req.body
+  qty = parseInt(qty)
+  if (!ethers.utils.isAddress(address) || isNaN(qty)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid Request Body',
+    })
+  }
+
   try {
     const location = await ipToLocation(ip as string)
+
+    // store to supabase
+    await supabase.from('countries').insert({ address, qty, ip: ip as string, country: location.addressCountry })
+
     if (!isAllowed(location.addressCountry)) {
       return res.status(400).json({
         success: false,
@@ -38,15 +54,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.status(400).json({
       success: false,
       message: 'Failed to get geo location',
-    })
-  }
-
-  let { address, qty } = req.body
-  qty = parseInt(qty)
-  if (!ethers.utils.isAddress(address) || isNaN(qty)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid Request Body',
     })
   }
 
