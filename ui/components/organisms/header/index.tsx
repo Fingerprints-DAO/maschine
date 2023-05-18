@@ -20,6 +20,7 @@ import useMediaQuery from '@ui/hooks/use-media-query'
 import Footer from '../footer'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { useRouter } from 'next/router'
+import Wallet from '@ui/components/molecules/wallet'
 
 const nav = [
   { value: '/', label: 'home' },
@@ -45,9 +46,8 @@ const Header = () => {
               <HamburgerIcon display="block" />
             </Box>
           ) : (
-            <Flex as="nav">
+            <Flex as="nav" display="flex" alignItems="center">
               {nav.map((item, index) => {
-                const isLastChild = nav.length - 1 === index
                 const isActive = router.pathname === item.value
 
                 return (
@@ -56,7 +56,7 @@ const Header = () => {
                     as={Link}
                     href={item.value}
                     title={item.label}
-                    mr={!isLastChild ? 14 : 0}
+                    mr={14}
                     _hover={{ color: 'secondary.500' }}
                     color={isActive ? 'secondary.500' : 'white'}
                     transition="ease"
@@ -69,6 +69,7 @@ const Header = () => {
                   </Box>
                 )
               })}
+              <Wallet variant="header" />
             </Flex>
           )}
         </Container>
@@ -105,7 +106,7 @@ const Header = () => {
             })}
           </DrawerBody>
           <DrawerFooter p={0}>
-            <Footer />
+            <Footer withConnectButton={true} />
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

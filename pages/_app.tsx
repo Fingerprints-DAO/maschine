@@ -9,6 +9,8 @@ import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import useScrollRestoration from '@ui/hooks/use-scroll-restoration'
 import Transition from '@ui/components/molecules/transition'
+import Web3Provider from '@ui/contexts/web3'
+import { MaschineProvider } from '@ui/contexts/maschine'
 
 type MaschineProps = AppProps & {
   pageProps: {
@@ -25,12 +27,16 @@ function Maschine({ Component, pageProps }: MaschineProps) {
   useScrollRestoration(router)
 
   return (
-    <ChakraProvider theme={theme}>
-      <MetaTags {...pageProps.meta} host={pageProps.host} />
-      <Transition>
-        <Component {...pageProps} />
-      </Transition>
-    </ChakraProvider>
+    <Web3Provider>
+      <ChakraProvider theme={theme}>
+        <MaschineProvider>
+          <MetaTags {...pageProps.meta} host={pageProps.host} />
+          <Transition>
+            <Component {...pageProps} />
+          </Transition>
+        </MaschineProvider>
+      </ChakraProvider>
+    </Web3Provider>
   )
 }
 

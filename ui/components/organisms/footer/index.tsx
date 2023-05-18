@@ -1,11 +1,17 @@
 import { Box, Container, Flex, Icon, Text } from '@chakra-ui/react'
+import Wallet from '@ui/components/molecules/wallet'
 import { BsDiscord } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 
-const Footer = () => {
+type FooterProps = {
+  withConnectButton?: boolean
+}
+
+const Footer = ({ withConnectButton }: FooterProps) => {
   return (
     <Container as="footer" py={[6, 4]}>
+      {withConnectButton && <Wallet variant="drawer" />}
       <Flex alignItems={['unset', 'center']} flexDir={['column', 'row-reverse']}>
         <Flex justifyContent="center" mb={[2, 0]}>
           <Box
