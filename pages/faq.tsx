@@ -5,46 +5,37 @@ import Head from 'next/head'
 
 const questions = [
   {
-    question: 'What is a Dutch auction selling method, and how does it work with NFTs?',
+    question: 'How will the Maschine auction work?',
     answer:
-      'A Dutch auction is a type of auction where the price of an item is gradually lowered over time until a buyer is found. In the context of NFTs, this means that the price of an NFT will decrease over time during the auction period.',
+      'The collection will be sold in its entirety thourgh a live Dutch Auction. A Dutch auction is a type of auction where the price of an item is gradually lowered over time until a buyer is found. In the context of NFTs, this means that the price of an NFT will decrease over time during the auction period, and collectors will be able to acquire their pieces when the price reaches whatever level they\'re happy buying at. Collectors will also be entitled to a rebate if the price they paid is larger than the final auction price.',
   },
   {
     question: 'How does the rebate mechanics work in relation to the Dutch auction selling method?',
     answer:
-      'At the end of the auction, buyers who paid more than the last sell price can claim cashback based on the difference between their purchase price and the last sell price.',
+      'At the end of the auction, buyers who paid more than the last sell price can claim a refund equal to the difference between their purchase price and the last sell price. This process is done trustlessly using the auction contract.',
   },
   {
     question: `Can I participate in the Dutch auction selling method if I don't have a cryptocurrency wallet?`,
     answer: 'No, you must have a cryptocurrency wallet to participate in the auction.',
   },
   {
-    question: 'Is there a limit to the number of NFTs I can purchase using the Dutch auction selling method if there is a total amount limit?',
+    question: 'Is there a limit to the number of NFTs I can purchase?',
     answer:
-      'Yes, if there is a total amount limit of USD 10,000 for the NFT sale, there may also be a limit on the number of NFTs you can purchase. The specific limit will depend on the price of the NFTs and the total amount available for the sale. ',
+      'Yes, if there is a total amount limit of US$10,000 for the NFT sale, thus there will also be a limit on the number of NFTs you can purchase. The specific limit will depend on the latest price of the auction and the total quantity of NFTs still available for the sale.',
   },
   {
-    question: 'What is the advantage of using a Dutch auction selling method for NFTs?',
-    answer:
-      'The advantage of using a Dutch auction selling method for NFTs is that it allows buyers to potentially purchase NFTs at a lower price than they would in a traditional fixed-price sale.',
-  },
-  {
-    question: 'How is the cashback amount calculated for buyers who pay more than the last sell?',
-    answer: `The cashback amount is calculated based on the difference between the buyer's purchase price and the last sell price.`,
-  },
-  {
-    question: 'Is the cashback amount automatically refunded to my cryptocurrency wallet?',
-    answer: 'After the auction has ended, you will need to claim your cashback amount by following the instructions provided by the project.',
+    question: 'Is the rebate automatically refunded to my cryptocurrency wallet?',
+    answer: 'After the auction has ended, you will need to claim your rebate by following the instructions provided in the minting page.',
   },
   {
     question: 'Can I sell the NFTs I purchase through the Dutch auction selling method to other users?',
     answer:
-      'Yes, after purchasing an NFT through the Dutch auction selling method, you can sell it to other users if the project allows for secondary market transactions. However, please note that the project may have specific guidelines or restrictions on selling NFTs.',
+      'Yes, after purchasing an NFT through the Dutch auction selling method, you can sell it to other users on the secondary market.',
   },
   {
     question: 'Are there any fees associated with participating in a Dutch auction NFT sale?',
     answer:
-      'Yes, there may be transaction fees associated with participating in a Dutch auction NFT sale. These fees will vary depending on the cryptocurrency used for the transaction.',
+      'Yes, there will be gas fees for transaction interactions with the project\'s smart contracts.',
   },
 ]
 
@@ -62,7 +53,7 @@ const FaqPage = () => {
               FAQ
             </Text>
             <Text fontSize="lg" fontWeight="light" lineHeight="7" mb="72px">
-              Here you can find common questions about the project.
+              Here you can find common questions about the upcoming auction.
             </Text>
             <Box>
               {questions.map((item, index) => {
