@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
 import { useDisconnect } from 'wagmi'
 import { Avatar, ConnectKitButton } from 'connectkit'
@@ -7,7 +7,7 @@ import { useMaschineContext } from '@ui/contexts/maschine'
 import useMediaQuery from '@ui/hooks/use-media-query'
 
 type WalletProps = {
-  variant: 'header' | 'drawer'
+  variant: 'header' | 'drawer' | 'card'
 }
 
 const Wallet = ({ variant }: WalletProps) => {
@@ -16,6 +16,27 @@ const Wallet = ({ variant }: WalletProps) => {
   const isMobile = useMediaQuery('(max-width: 479px)')
 
   const isDrawer = variant === 'drawer'
+  const isCard = variant === 'card'
+  const isHeader = variant === 'header'
+
+  const buttonVariant = useMemo(
+    () => (isConnected: boolean) => {
+      if (isCard) {
+        return 'outline'
+      }
+
+      return isConnected ? 'outline' : 'solid'
+    },
+    [isCard]
+  )
+
+  const buttonColorScheme = useMemo(() => {
+    if (isCard) {
+      return
+    }
+
+    return isDrawer ? 'gray' : 'whiteAlpha'
+  }, [isDrawer, isCard])
 
   const handleConnectWallet = (isConnected: boolean, show?: () => void) => () => isConnected ? disconnect() : show?.()
 
@@ -24,7 +45,7 @@ const Wallet = ({ variant }: WalletProps) => {
       {({ isConnected, show, ensName }) => {
         return (
           <Flex alignItems={isDrawer ? 'flex-start' : 'center'} flexDirection={isDrawer ? 'column' : 'row'} width={isDrawer ? '100%' : 'auto'}>
-            {isConnected && (
+            {isConnected && !isCard && (
               <Flex flexDirection={isDrawer ? 'row-reverse' : 'row'} alignItems="center" mr={isDrawer ? 0 : [3, 6]} mb={isDrawer ? 6 : 0}>
                 <Box textAlign={isDrawer ? 'left' : 'right'} mx={2}>
                   {/* <Text as="strong" color="gray.200" display="block" fontSize={['xs', 'sm']} fontWeight={600} mb="-2px">
@@ -38,19 +59,19 @@ const Wallet = ({ variant }: WalletProps) => {
               </Flex>
             )}
             <Button
-              //   color={isConnected ? 'gray.200' : 'gray.900'}
-              //   size={['xs', 'md']}
-              size={['lg', 'md']}
-              h={[16, '44px']}
+              borderColor={isCard ? 'gray.50' : undefined}
+              borderWidth={isCard ? 2 : undefined}
+              color={!isHeader ? 'gray.50' : undefined}
+              h={[16, isCard ? 16 : '44px']}
+              fontSize={['lg']}
               mb={isDrawer ? 8 : 0}
-              borderColor="gray.200"
-              color={isDrawer ? 'white' : 'gray.900'}
-              variant={isConnected ? 'outline' : 'solid'}
+              colorScheme={buttonColorScheme}
+              _hover={{ backgroundColor: isDrawer ? 'gray' : 'whiteAlpha.500' }}
+              variant={buttonVariant(isConnected)}
               w={['full']}
-              bg={isDrawer ? 'gray.900' : 'white'}
               onClick={handleConnectWallet(isConnected, show)}
             >
-              {!isConnected ? 'Connect' : 'Disconnect'}
+              {!isConnected ? 'Connect' : 'Disconnect'} {isCard && 'wallet'}
             </Button>
           </Flex>
         )

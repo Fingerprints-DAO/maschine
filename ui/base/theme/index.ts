@@ -1,10 +1,10 @@
-import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { defineStyle, defineStyleConfig, extendTheme, ThemeConfig } from '@chakra-ui/react'
 import fonts from './fonts'
 import styles from './styles'
 
 const config: ThemeConfig = {
-  initialColorMode: 'dark',
   useSystemColorMode: false,
+  initialColorMode: 'dark',
 }
 
 const colors = {
@@ -15,6 +15,9 @@ const colors = {
   secondary: {
     500: '#F76B8B',
   },
+  links: {
+    500: '#6ECCDD',
+  },
 }
 
 const theme = extendTheme({
@@ -23,6 +26,14 @@ const theme = extendTheme({
   styles,
   fonts,
   components: {
+    Button: defineStyleConfig({
+      baseStyle: defineStyle((props) => {
+        return {
+          bg: `${props.colorScheme}.900`,
+          background: `${props.colorScheme}.900`,
+        }
+      }),
+    }),
     Container: {
       baseStyle: {
         maxWidth: {
