@@ -4,7 +4,6 @@ import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-mercedes.png'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
-import Footer from '@ui/components/organisms/footer'
 
 type HomeProps = {
   meta: {
@@ -25,10 +24,10 @@ export default function Home({ meta, bg }: HomeProps) {
         <meta property="og:image" content={meta.image} />
       </Head>
       <Box as="main" bg={`url('${bg}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat" w="full" h="full" position="relative">
-        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
+        <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.600" />
         <Flex as="div" position="relative" zIndex={2} flexDir="column" h="full">
           <Header />
-          <Container as={Flex} py={['8', '20']} flex={1} flexDir="column" justifyContent="space-between">
+          <Container as={Flex} pt={['8', '20']} pb={['14', '20']} flex={1} flexDir="column" justifyContent="space-between">
             <Box>
               <Heading as="h1" fontSize={['3rem', '4rem']} fontWeight="normal" mb={[4, 6]}>
                 Maschine
@@ -43,11 +42,11 @@ export default function Home({ meta, bg }: HomeProps) {
               flexDir={['column', 'column', 'column', 'column', 'row']}
               mb={[0, 0, 0, 0, 6]}
             >
-              <Text fontSize={['xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
-                <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[3, 6]}>
+                <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Image src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
                 <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
@@ -56,7 +55,6 @@ export default function Home({ meta, bg }: HomeProps) {
               </Flex>
             </Flex>
           </Container>
-          <Footer />
         </Flex>
       </Box>
     </>
@@ -71,7 +69,14 @@ export async function getServerSideProps() {
     image: '/images/seo-5.png',
   }
 
-  let bgs = ['/images/animated-1.gif', '/images/animated-2.gif', '/images/animated-3.gif']
+  let bgs = [
+    '/images/animated-1.gif',
+    '/images/animated-2.gif',
+    '/images/animated-3.gif',
+    '/images/animated-4.gif',
+    '/images/animated-5.gif',
+    '/images/animated-6.gif',
+  ]
 
   let bg = bgs[Math.floor(Math.random() * bgs.length)]
 
