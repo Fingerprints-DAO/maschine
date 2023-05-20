@@ -29,14 +29,17 @@ const aktiv_grotesk = localFont({
   src: [
     {
       path: '../../../public/fonts/AktivGrotesk-Thin.ttf',
+      weight: '200',
       style: 'thin',
     },
     {
       path: '../../../public/fonts/AktivGrotesk-Regular.ttf',
+      weight: '400',
       style: 'normal',
     },
     {
       path: '../../../public/fonts/AktivGrotesk-Bold.ttf',
+      weight: '700',
       style: 'bold',
     },
   ],

@@ -43,6 +43,7 @@ const theme = extendTheme({
         return {
           bg: `${props.colorScheme}.900`,
           background: `${props.colorScheme}.900`,
+          lineHeight: 1,
         }
       }),
     }),

@@ -11,6 +11,8 @@ import useScrollRestoration from '@ui/hooks/use-scroll-restoration'
 import Transition from '@ui/components/molecules/transition'
 import Web3Provider from '@ui/contexts/web3'
 import { MaschineProvider } from '@ui/contexts/maschine'
+import { ModalProvider } from '@ui/contexts/modal'
+import Modal from '@ui/components/organisms/modals'
 
 type MaschineProps = AppProps & {
   pageProps: {
@@ -30,10 +32,13 @@ function Maschine({ Component, pageProps }: MaschineProps) {
     <Web3Provider>
       <ChakraProvider theme={theme}>
         <MaschineProvider>
-          <MetaTags {...pageProps.meta} host={pageProps.host} />
-          <Transition>
-            <Component {...pageProps} />
-          </Transition>
+          <ModalProvider>
+            <MetaTags {...pageProps.meta} host={pageProps.host} />
+            <Transition>
+              <Component {...pageProps} />
+              <Modal />
+            </Transition>
+          </ModalProvider>
         </MaschineProvider>
       </ChakraProvider>
     </Web3Provider>

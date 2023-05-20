@@ -1,14 +1,12 @@
 import Head from 'next/head'
-import { AspectRatio, Box, Button, CardBody, CardHeader, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-mercedes.png'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 import Footer from '@ui/components/organisms/footer'
-import Card from '@ui/components/organisms/card'
-import carbonFiber from 'public/images/carbon-fiber.png'
-import Wallet from '@ui/components/molecules/wallet'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
+import NftCard from '@ui/components/organisms/nft-card'
 
 type HomeProps = {
   meta: {
@@ -20,7 +18,7 @@ type HomeProps = {
   bg: string
 }
 
-export default function Home({ meta, bg }: HomeProps) {
+function HomePage({ meta, bg }: HomeProps) {
   return (
     <>
       <Head>
@@ -50,65 +48,7 @@ export default function Home({ meta, bg }: HomeProps) {
                 A collection about velocity and perception.
               </Text>
             </Box>
-            <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
-              <CardHeader p={6} pb={2}>
-                <Text color="gray.500">
-                  Sale ends in{' '}
-                  <Text color="gray.300" as="span" fontWeight="bold">
-                    90 minutes
-                  </Text>{' '}
-                  at{' '}
-                  <Text color="gray.300" as="span" fontWeight="bold">
-                    0.2 ETH
-                  </Text>
-                </Text>
-              </CardHeader>
-              <CardBody px={6} pt={2} pb={8}>
-                <AspectRatio maxW="full" w={'auto'} h={['auto', '288px']} ratio={4 / 3} borderTopRadius={8} overflow="hidden">
-                  <Image src={carbonFiber} alt="The Maschine Collection" />
-                </AspectRatio>
-                <Box bg="gray.800" borderBottomRadius={8} p={4} mb={10}>
-                  <Heading as="h3" color="gray.300" fontSize={['1.75rem']} fontWeight="normal" mb={[2]}>
-                    Maschine
-                  </Heading>
-                  <Text color="gray.500" fontWeight="light">
-                    Created by{' '}
-                    <Box
-                      as="a"
-                      href="#"
-                      title="Harm van den Dorpel"
-                      target="_blank"
-                      color="links.500"
-                      _hover={{ color: 'white' }}
-                      transition="ease"
-                      transitionProperty="color"
-                      transitionDuration="0.2s"
-                    >
-                      Harm van den Dorpel
-                    </Box>
-                  </Text>
-                </Box>
-                <Flex mb={8}>
-                  <Box flex={1}>
-                    <Text color="gray.400" mb={2}>
-                      NFTs minted
-                    </Text>
-                    <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-                      23/1000
-                    </Text>
-                  </Box>
-                  <Box flex={1}>
-                    <Text color="gray.400" mb={2}>
-                      Current price
-                    </Text>
-                    <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-                      1.979 ETH
-                    </Text>
-                  </Box>
-                </Flex>
-                <Wallet variant="card" />
-              </CardBody>
-            </Card>
+            <NftCard />
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0, 106]}>
               <Box mb={8} display={['none', 'none', 'none', 'block']}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
@@ -122,14 +62,14 @@ export default function Home({ meta, bg }: HomeProps) {
                 <Button
                   as="a"
                   fontWeight="normal"
-                  rightIcon={<ExternalLinkIcon color="links.500" />}
+                  rightIcon={<ExternalLinkIcon color="links.500" transition="ease" transitionProperty="color" transitionDuration="0.2s" />}
                   bg="transparent"
                   variant="link"
                   href="#"
                   title="View smart contract in Etherscan"
                   target="_blank"
                   color="links.500"
-                  _hover={{ color: 'white' }}
+                  _hover={{ color: 'white', '> span svg': { color: 'white' } }}
                   transition="ease"
                   transitionProperty="color"
                   transitionDuration="0.2s"
@@ -140,14 +80,14 @@ export default function Home({ meta, bg }: HomeProps) {
                 <Button
                   as="a"
                   fontWeight="normal"
-                  rightIcon={<ExternalLinkIcon color="links.500" />}
+                  rightIcon={<ExternalLinkIcon color="links.500" transition="ease" transitionProperty="color" transitionDuration="0.2s" />}
                   bg="transparent"
                   variant="link"
                   href="#"
                   title="View smart contract in Etherscan"
                   target="_blank"
                   color="links.500"
-                  _hover={{ color: 'white' }}
+                  _hover={{ color: 'white', '> span svg': { color: 'white' } }}
                   transition="ease"
                   transitionProperty="color"
                   transitionDuration="0.2s"
@@ -189,7 +129,7 @@ export default function Home({ meta, bg }: HomeProps) {
               flexDir={['column', 'column', 'column', 'column', 'row']}
               mb={[0, 0, 0, 0, 6]}
             >
-              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="thin" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
@@ -235,3 +175,5 @@ export async function getServerSideProps() {
     },
   }
 }
+
+export default HomePage
