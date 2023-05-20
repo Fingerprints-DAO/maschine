@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Icon, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Icon } from '@chakra-ui/react'
 import Wallet from '@ui/components/molecules/wallet'
 import { BsDiscord } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
@@ -26,7 +26,7 @@ const Footer = ({ withConnectButton }: FooterProps) => {
             transitionProperty="color"
             transitionDuration="0.2s"
           >
-            <Icon as={BsTwitter} w={8} h={8} display="block" />
+            <Icon as={BsTwitter} w={6} h={6} display="block" />
           </Box>
           <Box
             as="a"
@@ -40,7 +40,7 @@ const Footer = ({ withConnectButton }: FooterProps) => {
             transitionProperty="color"
             transitionDuration="0.2s"
           >
-            <Icon as={BsDiscord} w={8} h={8} display="block" />
+            <Icon as={BsDiscord} w={6} h={6} display="block" />
           </Box>
           <Box
             as="a"
@@ -54,19 +54,9 @@ const Footer = ({ withConnectButton }: FooterProps) => {
             transitionProperty="color"
             transitionDuration="0.2s"
           >
-            <Icon as={SiOpensea} w={8} h={8} display="block" />
+            <Icon as={SiOpensea} w={6} h={6} display="block" />
           </Box>
         </Flex>
-        <Text align={['center', 'left']} fontSize="xs" color="gray.500" flex={1}>
-          By{' '}
-          <Box as="a" href="https://fingerprintsdao.xyz" title="Fingerprints DAO" target="_blank">
-            Fingerprints DAO
-          </Box>{' '}
-          & developed by{' '}
-          <Box as="a" title="arod.studio" href="https://arod.studio" target="_blank">
-            arod.studio
-          </Box>
-        </Text>
       </Flex>
     </Container>
   )

@@ -36,14 +36,16 @@ const Header = () => {
 
   return (
     <>
-      <Box as="header" py={[8, 12]}>
+      <Box as="header" py={[8]}>
         <Container as={Flex} alignItems="center" justifyContent="space-between">
-          <Link href="/">
-            <Image src={logoFP} alt="Fingerprints DAO" width={54} height={64} />
-          </Link>
+          <Box boxSize={[35, 45]}>
+            <Link href="/">
+              <Image src={logoFP} alt="Fingerprints DAO" />
+            </Link>
+          </Box>
           {isMobile && isBrowser ? (
-            <Box as="button" p="14px" onClick={onOpen}>
-              <HamburgerIcon display="block" />
+            <Box as="button" boxSize={[6, 25]} onClick={onOpen}>
+              <HamburgerIcon display="block" boxSize="100%" />
             </Box>
           ) : (
             <Flex as="nav" display="flex" alignItems="center">
@@ -63,7 +65,7 @@ const Header = () => {
                     transitionProperty="color"
                     transitionDuration="0.2s"
                   >
-                    <Text as="strong" fontSize="lg">
+                    <Text as="strong" fontSize={['lg', 'lg', 'lg', 'xl']}>
                       {item.label}
                     </Text>
                   </Box>
@@ -74,15 +76,17 @@ const Header = () => {
           )}
         </Container>
       </Box>
-      <Drawer isOpen={isOpen} placement="top" size="full" isFullHeight={true} onClose={onClose}>
+      <Drawer isOpen={isOpen} placement="left" size="full" isFullHeight={true} onClose={onClose}>
         <DrawerContent h="full" bgColor="#F5F5F5">
-          <DrawerHeader px={4} py={8} display="flex" flexDir="row" alignItems="center" justifyContent="space-between">
-            <Link href="/">
-              <Image src={logoFPDark} alt="Fingerprints DAO" width={54} height={64} />
-            </Link>
+          <DrawerHeader p={8} display="flex" flexDir="row" alignItems="center" justifyContent="space-between">
+            <Box boxSize={[35, 45]}>
+              <Link href="/">
+                <Image src={logoFPDark} alt="Fingerprints DAO" width={54} height={64} />
+              </Link>
+            </Box>
             <DrawerCloseButton position="static" color="gray.900" />
           </DrawerHeader>
-          <DrawerBody>
+          <DrawerBody mt={8} px={8}>
             {nav.map((item, index) => {
               const isLastChild = nav.length - 1 === index
               const isActive = router.pathname === item.value
@@ -93,12 +97,12 @@ const Header = () => {
                   as={Link}
                   href={item.value}
                   title={item.label}
-                  mb={!isLastChild ? 12 : 0}
+                  mb={!isLastChild ? 8 : 0}
                   color={isActive ? 'secondary.500' : 'gray.900'}
                   display="block"
                   onClick={onClose}
                 >
-                  <Text as="strong" fontSize="2rem">
+                  <Text as="strong" fontSize="1.75rem">
                     {item.label}
                   </Text>
                 </Box>

@@ -189,11 +189,11 @@ export default function Home({ meta, bg }: HomeProps) {
               flexDir={['column', 'column', 'column', 'column', 'row']}
               mb={[0, 0, 0, 0, 6]}
             >
-              <Text fontSize={['xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
-                <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[3, 6]}>
+                <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Image src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
                 <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
@@ -217,9 +217,16 @@ export async function getServerSideProps() {
     image: '/images/seo-5.png',
   }
 
-  let bgs = ['/images/animated-1.gif', '/images/animated-2.gif', '/images/animated-3.gif']
+  const bgs = [
+    '/images/animated-1.gif',
+    '/images/animated-2.gif',
+    '/images/animated-3.gif',
+    '/images/animated-4.gif',
+    '/images/animated-5.gif',
+    '/images/animated-6.gif',
+  ]
 
-  let bg = bgs[Math.floor(Math.random() * bgs.length)]
+  const bg = bgs[Math.floor(Math.random() * bgs.length)]
 
   return {
     props: {
