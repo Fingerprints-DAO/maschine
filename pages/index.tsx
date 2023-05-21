@@ -43,7 +43,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
         bgPos="center"
         bgRepeat="no-repeat"
         w="full"
-        h={['full', 'full', 'full', 'full', 'unset']}
+        h={['full', 'full', 'full', 'unset']}
         position="relative"
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />

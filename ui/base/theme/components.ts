@@ -4,7 +4,7 @@ const containerTheme = defineStyleConfig({
   baseStyle: {
     maxWidth: {
       base: '90%',
-      sm: '80%',
+      sm: '90%',
       xl: '1160px',
       '2xl': '1280px',
     },
