@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Box, Button, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Alert, AlertTitle, Box, Button, CloseButton, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-mercedes.png'
@@ -7,6 +7,12 @@ import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 import Footer from '@ui/components/organisms/footer'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import NftCard from '@ui/components/organisms/nft-card'
+import MintCta from '@ui/components/organisms/mint-cta'
+import useMediaQuery from '@ui/hooks/use-media-query'
+import { useIsBrowser } from '@ui/hooks/use-is-browser'
+import RebateCta from '@ui/components/organisms/rebate-cta'
+import { HiOutlineLockClosed } from 'react-icons/hi'
+import Unavailability from '@ui/components/organisms/unavailability'
 
 type HomeProps = {
   meta: {
@@ -16,9 +22,13 @@ type HomeProps = {
     image: string
   }
   bg: string
+  cardImageNumber: string
 }
 
-function HomePage({ meta, bg }: HomeProps) {
+const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
+  const isBrowser = useIsBrowser()
+  const isMobile = useMediaQuery('(max-width: 479px)')
+
   return (
     <>
       <Head>
@@ -38,8 +48,9 @@ function HomePage({ meta, bg }: HomeProps) {
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
         <Box position="relative" zIndex={2}>
+          <Unavailability />
           <Header />
-          <Container pt={[10]} pb={[0, 0, 0, 126]} display={['block', 'block', 'block', 'flex']}>
+          <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
             <Box mb={12} display={['block', 'none']}>
               <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                 Maschine
@@ -48,7 +59,13 @@ function HomePage({ meta, bg }: HomeProps) {
                 A collection about velocity and perception.
               </Text>
             </Box>
-            <NftCard />
+            <NftCard cardImageNumber={cardImageNumber} />
+            {isMobile && isBrowser && (
+              <>
+                <MintCta />
+                <RebateCta />
+              </>
+            )}
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0, 106]}>
               <Box mb={8} display={['none', 'none', 'none', 'block']}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
@@ -122,22 +139,27 @@ function HomePage({ meta, bg }: HomeProps) {
               </Box>
             </Box>
           </Container>
-          <Container pb={10}>
+          {!isMobile && isBrowser && (
+            <Container mb={24}>
+              <MintCta />
+              <RebateCta />
+            </Container>
+          )}
+          <Container mb={10}>
             <Flex
               alignItems={['unset', 'unset', 'unset', 'unset', 'center']}
               justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}
               flexDir={['column', 'column', 'column', 'column', 'row']}
-              mb={[0, 0, 0, 0, 6]}
             >
-              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="thin" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
-                  <Image src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
+                  <Box as={Image} src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
                 <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
-                  <Image src={logoMercedes} alt="Harm Studio" width={42} height={42} />
+                  <Box as={Image} src={logoMercedes} alt="Harm Studio" width={42} height={42} />
                 </Box>
               </Flex>
             </Flex>
@@ -154,7 +176,7 @@ export async function getServerSideProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
-    image: '/images/seo-5.png',
+    image: '/images/maschine-og-image.jpg',
   }
 
   const bgs = [
@@ -168,9 +190,13 @@ export async function getServerSideProps() {
 
   const bg = bgs[Math.floor(Math.random() * bgs.length)]
 
+  const NFTS_IMAGES_COUNT = 10
+  const cardImageNumber = Math.floor(Math.random() * NFTS_IMAGES_COUNT) + 1
+
   return {
     props: {
       bg,
+      cardImageNumber,
       meta,
     },
   }

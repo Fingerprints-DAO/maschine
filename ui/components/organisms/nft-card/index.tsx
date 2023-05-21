@@ -1,12 +1,17 @@
 import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Text } from '@chakra-ui/react'
 import Card from '../card'
 import Image from 'next/image'
-import carbonFiber from 'public/images/carbon-fiber.png'
 import Wallet from '@ui/components/molecules/wallet'
 import { useMaschineContext } from '@ui/contexts/maschine'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
+import { useIsBrowser } from '@ui/hooks/use-is-browser'
 
-const NftCard = () => {
+type NftCardProps = {
+  cardImageNumber: string
+}
+
+const NftCard = ({ cardImageNumber }: NftCardProps) => {
+  const isBrowser = useIsBrowser()
   const { isConnected } = useMaschineContext()
   const { handleOpenModal } = useModalContext()
 
@@ -25,8 +30,15 @@ const NftCard = () => {
         </Text>
       </CardHeader>
       <CardBody px={6} pt={2} pb={8}>
-        <AspectRatio maxW="full" w={'auto'} h={['auto', '288px']} ratio={4 / 4} borderTopRadius={8} overflow="hidden">
-          <Image src={carbonFiber} alt="The Maschine Collection" />
+        <AspectRatio maxW="full" w="auto" h="auto" ratio={4 / 4} borderTopRadius={8} overflow="hidden">
+          <Box
+            as={Image}
+            alt="The Maschine Collection"
+            src={require(`public/images/nfts/${cardImageNumber}.jpg`)}
+            priority={true}
+            width={470}
+            height={470}
+          />
         </AspectRatio>
         <Box bg="gray.800" borderBottomRadius={8} p={4} mb={10}>
           <Heading as="h3" color="gray.300" fontSize={['1.75rem']} fontWeight="normal" mb={[2]}>
@@ -67,16 +79,8 @@ const NftCard = () => {
             </Text>
           </Box>
         </Flex>
-        {isConnected ? (
-          <Button
-            h={[16, '64px']}
-            fontSize={['lg']}
-            colorScheme="whiteAlpha"
-            _hover={{ backgroundColor: 'whiteAlpha.700' }}
-            variant="solid"
-            w={['full']}
-            onClick={handleOpenModal(ModalElement.Buy)}
-          >
+        {isConnected && isBrowser ? (
+          <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
             Buy
           </Button>
         ) : (

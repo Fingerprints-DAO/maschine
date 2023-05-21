@@ -5,6 +5,7 @@ import { PropsWithChildren } from 'react'
 
 const Transition = ({ children }: PropsWithChildren) => {
   const { asPath } = useRouter()
+
   const variants = {
     out: {
       opacity: 0,

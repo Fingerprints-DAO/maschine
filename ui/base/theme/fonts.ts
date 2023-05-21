@@ -10,7 +10,8 @@ const helvetica = localFont({
   src: [
     {
       path: '../../../public/fonts/helvetica-light.ttf',
-      style: 'normal',
+      weight: '300',
+      style: 'light',
     },
     {
       path: '../../../public/fonts/helvetica.ttf',
@@ -20,33 +21,13 @@ const helvetica = localFont({
     {
       path: '../../../public/fonts/helvetica-bold.ttf',
       weight: '700',
-      style: 'normal',
-    },
-  ],
-})
-
-const aktiv_grotesk = localFont({
-  src: [
-    {
-      path: '../../../public/fonts/AktivGrotesk-Thin.ttf',
-      weight: '200',
-      style: 'thin',
-    },
-    {
-      path: '../../../public/fonts/AktivGrotesk-Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../../public/fonts/AktivGrotesk-Bold.ttf',
-      weight: '700',
       style: 'bold',
     },
   ],
 })
 
 const fonts: Partial<Theme['fonts']> = {
-  body: aktiv_grotesk.style.fontFamily,
+  body: helvetica.style.fontFamily,
   heading: mercedes.style.fontFamily,
 }
 

@@ -1,21 +1,24 @@
 import React, { useCallback } from 'react'
 import { Box, Button, CloseButton, Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import { ModalProps } from '@ui/contexts/modal'
+import Counter from '../../counter'
+import useMediaQuery from '@ui/hooks/use-media-query'
 
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
+  const isMobile = useMediaQuery('(max-width: 479px)')
+
   const submit = useCallback(async () => {}, [])
 
   return (
-    <Modal isCentered onClose={onClose} isOpen={isOpen} scrollBehavior="outside" motionPreset="slideInBottom">
+    <Modal isCentered={true} isOpen={isOpen} scrollBehavior="inside" motionPreset={isMobile ? 'slideInBottom' : 'scale'} onClose={onClose}>
       <ModalOverlay height="100vh" />
       <ModalContent
         bg="white"
-        //   background="gray.900" padding={[6, 12]} minW={['unset', 650]} maxW={['90%', '90%', '90%', 'md']}
-        position="fixed"
-        bottom="0px"
-        mb="0"
-        borderRadius="1.75rem 1.75rem 0px 0px"
-        maxW="lg"
+        position={['fixed', 'unset']}
+        bottom={['0px', 'unset']}
+        mb={['0', 'auto']}
+        borderRadius={['1rem 1rem 0 0', '1rem']}
+        maxW={['lg', '438px']}
         px={4}
         py={6}
       >
@@ -33,13 +36,19 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
             0.59 ETH
           </Text>
         </Box>
-        <Box>
-          <Text color="gray.500">How many NFTs do you want to mint?</Text>
+        <Box mb={10}>
+          <Text color="gray.500" mb={10}>
+            How many NFTs do you want to mint?
+          </Text>
+          <Counter />
         </Box>
-        <ModalFooter px={0} display="block">
+        <ModalFooter px={0} pt={0} display="block">
+          <Button variant="solid" size="lg" w="full" mb={6}>
+            Mint now
+          </Button>
           <Text color="gray.500" fontSize="xs" textAlign="center">
             By clicking {`"Mint now"`} button you agree with our{' '}
-            <Box as="a" color="links.500">
+            <Box as="a" href="#" color="links.500">
               terms of use
             </Box>
             .

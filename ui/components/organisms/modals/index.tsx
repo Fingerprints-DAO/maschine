@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import ModalBuy from './modal-buy'
 import ModalMint from './modal-mint'
+import ModalRebate from './modal-rebate'
 import { ModalContext, ModalContextValue, ModalElement } from '@ui/contexts/modal'
 
 const Modal = () => {
@@ -10,6 +11,7 @@ const Modal = () => {
     const map = new Map<ModalContextValue['element'], any>([
       [ModalElement.Buy, ModalBuy],
       [ModalElement.Mint, ModalMint],
+      [ModalElement.Rebate, ModalRebate],
     ])
 
     return map.get(element)

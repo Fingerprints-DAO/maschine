@@ -6,6 +6,7 @@ import useTxToast from '@ui/hooks/use-tx-toast'
 export enum ModalElement {
   Buy = 'buy',
   Mint = 'mint',
+  Rebate = 'rebate',
   Default = '',
 }
 
@@ -31,8 +32,7 @@ export type ModalProps = {
 }
 
 const INITIAL_STATE: ModalContextValue = {
-  //   element: ModalElement.Default,
-  element: ModalElement.Buy,
+  element: ModalElement.Default,
   handleOpenModal: () => () => {},
   handleCloseModal: () => {},
 }
@@ -46,9 +46,7 @@ const ModalProvider = ({ children }: PropsWithChildren) => {
   const [lastTxHash, setLastTxHash] = useState<Address | undefined>(undefined)
   const [lastTxCallback, setLastTxCallback] = useState<Function | undefined>(undefined)
 
-  const { isOpen, onClose, onOpen } = useDisclosure({
-    isOpen: true,
-  })
+  const { isOpen, onClose, onOpen } = useDisclosure()
 
   useWaitForTransaction({
     hash: lastTxHash,
