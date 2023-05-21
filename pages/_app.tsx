@@ -13,6 +13,7 @@ import Web3Provider from '@ui/contexts/web3'
 import { MaschineProvider } from '@ui/contexts/maschine'
 import { ModalProvider } from '@ui/contexts/modal'
 import Modal from '@ui/components/organisms/modals'
+import ReactQueryProvider from '@ui/contexts/react-query'
 
 type MaschineProps = AppProps & {
   pageProps: {
@@ -29,19 +30,21 @@ function Maschine({ Component, pageProps }: MaschineProps) {
   useScrollRestoration(router)
 
   return (
-    <Web3Provider>
-      <ChakraProvider theme={theme}>
-        <MaschineProvider>
-          <ModalProvider>
-            <MetaTags {...pageProps.meta} host={pageProps.host} />
-            <Transition>
-              <Component {...pageProps} />
-              <Modal />
-            </Transition>
-          </ModalProvider>
-        </MaschineProvider>
-      </ChakraProvider>
-    </Web3Provider>
+    <ReactQueryProvider>
+      <Web3Provider>
+        <ChakraProvider theme={theme}>
+          <MaschineProvider>
+            <ModalProvider>
+              <MetaTags {...pageProps.meta} host={pageProps.host} />
+              <Transition>
+                <Component {...pageProps} />
+                <Modal />
+              </Transition>
+            </ModalProvider>
+          </MaschineProvider>
+        </ChakraProvider>
+      </Web3Provider>
+    </ReactQueryProvider>
   )
 }
 

@@ -1,22 +1,25 @@
+import Link from 'next/link'
 import { Box, CloseButton, Container, Flex, Text } from '@chakra-ui/react'
-import useMediaQuery from '@ui/hooks/use-media-query'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 
-const Unavailability = () => {
-  const isMobile = useMediaQuery('(max-width: 479px)')
+type UnavailabilityProps = {
+  onClose: () => void
+}
 
+const Unavailability = ({ onClose }: UnavailabilityProps) => {
   return (
     <Box bg="#F76B8B" position="relative">
-      <Container color="gray.700" maxW={['full', 'full', 'unset']} p={isMobile ? '16px 16px 72px' : 6}>
+      <Container color="gray.700" maxW={['full', 'full', 'unset']} p={['16px 16px 72px', 6]}>
         <CloseButton
           w="44px"
           h="44px"
           size="lg"
-          ml={isMobile ? 'auto' : undefined}
-          mb={isMobile ? 6 : undefined}
-          position={isMobile ? 'static' : 'absolute'}
+          ml={['auto', 'unset']}
+          mb={[6, 'unset']}
+          position={['static', 'absolute']}
           right={4}
           top={4}
+          onClick={onClose}
         />
         <Flex justifyContent="center" alignItems="baseline" flexWrap="wrap">
           <HiOutlineLockClosed />
@@ -29,7 +32,7 @@ const Unavailability = () => {
             flexBasis={['90%', '90%', '90%', 'unset']}
           >
             It seems like you are not eligible to mint an Maschine NFT. Please{' '}
-            <Box as="a" href="#" target="_blank" textDecoration="underline">
+            <Box as={Link} href="terms-and-conditions" textDecoration="underline">
               read our terms
             </Box>{' '}
             for more information.

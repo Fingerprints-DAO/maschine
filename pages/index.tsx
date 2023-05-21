@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Alert, AlertTitle, Box, Button, CloseButton, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-mercedes.png'
@@ -11,8 +11,9 @@ import MintCta from '@ui/components/organisms/mint-cta'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
-import { HiOutlineLockClosed } from 'react-icons/hi'
 import Unavailability from '@ui/components/organisms/unavailability'
+import { useMaschineContext } from '@ui/contexts/maschine'
+import { useEffect, useState } from 'react'
 
 type HomeProps = {
   meta: {
@@ -28,6 +29,15 @@ type HomeProps = {
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isBrowser = useIsBrowser()
   const isMobile = useMediaQuery('(max-width: 479px)')
+  const { canInteract } = useMaschineContext()
+
+  const [isWarningVisible, setIsWarningVisible] = useState(true)
+
+  useEffect(() => {
+    setIsWarningVisible(canInteract)
+  }, [canInteract])
+
+  const handleCloseWarning = () => setIsWarningVisible(false)
 
   return (
     <>
@@ -38,7 +48,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
       </Head>
       <Box
         as="main"
-        bg={`url('${bg}')`}
+        bg={`url('${bg || ''}')`}
         bgSize="cover"
         bgPos="center"
         bgRepeat="no-repeat"
@@ -48,7 +58,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
         <Box position="relative" zIndex={2}>
-          <Unavailability />
+          {!isWarningVisible && <Unavailability onClose={handleCloseWarning} />}
           <Header />
           <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
             <Box mb={12} display={['block', 'none']}>
@@ -195,9 +205,9 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      bg,
       cardImageNumber,
       meta,
+      ...(process.env.NODE_ENV !== 'development' && { bg }),
     },
   }
 }

@@ -5,6 +5,7 @@ import Wallet from '@ui/components/molecules/wallet'
 import { useMaschineContext } from '@ui/contexts/maschine'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
+import { HiOutlineLockClosed } from 'react-icons/hi'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -12,7 +13,7 @@ type NftCardProps = {
 
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
-  const { isConnected } = useMaschineContext()
+  const { isConnected, canInteract } = useMaschineContext()
   const { handleOpenModal } = useModalContext()
 
   return (
@@ -79,9 +80,23 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             </Text>
           </Box>
         </Flex>
-        {isConnected && isBrowser ? (
+        {canInteract && isConnected && isBrowser ? (
           <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
             Buy
+          </Button>
+        ) : !canInteract ? (
+          <Button
+            color="gray.500"
+            cursor="no-drop"
+            borderColor="gray.500"
+            leftIcon={<HiOutlineLockClosed />}
+            variant="outline"
+            disabled={true}
+            h={16}
+            w="full"
+            size="lg"
+          >
+            Mint unavailable
           </Button>
         ) : (
           <Wallet variant="card" />
