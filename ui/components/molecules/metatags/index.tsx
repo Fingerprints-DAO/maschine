@@ -10,7 +10,7 @@ export type MetaTagsProps = {
 
 export default function MetaTags({ title = '', description, host, image }: MetaTagsProps) {
   const pageTitle = 'Maschine by Fingerprints DAO | ' + title
-  let thumbnail = (image != undefined && `${host}/${image}`) || `${host}/images/social-cover.jpeg`
+  let thumbnail = (image != undefined && `${host}/${image}`) || `${host}/images/maschine-og-image.jpg`
 
   return (
     <Head>
