@@ -6,6 +6,9 @@ import { useMaschineContext } from '@ui/contexts/maschine'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
+import { useMemo } from 'react'
+import { BigNumber } from 'ethers'
+import dayjs from 'dayjs'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -13,8 +16,17 @@ type NftCardProps = {
 
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
-  const { isConnected, canInteract } = useMaschineContext()
   const { handleOpenModal } = useModalContext()
+  const { isConnected, canInteract, config } = useMaschineContext()
+
+  const endTime = useMemo(() => {
+    const endTimeUnix = config?.startTime?.toNumber()
+    const end = dayjs(endTimeUnix)
+    console.log('endTimeUnix', endTimeUnix)
+    console.log('end', end)
+
+    return ``
+  }, [config])
 
   return (
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
@@ -22,7 +34,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         <Text color="gray.500">
           Sale ends in{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
-            90 minutes
+            {endTime}
           </Text>{' '}
           at{' '}
           <Text color="gray.300" as="span" fontWeight="bold">

@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query'
 import { getNftContractAddressKey } from './keys'
-import useMaschine from './use-maschine'
+import useDutchAuction from './use-dutch-auction'
 
 const useGetNftContractAddress = () => {
-  const maschine = useMaschine()
+  const dutchAuction = useDutchAuction()
 
   const request = async () => {
-    const address = await maschine?.nftContractAddress()
+    const address = await dutchAuction?.nftContractAddress()
 
     return address
   }

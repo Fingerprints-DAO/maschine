@@ -3,18 +3,23 @@ const MaschineContract = [
     inputs: [
       {
         internalType: 'address',
-        name: '_nftAddress',
+        name: '_payoutAddress',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_signerAddress',
+        name: '_minterContractAddress',
         type: 'address',
       },
       {
-        internalType: 'address',
-        name: '_treasuryAddress',
-        type: 'address',
+        internalType: 'uint16',
+        name: '_tokenTokenIdMax',
+        type: 'uint16',
+      },
+      {
+        internalType: 'string',
+        name: '_baseURIValue',
+        type: 'string',
       },
     ],
     stateMutability: 'nonpayable',
@@ -22,129 +27,78 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'AlreadyWithdrawn',
+    name: 'InitialRegistryAddressCannotBeZeroAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OnlyOwner',
     type: 'error',
   },
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: 'deadline',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
       },
     ],
-    name: 'BidExpired',
+    name: 'OperatorNotAllowed',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'ClaimRefundNotReady',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'ConfigAlreadySet',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'ConfigNotSet',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidAmountInWei',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidQuantity',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'InvalidSignature',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64',
-        name: 'startTime',
-        type: 'uint64',
-      },
-      {
-        internalType: 'uint64',
-        name: 'endTime',
-        type: 'uint64',
-      },
-    ],
-    name: 'InvalidStartEndTime',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotEnded',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotEnoughValue',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotRefundable',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotStarted',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NothingToClaim',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'PurchaseLimitReached',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'TransferFailed',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'UserAlreadyClaimed',
+    name: 'RegistryHasBeenRevoked',
     type: 'error',
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'address',
-        name: 'user',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'approved',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'Approval',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'operator',
         type: 'address',
       },
       {
         indexed: false,
-        internalType: 'uint32',
-        name: 'qty',
-        type: 'uint32',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'price',
-        type: 'uint256',
+        internalType: 'bool',
+        name: 'approved',
+        type: 'bool',
       },
     ],
-    name: 'Bid',
+    name: 'ApprovalForAll',
     type: 'event',
   },
   {
@@ -153,36 +107,36 @@ const MaschineContract = [
       {
         indexed: false,
         internalType: 'address',
-        name: 'user',
+        name: 'newRegistry',
         type: 'address',
       },
-      {
-        indexed: false,
-        internalType: 'uint32',
-        name: 'qty',
-        type: 'uint32',
-      },
     ],
-    name: 'Claim',
+    name: 'OperatorFilterRegistryAddressUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: 'OperatorFilterRegistryRevoked',
     type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'address',
-        name: 'user',
+        name: 'previousOwner',
         type: 'address',
       },
       {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'refundInWei',
-        type: 'uint256',
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
       },
     ],
-    name: 'ClaimRefund',
+    name: 'OwnershipTransferred',
     type: 'event',
   },
   {
@@ -203,74 +157,24 @@ const MaschineContract = [
     inputs: [
       {
         indexed: true,
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
       },
       {
         indexed: true,
-        internalType: 'bytes32',
-        name: 'previousAdminRole',
-        type: 'bytes32',
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
       },
       {
         indexed: true,
-        internalType: 'bytes32',
-        name: 'newAdminRole',
-        type: 'bytes32',
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
       },
     ],
-    name: 'RoleAdminChanged',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
-    name: 'RoleGranted',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
-    name: 'RoleRevoked',
+    name: 'Transfer',
     type: 'event',
   },
   {
@@ -287,44 +191,19 @@ const MaschineContract = [
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'DEFAULT_ADMIN_ROLE',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
-        internalType: 'uint32',
-        name: 'qty',
-        type: 'uint32',
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
       },
       {
         internalType: 'uint256',
-        name: 'deadline',
+        name: 'tokenId',
         type: 'uint256',
       },
-      {
-        internalType: 'bytes',
-        name: 'signature',
-        type: 'bytes',
-      },
     ],
-    name: 'bid',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'claimRefund',
+    name: 'approve',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -332,96 +211,12 @@ const MaschineContract = [
   {
     inputs: [
       {
-        internalType: 'uint32',
-        name: 'amount',
-        type: 'uint32',
-      },
-    ],
-    name: 'claimTokens',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'eip712DomainHash',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
-        name: 'user',
+        name: 'owner',
         type: 'address',
       },
     ],
-    name: 'getClaimableTokens',
-    outputs: [
-      {
-        internalType: 'uint32',
-        name: 'claimable',
-        type: 'uint32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getConfig',
-    outputs: [
-      {
-        components: [
-          {
-            internalType: 'uint256',
-            name: 'startAmountInWei',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'endAmountInWei',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint216',
-            name: 'limitInWei',
-            type: 'uint216',
-          },
-          {
-            internalType: 'uint32',
-            name: 'refundDelayTime',
-            type: 'uint32',
-          },
-          {
-            internalType: 'uint64',
-            name: 'startTime',
-            type: 'uint64',
-          },
-          {
-            internalType: 'uint64',
-            name: 'endTime',
-            type: 'uint64',
-          },
-        ],
-        internalType: 'struct IDutchAuction.Config',
-        name: '',
-        type: 'tuple',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getCurrentPriceInWei',
+    name: 'balanceOf',
     outputs: [
       {
         internalType: 'uint256',
@@ -433,38 +228,13 @@ const MaschineContract = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-    ],
-    name: 'getNonce',
+    inputs: [],
+    name: 'baseURIValue',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'string',
         name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-    ],
-    name: 'getRoleAdmin',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -472,7 +242,7 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'getSettledPriceInWei',
+    name: 'currentTokenId',
     outputs: [
       {
         internalType: 'uint256',
@@ -484,36 +254,13 @@ const MaschineContract = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-    ],
-    name: 'getUserData',
+    inputs: [],
+    name: 'customBaseURIValue',
     outputs: [
       {
-        components: [
-          {
-            internalType: 'uint216',
-            name: 'contribution',
-            type: 'uint216',
-          },
-          {
-            internalType: 'uint32',
-            name: 'tokensBidded',
-            type: 'uint32',
-          },
-          {
-            internalType: 'bool',
-            name: 'refundClaimed',
-            type: 'bool',
-          },
-        ],
-        internalType: 'struct IDutchAuction.User',
+        internalType: 'string',
         name: '',
-        type: 'tuple',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -522,17 +269,17 @@ const MaschineContract = [
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-      {
         internalType: 'address',
-        name: 'account',
+        name: 'recipient',
         type: 'address',
       },
+      {
+        internalType: 'uint16',
+        name: 'tokenId',
+        type: 'uint16',
+      },
     ],
-    name: 'grantRole',
+    name: 'customTokenMint',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -540,17 +287,36 @@ const MaschineContract = [
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
       },
+    ],
+    name: 'getApproved',
+    outputs: [
       {
         internalType: 'address',
-        name: 'account',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'hasRole',
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+    ],
+    name: 'isApprovedForAll',
     outputs: [
       {
         internalType: 'bool',
@@ -563,10 +329,94 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'nftContractAddress',
+    name: 'isOperatorFilterRegistryRevoked',
     outputs: [
       {
-        internalType: 'contract INFT',
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
+      },
+    ],
+    name: 'mint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'minterContractAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'name',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'operatorFilterRegistry',
+    outputs: [
+      {
+        internalType: 'contract IOperatorFilterRegistry',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'ownerOf',
+    outputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -595,134 +445,8 @@ const MaschineContract = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address[]',
-        name: 'accounts',
-        type: 'address[]',
-      },
-    ],
-    name: 'refundUsers',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'renounceRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bytes32',
-        name: 'role',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'revokeRole',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'startAmountInWei',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'endAmountInWei',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint216',
-        name: 'limitInWei',
-        type: 'uint216',
-      },
-      {
-        internalType: 'uint32',
-        name: 'refundDelayTime',
-        type: 'uint32',
-      },
-      {
-        internalType: 'uint64',
-        name: 'startTime',
-        type: 'uint64',
-      },
-      {
-        internalType: 'uint64',
-        name: 'endTime',
-        type: 'uint64',
-      },
-    ],
-    name: 'setConfig',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setNftContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setSignerAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_treasuryAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setTreasuryAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
-    name: 'signerAddress',
+    name: 'payoutAddress',
     outputs: [
       {
         internalType: 'address',
@@ -731,6 +455,196 @@ const MaschineContract = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'reservedCustomTokens',
+    outputs: [
+      {
+        internalType: 'uint8',
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'revokeOperatorFilterRegistry',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'royaltyFee',
+    outputs: [
+      {
+        internalType: 'uint96',
+        name: '',
+        type: 'uint96',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_salePrice',
+        type: 'uint256',
+      },
+    ],
+    name: 'royaltyInfo',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: 'data',
+        type: 'bytes',
+      },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: 'approved',
+        type: 'bool',
+      },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'newBaseURI',
+        type: 'string',
+      },
+    ],
+    name: 'setBaseURI',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'newCustomBaseURI',
+        type: 'string',
+      },
+    ],
+    name: 'setCustomBaseURI',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newMinter',
+        type: 'address',
+      },
+    ],
+    name: 'setMinterAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: 'newPayoutAddress',
+        type: 'address',
+      },
+    ],
+    name: 'setPayoutAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -754,15 +668,96 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'treasuryAddress',
+    name: 'symbol',
     outputs: [
       {
-        internalType: 'address',
+        internalType: 'string',
         name: '',
-        type: 'address',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenTokenIdMax',
+    outputs: [
+      {
+        internalType: 'uint16',
+        name: '',
+        type: 'uint16',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenURI',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -773,12 +768,18 @@ const MaschineContract = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'withdrawFunds',
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newRegistry',
+        type: 'address',
+      },
+    ],
+    name: 'updateOperatorFilterRegistryAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
-] as const
+]
 
 export default MaschineContract
