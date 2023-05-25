@@ -61,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const ethCallProvider = new Provider(provider)
   await ethCallProvider.init()
 
-  const auction = new Contract(process.env.AUCTION_CONTRACT as string, ABI)
+  const auction = new Contract(process.env.NEXT_PUBLIC_AUCTION_CONTRACT as string, ABI)
 
   const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
 
