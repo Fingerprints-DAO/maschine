@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <Container as="footer" py={[6, 4]}>
       <Flex alignItems={['unset', 'center']} flexDir={['column', 'column', 'row-reverse']}>
-        <Text align={['center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]}>
+        <Text align={['center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} ml={[2]}>
           developed by{' '}
           <Box as="a" href="https://fingerprintsdao.xyz" title="Fingerprints DAO" target="_blank">
             Fingerprints DAO

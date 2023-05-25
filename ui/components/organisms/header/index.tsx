@@ -22,9 +22,9 @@ import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { useRouter } from 'next/router'
 
 const nav = [
-  { value: '/', label: 'home' },
   { value: '/about', label: 'about' },
   { value: '/faq', label: 'FAQ' },
+  { value: '/terms', label: 'terms' },
 ]
 
 const Header = () => {

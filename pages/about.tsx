@@ -3,98 +3,133 @@ import Footer from '@ui/components/organisms/footer'
 import Header from '@ui/components/organisms/header'
 import Head from 'next/head'
 import Image from 'next/image'
-import hero from 'public/images/img2.jpg'
-import aHarmVanDenDorpel from 'public/images/a-harm-van-den-dorpel.png'
-import fingerPrintsThumb from 'public/images/fingerprints-thumb.png'
+import hero from 'public/images/animated-2.gif'
+import aHarmVanDenDorpel from 'public/images/harm-profile.webp'
+import fingerPrintsThumb from 'public/images/fpthumb.gif'
+import mercedesThumb from 'public/images/mnxt.png'
+import { Stack } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/react'
 
 const AboutPage = () => {
   return (
     <>
       <Head>
-        <title>About</title>
+        <title>Maschine | About</title>
       </Head>
       <Box as="main">
         <Header />
-        <Box as="section" pt={10} pb={148}>
-          <Container>
-            <Text as="h3" color="gray.50" fontWeight="bold" fontSize={['4xl', '4xl', '4xl', '4xl', '5xl']} lineHeight="55px" mb={6}>
-              The Maschine Collection
-            </Text>
-            <Box mb={[16, '72px']} display={['block', 'flex']} flexDir="row">
-              <AspectRatio
-                maxW="full"
-                w={['auto', '316px']}
-                h={['auto', '288px']}
-                ratio={1}
-                borderRadius={8}
-                overflow="hidden"
-                mb={[8, 0]}
-                mr={[0, 8]}
-              >
-                <Image src={hero} alt="The Maschine Collection" />
-              </AspectRatio>
-              <Text fontWeight="light" color="gray.300" fontSize="lg" lineHeight="7">
-                Maschine is an artwork inspired by speed and its effects on human perception. It draws
-              </Text>
-            </Box>
+        <Container>
+          <Box as="section" pt={10} pb={148}>
+            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+              <Box mb={[5, 5, 0]}>
+                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                  <Image src={hero} alt="The Maschine Collection" />
+                </AspectRatio>
+              </Box>
 
-            <Text as="h3" color="gray.50" fontWeight="bold" fontSize={['4xl', '4xl', '4xl', '4xl', '5xl']} lineHeight="55px" mb={6}>
-              A Harm van den Dorpel artwork
-            </Text>
-            <Box mb={[16, '72px']} display={['block', 'flex']} flexDir="row">
-              <AspectRatio
-                maxW="full"
-                w={['auto', '316px']}
-                h={['auto', '288px']}
-                ratio={4 / 3}
-                borderRadius={8}
-                overflow="hidden"
-                mb={[8, 0]}
-                mr={[0, 8]}
-              >
-                <Image src={aHarmVanDenDorpel} alt="A Harm van den Dorpel artwork" />
-              </AspectRatio>
-              <Box flex={1}>
-                <Text fontWeight="light" color="gray.300" fontSize="lg" lineHeight="6">
-                  Harm van den Dorpel is an artist dedicated to discovering emergent aesthetics by composing software and language, borrowing from
-                  disparate fields such as genetics and blockchain. Also I co-founded left gallery. Based in Berlin. Harm van den Dorpel is an artist
-                  dedicated to discovering emergent aesthetics by composing software and language, borrowing from disparate fields such as genetics
-                  and blockchain. Also I co-founded left gallery. Based in Berlin.Harm van den Dorpel is an artist dedicated to discovering emergent
-                  aesthetics by composing software and language, borrowing from disparate fields such as genetics and blockchain. Also I co-founded
-                  left gallery. Based in Berlin.
+              <Box flex={1} order={[2, 2, 1]}>
+                <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
+                  The Maschine Collection
                 </Text>
+                <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
+                  <Text>Maschine is an artwork inspired by speed and its effects on human perception.</Text>
+                  <Text>
+                    When objects move really fast, the human eye is not able to properly process the phenomena, instead capturing only slices and
+                    disjointed images. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
+                  </Text>
+                  <Text>
+                    This illusion isn't common in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
+                    stroboscopic effect became a common occurence in people's lives. It can since be observed in car wheels, propellers, turbines and all sorts of engine-driven machines.
+                  </Text>
+                  <Text>
+                    Maschine reproduces this illusion with a 3D webGL animation. Each piece is made unique through the generation of a large number of
+                    aesthetic parameters.
+                  </Text>
+                </Stack>
               </Box>
             </Box>
 
-            <Text as="h3" color="gray.50" fontWeight="bold" fontSize={['4xl', '4xl', '4xl', '4xl', '5xl']} lineHeight="55px" mb={6}>
-              In Partnership with Fingerprints
-            </Text>
-            <Box mb={[16, '72px']} display={['block', 'flex']} flexDir="row">
-              <AspectRatio
-                maxW="full"
-                w={['auto', '316px']}
-                h={['auto', '288px']}
-                ratio={4 / 3}
-                borderRadius={8}
-                overflow="hidden"
-                mb={[8, 0]}
-                mr={[0, 8]}
-              >
-                <Image src={fingerPrintsThumb} alt="By Fingerprints community" />
-              </AspectRatio>
-              <Box flex={1}>
-                <Text fontWeight="light" color="gray.300" fontSize="lg" lineHeight="6">
-                  Harm van den Dorpel is an artist dedicated to discovering emergent aesthetics by composing software and language, borrowing from
-                  disparate fields such as genetics and blockchain. Also I co-founded left gallery. Based in Berlin. Harm van den Dorpel is an artist
-                  dedicated to discovering emergent aesthetics by composing software and language, borrowing from disparate fields such as genetics
-                  and blockchain. Also I co-founded left gallery. Based in Berlin.Harm van den Dorpel is an artist dedicated to discovering emergent
-                  aesthetics by composing software and language, borrowing from disparate fields such as genetics and blockchain. Also I co-founded
-                  left gallery. Based in Berlin.
+            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+              <Box mb={[5, 5, 0]} order={[1, 1, 2]}>
+                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                  <Image src={aHarmVanDenDorpel} alt="A Harm van den Dorpel artwork" />
+                </AspectRatio>
+              </Box>
+
+              <Box flex={1} order={[2, 2, 1]}>
+                <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
+                  A Harm van den Dorpel Artwork
                 </Text>
+                <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
+                  <Text>
+                    Berlin-based artist {' '}<Link isExternal color={'#6ECCDD'} href='https://harm.work/'>Harm van den Dorpel</Link>{' '} began creating blockchain-based artworks in 2015. His art is dedicated to discovering
+                    emergent aesthetics by composing software and language.
+                  </Text>
+                  <Text>
+                    His previous works using NFTs include very early experiments and celebrated collections such as Mutant Garden Seeder, of which
+                    Fingerprints DAO is the largest holder.
+                  </Text>
+                  <Text>
+                    He's had institutional exhibitions at Museum Kurhaus Kleve, the New Museum in New York, The Ullens Center for Contemporary Art in
+                    Beijing, China, the Museum of Modern Art, Warsaw, and the Netherlands Media Art Institute, Amsterdam.
+                  </Text>
+                </Stack>
               </Box>
             </Box>
-          </Container>
-        </Box>
+
+            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+              <Box mb={[5, 5, 0]}>
+                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                  <Image src={mercedesThumb} alt="Mercedes-Benz NXT" />
+                </AspectRatio>
+              </Box>
+
+              <Box flex={1} order={[2, 2, 1]}>
+                <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
+                  In Collaboration with Mercedes-Benz NXT
+                </Text>
+                <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
+                  <Text>
+                    Mercedes-Benz’s history spans more than 130 years. During this time, collectors have engaged with and enjoyed all kinds of
+                    physical objects, from the vehicles themselves to model cars and memorabilia.
+                  </Text>
+                  <Text>
+                    Having been born in the height of the machine age, the collection rhymes with the original Mercedes-Benz's vision for universal
+                    motorization.
+                  </Text>
+                  <Text><Link isExternal color={'#6ECCDD'} href='https://nxt.mercedes-benz.com/'>Mercedes-Benz NXT</Link>{' '} aims to bring this collectibility to the digital realm.</Text>
+                </Stack>
+              </Box>
+            </Box>
+
+            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+              <Box mb={[5, 5, 0]} order={[1, 1, 2]}>
+                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                  <Image src={fingerPrintsThumb} alt="And Fingerprints DAO" />
+                </AspectRatio>
+              </Box>
+
+              <Box flex={1} order={[2, 2, 1]}>
+                <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
+                  And Fingerprints DAO
+                </Text>
+                <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
+                  <Text>
+                    Described as the home of blockchain art, 
+                    {' '}<Link isExternal color={'#6ECCDD'} href='https://fingerprintsdao.xyz'>Fingerprints</Link>{' '}
+                     is an organization dedicated to collecting and supporting the best art built on top of blockchain technology.
+                  </Text>
+                  <Text>
+                    Consisting of over 250 collectors, its open community manages a shared treasury and notable collection of NFT art assembled by its curatorial committee.
+                  </Text>
+                  <Text>
+                    Fingerprints and its community are glad to support the making and auctioning of this collection.
+                  </Text>
+                </Stack>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
         <Footer />
       </Box>
     </>

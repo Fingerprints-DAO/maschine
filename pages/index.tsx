@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
-import logoMercedes from 'public/images/logo-mercedes.png'
+import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 
 type HomeProps = {
@@ -43,14 +43,14 @@ export default function Home({ meta, bg }: HomeProps) {
               mb={[0, 0, 0, 0, 6]}
             >
               <Text fontSize={['lg', 'xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
-                By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
+                By Harm van den Dorpel, in collaboration with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
-                  <Image src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
+                  <Image src={logoHarmStudio} alt="Harm Studio" width={50} height={50} />
                 </Box>
                 <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
-                  <Image src={logoMercedes} alt="Harm Studio" width={42} height={42} />
+                  <Image src={logoMercedes} alt="Harm Studio" width={110} height={110} />
                 </Box>
               </Flex>
             </Flex>
@@ -64,7 +64,7 @@ export default function Home({ meta, bg }: HomeProps) {
 export async function getServerSideProps() {
   const meta = {
     title: 'Maschine',
-    description: 'A project by Harm van den Dorpel in partnership with Mercedes-Benz and Fingerprints DAO.',
+    description: 'A project by Harm van den Dorpel in collaboration with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
     image: '/images/seo-5.png',
   }
