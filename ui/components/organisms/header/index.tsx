@@ -24,7 +24,7 @@ import { useRouter } from 'next/router'
 const nav = [
   { value: '/about', label: 'about' },
   { value: '/faq', label: 'FAQ' },
-  { value: '/terms', label: 'terms' },
+  { value: '/terms-and-conditions', label: 'terms' },
 ]
 
 const Header = () => {
