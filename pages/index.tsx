@@ -63,7 +63,7 @@ export default function Home({ meta, bg }: HomeProps) {
 
 export async function getServerSideProps() {
   const meta = {
-    title: 'Maschine',
+    title: 'Homepage',
     description: 'A project by Harm van den Dorpel in collaboration with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
     image: '/images/seo.jpg',

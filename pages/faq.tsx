@@ -68,7 +68,7 @@ const FaqPage = () => {
   return (
     <>
       <Head>
-        <title>Maschine | FAQ</title>
+        <title>FAQ</title>
       </Head>
       <Box as="main">
         <Header />

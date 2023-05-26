@@ -14,7 +14,7 @@ const AboutPage = () => {
   return (
     <>
       <Head>
-        <title>Maschine | About</title>
+        <title>About</title>
       </Head>
       <Box as="main">
         <Header />
