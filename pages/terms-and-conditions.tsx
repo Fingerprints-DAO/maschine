@@ -6,7 +6,7 @@ const TermsAndConditionsPage = () => {
   return (
     <>
       <Head>
-        <title>Terms and conditions</title>
+        <title>Maschine | Terms and conditions</title>
       </Head>
       <Box as="main">
         <Header />

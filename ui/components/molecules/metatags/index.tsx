@@ -9,7 +9,7 @@ export type MetaTagsProps = {
 }
 
 export default function MetaTags({ title = '', description, host, image }: MetaTagsProps) {
-  const pageTitle = 'Maschine | ' + title
+  const pageTitle = title
   let thumbnail = (image != undefined && `${host}/${image}`) || `${host}/images/maschine-og-image.jpg`
 
   return (
