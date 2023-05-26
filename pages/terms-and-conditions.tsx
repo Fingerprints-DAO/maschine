@@ -1,5 +1,4 @@
 import { Box, Container, Text } from '@chakra-ui/react'
-import Footer from '@ui/components/organisms/footer'
 import Header from '@ui/components/organisms/header'
 import Head from 'next/head'
 
@@ -52,7 +51,6 @@ const TermsAndConditionsPage = () => {
             </Box>
           </Container>
         </Box>
-        <Footer />
       </Box>
     </>
   )

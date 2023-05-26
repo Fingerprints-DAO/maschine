@@ -3,9 +3,9 @@ import Footer from '@ui/components/organisms/footer'
 import Header from '@ui/components/organisms/header'
 import Head from 'next/head'
 import Image from 'next/image'
-import hero from 'public/images/animated-2.gif'
+import hero from 'public/images/still.jpg'
 import aHarmVanDenDorpel from 'public/images/harm-profile.webp'
-import fingerPrintsThumb from 'public/images/fpthumb.gif'
+import fingerPrintsThumb from 'public/images/fpthumb.jpg'
 import mercedesThumb from 'public/images/mnxt.png'
 import { Stack } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/react'
@@ -21,7 +21,7 @@ const AboutPage = () => {
         <Container>
           <Box as="section" pt={10} pb={148}>
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mb={[5, 5, 0]}>
+              <Box mt={[3]} mb={[5, 5, 0]}>
                 <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={hero} alt="The Maschine Collection" />
                 </AspectRatio>
@@ -32,25 +32,31 @@ const AboutPage = () => {
                   The Maschine Collection
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
-                  <Text>Maschine is an artwork inspired by speed and its effects on human perception.</Text>
                   <Text>
-                    When objects move really fast, the human eye is not able to properly process the phenomena, instead capturing only slices and
-                    disjointed images. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
+                    Maschine is a collection exploring velocity and perception, consisting of 1,000 unique generative artworks which depict radial
+                    arrangements that spin at varying speeds.
                   </Text>
                   <Text>
-                    This illusion isn't common in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
-                    stroboscopic effect became a common occurence in people's lives. It can since be observed in car wheels, propellers, turbines and all sorts of engine-driven machines.
+                    When objects move really fast, the human eye is not able to properly process the phenomena, instead merging the images into a blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
+                  </Text>
+                  <Text>
+                    It's hard to observe it in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
+                    stroboscopic effect became a common occurence in people's lives. It can since be observed in car wheels, propellers, turbines and
+                    all sorts of engine-driven machines.
                   </Text>
                   <Text>
                     Maschine reproduces this illusion with a 3D webGL animation. Each piece is made unique through the generation of a large number of
                     aesthetic parameters.
+                  </Text>
+                  <Text>
+                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations during the making of this collection.
                   </Text>
                 </Stack>
               </Box>
             </Box>
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mb={[5, 5, 0]} order={[1, 1, 2]}>
+              <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
                 <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={aHarmVanDenDorpel} alt="A Harm van den Dorpel artwork" />
                 </AspectRatio>
@@ -62,8 +68,12 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Berlin-based artist {' '}<Link isExternal color={'#6ECCDD'} href='https://harm.work/'>Harm van den Dorpel</Link>{' '} began creating blockchain-based artworks in 2015. His art is dedicated to discovering
-                    emergent aesthetics by composing software and language.
+                    Berlin-based artist {' '}
+                    <Link isExternal color={'#6ECCDD'} href="https://harm.work/">
+                      Harm van den Dorpel
+                    </Link>{' '}
+                    began creating blockchain-based artworks in 2015. His art is dedicated to discovering emergent aesthetics by composing software
+                    and language.
                   </Text>
                   <Text>
                     His previous works using NFTs include very early experiments and celebrated collections such as Mutant Garden Seeder, of which
@@ -78,7 +88,7 @@ const AboutPage = () => {
             </Box>
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mb={[5, 5, 0]}>
+              <Box mt={[3]} mb={[5, 5, 0]}>
                 <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={mercedesThumb} alt="Mercedes-Benz NXT" />
                 </AspectRatio>
@@ -97,13 +107,18 @@ const AboutPage = () => {
                     Having been born in the height of the machine age, the collection rhymes with the original Mercedes-Benz's vision for universal
                     motorization.
                   </Text>
-                  <Text><Link isExternal color={'#6ECCDD'} href='https://nxt.mercedes-benz.com/'>Mercedes-Benz NXT</Link>{' '} aims to bring this collectibility to the digital realm.</Text>
+                  <Text>
+                    <Link isExternal color={'#6ECCDD'} href="https://nxt.mercedes-benz.com/">
+                      Mercedes-Benz NXT
+                    </Link>{' '}
+                    aims to bring this collectibility to the digital realm.
+                  </Text>
                 </Stack>
               </Box>
             </Box>
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mb={[5, 5, 0]} order={[1, 1, 2]}>
+              <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
                 <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={fingerPrintsThumb} alt="And Fingerprints DAO" />
                 </AspectRatio>
@@ -115,16 +130,17 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Described as the home of blockchain art, 
-                    {' '}<Link isExternal color={'#6ECCDD'} href='https://fingerprintsdao.xyz'>Fingerprints</Link>{' '}
-                     is an organization dedicated to collecting and supporting the best art built on top of blockchain technology.
+                    Described as the home of blockchain art,{' '}
+                    <Link isExternal color={'#6ECCDD'} href="https://fingerprintsdao.xyz">
+                      Fingerprints
+                    </Link>{' '}
+                    is an organization dedicated to collecting and supporting the best art built on top of blockchain technology.
                   </Text>
                   <Text>
-                    Consisting of over 250 collectors, its open community manages a shared treasury and notable collection of NFT art assembled by its curatorial committee.
+                    Consisting of over 250 collectors, its open community manages a shared treasury and notable collection of NFT art assembled by its
+                    curatorial committee.
                   </Text>
-                  <Text>
-                    Fingerprints and its community are glad to support the making and auctioning of this collection.
-                  </Text>
+                  <Text>Fingerprints and its community are glad to support the making and auctioning of this collection.</Text>
                 </Stack>
               </Box>
             </Box>
