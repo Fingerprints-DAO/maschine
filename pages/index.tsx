@@ -13,7 +13,9 @@ import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import Unavailability from '@ui/components/organisms/unavailability'
 import { useMaschineContext } from '@ui/contexts/maschine'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
+import dayjs from 'dayjs'
 
 type HomeProps = {
   meta: {
@@ -26,10 +28,14 @@ type HomeProps = {
   cardImageNumber: string
 }
 
+const now = dayjs()
+
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isBrowser = useIsBrowser()
   const isMobile = useMediaQuery('(max-width: 479px)')
-  const { canInteract } = useMaschineContext()
+
+  const { canInteract, config } = useMaschineContext()
+  const { data: claimableCount } = useGetClaimableTokens()
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
@@ -38,6 +44,18 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   }, [canInteract])
 
   const handleCloseWarning = () => setIsWarningVisible(false)
+
+  const isRebateAvailable = useMemo(() => {
+    const end = config?.endTime?.toNumber()
+
+    if (!end || !config?.refundDelayTime) {
+      return false
+    }
+
+    const delay = dayjs.unix(end).add(config.refundDelayTime, 'minutes')
+
+    return now.isAfter(delay)
+  }, [config?.refundDelayTime, config?.endTime])
 
   return (
     <>
@@ -149,10 +167,10 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Box>
             </Box>
           </Container>
-          {!isMobile && isBrowser && (
+          {!Boolean(claimableCount) && isRebateAvailable && !isMobile && isBrowser && (
             <Container mb={24}>
-              <MintCta />
-              <RebateCta />
+              {Boolean(claimableCount) && <MintCta />}
+              {isRebateAvailable && <RebateCta />}
             </Container>
           )}
           <Container mb={10}>

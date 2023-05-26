@@ -14,6 +14,10 @@ import { MaschineProvider } from '@ui/contexts/maschine'
 import { ModalProvider } from '@ui/contexts/modal'
 import Modal from '@ui/components/organisms/modals'
 import ReactQueryProvider from '@ui/contexts/react-query'
+import duration from 'dayjs/plugin/duration'
+import dayjs from 'dayjs'
+
+dayjs.extend(duration)
 
 type MaschineProps = AppProps & {
   pageProps: {

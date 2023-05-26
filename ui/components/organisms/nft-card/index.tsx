@@ -7,38 +7,99 @@ import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { useMemo } from 'react'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import dayjs from 'dayjs'
+import { formatTime } from 'utils/date'
+import CountdownTimer from '@ui/components/atoms/timer'
 
 type NftCardProps = {
   cardImageNumber: string
 }
+
+const now = dayjs()
 
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
   const { isConnected, canInteract, config } = useMaschineContext()
 
-  const endTime = useMemo(() => {
-    const endTimeUnix = config?.startTime?.toNumber()
-    const end = dayjs(endTimeUnix)
-    console.log('endTimeUnix', endTimeUnix)
-    console.log('end', end)
+  const isAuctionOpen = useMemo(() => {
+    const startTimeUnix = config?.startTime?.toNumber()
+    const start = dayjs.unix(startTimeUnix!)
 
-    return ``
+    return now.isAfter(start)
+  }, [config?.startTime])
+
+  const timeToGo = useMemo(() => {
+    const end = config?.endTime?.toNumber()
+
+    if (!end) {
+      return
+    }
+
+    const endDate = dayjs.unix(end)
+
+    return endDate
+
+    // const diff = endDate.diff(now, 'seconds')
+
+    // return formatTime(diff)
   }, [config])
+
+  const renderButton = useMemo(() => {
+    if (!isBrowser) {
+      return <div />
+    }
+
+    if (!isConnected) {
+      return <Wallet variant="card" />
+    }
+
+    if (!canInteract) {
+      return (
+        <Button
+          color="gray.500"
+          cursor="no-drop"
+          borderColor="gray.500"
+          leftIcon={<HiOutlineLockClosed />}
+          variant="outline"
+          disabled={true}
+          h={16}
+          w="full"
+          size="lg"
+        >
+          Mint unavailable
+        </Button>
+      )
+    }
+
+    if (isAuctionOpen) {
+      return (
+        <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
+          Buy
+        </Button>
+      )
+    }
+
+    return (
+      <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
+        Sold out
+      </Button>
+    )
+  }, [isConnected, isBrowser, isAuctionOpen, canInteract, handleOpenModal])
 
   return (
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
+      <CountdownTimer endDate={timeToGo} />
       <CardHeader p={6} pb={2}>
         <Text color="gray.500">
           Sale ends in{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
-            {endTime}
+            {'timeToGo'}
           </Text>{' '}
           at{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
-            0.2 ETH
+            {Boolean(config?.endAmountInWei) && ethers.utils.formatUnits(config?.endAmountInWei!, 18)} ETH
           </Text>
         </Text>
       </CardHeader>
@@ -92,27 +153,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             </Text>
           </Box>
         </Flex>
-        {canInteract && isConnected && isBrowser ? (
-          <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
-            Buy
-          </Button>
-        ) : !canInteract ? (
-          <Button
-            color="gray.500"
-            cursor="no-drop"
-            borderColor="gray.500"
-            leftIcon={<HiOutlineLockClosed />}
-            variant="outline"
-            disabled={true}
-            h={16}
-            w="full"
-            size="lg"
-          >
-            Mint unavailable
-          </Button>
-        ) : (
-          <Wallet variant="card" />
-        )}
+        {renderButton}
       </CardBody>
     </Card>
   )
