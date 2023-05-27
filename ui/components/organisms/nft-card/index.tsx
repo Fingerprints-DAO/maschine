@@ -7,10 +7,9 @@ import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { useMemo } from 'react'
-import { BigNumber, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import dayjs from 'dayjs'
-import { formatTime } from 'utils/date'
-import CountdownTimer from '@ui/components/atoms/timer'
+import useCountdownTime from '@ui/hooks/use-countdown-timer'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -30,21 +29,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     return now.isAfter(start)
   }, [config?.startTime])
 
-  const timeToGo = useMemo(() => {
-    const end = config?.endTime?.toNumber()
-
-    if (!end) {
-      return
-    }
-
-    const endDate = dayjs.unix(end)
-
-    return endDate
-
-    // const diff = endDate.diff(now, 'seconds')
-
-    // return formatTime(diff)
-  }, [config])
+  const { countdown, currentPrice } = useCountdownTime()
 
   const renderButton = useMemo(() => {
     if (!isBrowser) {
@@ -88,20 +73,43 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     )
   }, [isConnected, isBrowser, isAuctionOpen, canInteract, handleOpenModal])
 
-  return (
-    <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
-      <CountdownTimer endDate={timeToGo} />
-      <CardHeader p={6} pb={2}>
+  const renderTimer = useMemo(() => {
+    console.log('countdown', countdown)
+    if (Boolean(countdown)) {
+      return (
         <Text color="gray.500">
           Sale ends in{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
-            {'timeToGo'}
+            {countdown} minute(s)
           </Text>{' '}
           at{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
             {Boolean(config?.endAmountInWei) && ethers.utils.formatUnits(config?.endAmountInWei!, 18)} ETH
           </Text>
         </Text>
+      )
+    } else {
+      const endTime = dayjs.unix(config?.endTime?.toNumber() || 0)
+      const endTimeWithDelay = endTime.add(config?.refundDelayTime || 0, 'seconds')
+      const now = dayjs()
+
+      const rebate = endTimeWithDelay.diff(now, 'minutes')
+
+      return (
+        <Text color="gray.500">
+          Rebate will start in{' '}
+          <Text color="gray.300" as="span" fontWeight="bold">
+            {rebate} minute(s)
+          </Text>
+        </Text>
+      )
+    }
+  }, [countdown, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+
+  return (
+    <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
+      <CardHeader p={6} pb={2}>
+        {renderTimer}
       </CardHeader>
       <CardBody px={6} pt={2} pb={8}>
         <AspectRatio maxW="full" w="auto" h="auto" ratio={4 / 4} borderTopRadius={8} overflow="hidden">
@@ -149,7 +157,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               Current price
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              1.979 ETH
+              {Number(currentPrice).toFixed(3)} ETH
             </Text>
           </Box>
         </Flex>
