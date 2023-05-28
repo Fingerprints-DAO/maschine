@@ -2,19 +2,19 @@ import { useQuery } from 'react-query'
 import useDutchAuction from './use-dutch-auction'
 import { useMaschineContext } from '@ui/contexts/maschine'
 
-const useGetClaimableTokens = () => {
-  const { address } = useMaschineContext()
+const useGetUserData = () => {
   const dutchAuction = useDutchAuction()
+  const { address } = useMaschineContext()
 
   const request = async () => {
     if (!address) {
       throw new Error('Wallet is not connected')
     }
 
-    return dutchAuction?.getClaimableTokens?.(address)
+    return dutchAuction?.getUserData?.(address)
   }
 
-  return useQuery(['claimable-tokens', 'count'], request, { enabled: Boolean(dutchAuction) && Boolean(address) })
+  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction) })
 }
 
-export default useGetClaimableTokens
+export default useGetUserData

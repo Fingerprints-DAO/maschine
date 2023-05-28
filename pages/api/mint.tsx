@@ -5,30 +5,34 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
 import ABI from './_abi/auction.json'
+import { Address, readContracts } from 'wagmi'
+import DutchAuctionContract from '@web3/contracts/dutch-auction/abi'
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 type MintData = {
   deadline: number
-  signature: string
+  signature: Address
 }
 
-type MintResponse = {
+export type MintResponse = {
   success: boolean
   message?: string
   data?: MintData
 }
 
+const dutchAuctionContract = {
+  address: process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS as Address,
+  abi: DutchAuctionContract,
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<MintResponse>) {
-  let ip = req.headers['x-real-ip']
-  if (!ip) {
-    const forwardedFor = req.headers['x-forwarded-for']
-    if (Array.isArray(forwardedFor)) {
-      ip = forwardedFor.at(0)
-    } else {
-      ip = forwardedFor?.split(',').at(0) ?? 'Unknown'
-    }
-  }
+  const response = await fetch('https://api.ipify.org', {
+    method: 'GET',
+    headers: { 'Content-Type': 'text/plain' },
+  })
+
+  const ip = await response.text()
 
   let { address, qty } = req.body
   qty = parseInt(qty)
@@ -41,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   let country: string
   try {
-    const location = await ipToLocation(ip as string)
+    const location = await ipToLocation(ip)
     country = location.addressCountry
 
     if (!isAllowed(location.addressCountry)) {
@@ -57,17 +61,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
-  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL, parseInt(process.env.CHAIN_ID as string))
-  const ethCallProvider = new Provider(provider)
-  await ethCallProvider.init()
+  const multiCalls = await readContracts({
+    contracts: [
+      {
+        ...dutchAuctionContract,
+        functionName: 'getNonce',
+        args: [address],
+      },
+      {
+        ...dutchAuctionContract,
+        functionName: 'getCurrentPriceInWei',
+      },
+      {
+        ...dutchAuctionContract,
+        functionName: 'getUserData',
+        args: [address],
+      },
+      {
+        ...dutchAuctionContract,
+        functionName: 'getConfig',
+      },
+    ],
+  })
 
-  const auction = new Contract(process.env.NEXT_PUBLIC_AUCTION_CONTRACT as string, ABI)
+  //   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL, parseInt(process.env.CHAIN_ID as string))
+  //   const ethCallProvider = new Provider(provider)
+  //   await ethCallProvider.init()
 
-  const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
+  //   const auction = new Contract(process.env.NEXT_PUBLIC_AUCTION_CONTRACT as string, ABI)
+
+  //   const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
 
   let nonce = 0
   try {
-    const [rawNonce, currentPrice, userData, config] = await ethCallProvider.all(multiCalls)
+    const [rawNonce, currentPrice, userData, config] = multiCalls
     const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
     if (totalAfterMint.gt(config.limitInWei)) {
       return res.status(400).json({
@@ -83,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
-  const signature = await signBid(signer, auction.address, {
+  const signature = await signBid(signer, process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS as string, {
     account: address,
     qty,
     nonce,
@@ -94,7 +121,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     success: true,
     data: {
       deadline,
-      signature,
+      signature: signature as Address,
     },
   })
 }

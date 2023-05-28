@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 
-// const INTERVAL = 60000
-const INTERVAL = 1000
+const INTERVAL = 60000
+// const INTERVAL = 1000
 
 const useCountdownTime = () => {
   const { config } = useMaschineContext()
@@ -68,7 +68,7 @@ const useCountdownTime = () => {
     const interval = setInterval(() => {
       const minutes = handleMinutes()
       const price = handlePrice()
-      const endPrice = ethers.utils.formatUnits(config?.endAmountInWei!, 18)
+      const endPrice = !!config?.endAmountInWei ? ethers.utils.formatUnits(config?.endAmountInWei, 18) : ''
 
       if (minutes <= 0 && price <= Number(endPrice)) {
         clearInterval(interval)

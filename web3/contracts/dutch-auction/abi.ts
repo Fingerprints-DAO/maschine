@@ -84,6 +84,11 @@ const DutchAuctionContract = [
   },
   {
     inputs: [],
+    name: 'MaxSupplyReached',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'NotEnded',
     type: 'error',
   },

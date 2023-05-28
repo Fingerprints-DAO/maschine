@@ -6,7 +6,7 @@ const useDutchAuction = () => {
 
   const dutchAuction = useContract({
     abi: DutchAuctionConctract,
-    address: process.env.NEXT_PUBLIC_DUTCH_AUCTION_CONTRACT_ADDRESS as Address,
+    address: process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS as Address,
     signerOrProvider: signer,
   })
 

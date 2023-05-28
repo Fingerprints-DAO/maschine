@@ -13,7 +13,7 @@ const MaschineContract = [
       },
       {
         internalType: 'uint16',
-        name: '_tokenTokenIdMax',
+        name: '_tokenIdMax',
         type: 'uint16',
       },
       {
@@ -245,9 +245,9 @@ const MaschineContract = [
     name: 'currentTokenId',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'uint16',
         name: '',
-        type: 'uint256',
+        type: 'uint16',
       },
     ],
     stateMutability: 'view',
@@ -255,31 +255,7 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'customBaseURIValue',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'recipient',
-        type: 'address',
-      },
-      {
-        internalType: 'uint16',
-        name: 'tokenId',
-        type: 'uint16',
-      },
-    ],
-    name: 'customTokenMint',
+    name: 'endMint',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -466,19 +442,6 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'reservedCustomTokens',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'revokeOperatorFilterRegistry',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -611,19 +574,6 @@ const MaschineContract = [
   {
     inputs: [
       {
-        internalType: 'string',
-        name: 'newCustomBaseURI',
-        type: 'string',
-      },
-    ],
-    name: 'setCustomBaseURI',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: 'newMinter',
         type: 'address',
@@ -681,7 +631,7 @@ const MaschineContract = [
   },
   {
     inputs: [],
-    name: 'tokenTokenIdMax',
+    name: 'tokenIdMax',
     outputs: [
       {
         internalType: 'uint16',
