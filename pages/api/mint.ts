@@ -1,10 +1,8 @@
 import { ethers } from 'ethers'
 import { createClient } from '@supabase/supabase-js'
-import { Contract, ContractCall, Provider } from 'ethers-multicall'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
-import ABI from './_abi/auction.json'
 import { Address, readContracts } from 'wagmi'
 import DutchAuctionContract from '@web3/contracts/dutch-auction/abi'
 
@@ -84,14 +82,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     ],
   })
 
-  //   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL, parseInt(process.env.CHAIN_ID as string))
-  //   const ethCallProvider = new Provider(provider)
-  //   await ethCallProvider.init()
-
-  //   const auction = new Contract(process.env.NEXT_PUBLIC_AUCTION_CONTRACT as string, ABI)
-
-  //   const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
-
   let nonce = 0
   try {
     const [rawNonce, currentPrice, userData, config] = multiCalls
@@ -104,9 +94,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
     nonce = parseInt(rawNonce.toString())
 
-    // store to supabase
-    await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
-  } catch {}
+  // store to supabase
+  await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
