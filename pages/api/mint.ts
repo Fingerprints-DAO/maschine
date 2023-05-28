@@ -66,20 +66,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const multiCalls: ContractCall[] = [auction.getNonce(address), auction.getCurrentPriceInWei(), auction.getUserData(address), auction.getConfig()]
 
   let nonce = 0
-  try {
-    const [rawNonce, currentPrice, userData, config] = await ethCallProvider.all(multiCalls)
-    const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
-    if (totalAfterMint.gt(config.limitInWei)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Can not purchase more than limit',
-      })
-    }
-    nonce = parseInt(rawNonce.toString())
 
-    // store to supabase
-    await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
-  } catch {}
+  const [rawNonce, currentPrice, userData, config] = await ethCallProvider.all(multiCalls)
+  const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
+  if (totalAfterMint.gt(config.limitInWei)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Can not purchase more than limit',
+    })
+  }
+  nonce = parseInt(rawNonce.toString())
+
+  // store to supabase
+  await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
