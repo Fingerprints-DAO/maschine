@@ -68,6 +68,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       const payload = {
         deadline: BigNumber.from(mint.data.deadline),
         qty: quantity,
+        price: currentPrice ?? '0',
         signature: mint.data.signature,
       }
 
@@ -88,7 +89,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
     }
-  }, [address, handleMint, quantity, handleBid, showTxErrorToast, showTxExecutedToast])
+  }, [quantity, address, handleMint, currentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
 
   return (
     <Modal isCentered={true} isOpen={isOpen} scrollBehavior="inside" motionPreset={isMobile ? 'slideInBottom' : 'scale'} onClose={onClose}>
