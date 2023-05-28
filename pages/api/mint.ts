@@ -83,16 +83,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   })
 
   let nonce = 0
-  try {
-    const [rawNonce, currentPrice, userData, config] = multiCalls
-    const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
-    if (totalAfterMint.gt(config.limitInWei)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Can not purchase more than limit',
-      })
-    }
-    nonce = parseInt(rawNonce.toString())
+
+  const [rawNonce, currentPrice, userData, config] = multiCalls
+  const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
+
+  if (totalAfterMint.gt(config.limitInWei)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Can not purchase more than limit',
+    })
+  }
+
+  nonce = parseInt(rawNonce.toString())
 
   // store to supabase
   await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
