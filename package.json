@@ -13,6 +13,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.1",
+    "@elgorditosalsero/react-gtm-hook": "^2.7.2",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "autoprefixer": "10.4.14",
