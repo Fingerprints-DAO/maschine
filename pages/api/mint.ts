@@ -41,10 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
-  let country: string
+  let country: string, region: string, locality: string, postalCode: string
   try {
     const location = await ipToLocation(ip)
     country = location.addressCountry
+    region = location.addressRegion
+    locality = location.addressLocality
+    postalCode = location.postalCode
 
     if (!isAllowed(location.addressCountry)) {
       return res.status(400).json({
@@ -97,7 +100,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   nonce = parseInt(rawNonce.toString())
 
   // store to supabase
-  await supabase.from('mint-data').insert({ address, qty, price: ethers.utils.formatEther(currentPrice), ip: ip as string, country })
+  await supabase.from(process.env.SUPABASE_TABLE ?? '').insert({
+    address,
+    qty,
+    price: ethers.utils.formatEther(currentPrice),
+    ip: ip as string,
+    country,
+    region,
+    locality,
+    postalCode,
+  })
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
