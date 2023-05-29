@@ -6,8 +6,8 @@ import { useMaschineContext } from '@ui/contexts/maschine'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
-import { useMemo } from 'react'
-import { ethers } from 'ethers'
+import { useEffect, useMemo, useState } from 'react'
+import { BigNumber, ethers } from 'ethers'
 import dayjs from 'dayjs'
 import useCountdownTime from '@ui/hooks/use-countdown-timer'
 
@@ -17,19 +17,19 @@ type NftCardProps = {
 
 const now = dayjs()
 
+enum AUCTION_STATE {
+  NOT_STARTED,
+  STARTED,
+  SOLD_OUT,
+  ENDED,
+}
+
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
   const { isConnected, canInteract, config } = useMaschineContext()
-
-  const isAuctionOpen = useMemo(() => {
-    const startTimeUnix = config?.startTime?.toNumber()
-    const start = dayjs.unix(startTimeUnix!)
-
-    return now.isAfter(start)
-  }, [config?.startTime])
-
   const { countdown, currentPrice } = useCountdownTime()
+  const [currentState, setCurrentState] = useState<AUCTION_STATE>(AUCTION_STATE.NOT_STARTED)
 
   const renderButton = useMemo(() => {
     if (!isBrowser) {
@@ -58,24 +58,48 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
-    if (isAuctionOpen) {
+    if (currentState === AUCTION_STATE.STARTED) {
       return (
         <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
           Buy
         </Button>
       )
     }
+    if (currentState === AUCTION_STATE.SOLD_OUT) {
+      return (
+        <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
+          Sold out
+        </Button>
+      )
+    }
+    if (currentState === AUCTION_STATE.ENDED) {
+      return null
+    }
 
     return (
       <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
-        Sold out
+        Loading
       </Button>
     )
-  }, [isConnected, isBrowser, isAuctionOpen, canInteract, handleOpenModal])
+  }, [isBrowser, isConnected, canInteract, currentState, handleOpenModal])
 
   const renderTimer = useMemo(() => {
     console.log('countdown', countdown)
-    if (Boolean(countdown)) {
+    if (currentState === AUCTION_STATE.NOT_STARTED) {
+      return (
+        <Text color="gray.500">
+          Sale starts in{' '}
+          <Text color="gray.300" as="span" fontWeight="bold">
+            {countdown} minute(s)
+          </Text>{' '}
+          at{' '}
+          <Text color="gray.300" as="span" fontWeight="bold">
+            {Boolean(config?.startTime) && ethers.utils.formatUnits(config?.startAmountInWei!, 18)} ETH
+          </Text>
+        </Text>
+      )
+    }
+    if (currentState === AUCTION_STATE.STARTED) {
       return (
         <Text color="gray.500">
           Sale ends in{' '}
@@ -88,7 +112,8 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           </Text>
         </Text>
       )
-    } else {
+    }
+    if (currentState === AUCTION_STATE.ENDED) {
       const endTime = dayjs.unix(config?.endTime?.toNumber() || 0)
       const endTimeWithDelay = endTime.add(config?.refundDelayTime || 0, 'seconds')
       const now = dayjs()
@@ -104,7 +129,18 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Text>
       )
     }
-  }, [countdown, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+    return null
+  }, [countdown, currentState, config?.startTime, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+
+  useEffect(() => {
+    const startTimeUnix = config?.startTime?.toNumber()
+    const endTimeUnix = config?.endTime?.toNumber()
+    const start = dayjs.unix(startTimeUnix!)
+    const end = dayjs.unix(endTimeUnix!)
+
+    if (now.isAfter(start)) setCurrentState(AUCTION_STATE.STARTED)
+    if (now.isAfter(end)) setCurrentState(AUCTION_STATE.ENDED)
+  }, [config?.endTime, config?.startTime])
 
   return (
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
