@@ -16,7 +16,6 @@ export default function Banner({ children, buttonText = 'Close', onClose, revers
     <Box as="section" pos={'fixed'} bottom={0} left={0} right={0} zIndex={2}>
       <Box bg={reverseBg ? '#CBD5E0' : '#2D3748'} boxShadow="sm">
         <Container py={{ base: '4', md: '2.5' }} position="relative">
-          <CloseButton display={{ md: 'none' }} position="absolute" right="2" top="2" />
           <Stack direction={{ base: 'column', md: 'row' }} justify="space-between" spacing={{ base: '3', md: '2' }}>
             <Stack spacing="4" direction={{ base: 'column', md: 'row' }} align={{ base: 'start', md: 'center' }}>
               {!isMobile && (

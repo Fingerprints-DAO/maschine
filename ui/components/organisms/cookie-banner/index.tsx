@@ -25,7 +25,7 @@ const CookieBanner = ({ isInternalPage }: CookieBannerProps) => {
   return (
     <SlideFade in={showBanner} offsetY={'0'} unmountOnExit>
       {/* Show the banner only if the "showBanner" state is true */}
-      <Box pb={{ base: '150px', sm: '100px', md: '40px' }} pt={isInternalPage ? '40px' : 0}>
+      <Box pb={{ base: isInternalPage ? '200px' : '150px', sm: isInternalPage ? '150px' : '100px', md: isInternalPage ? '80px' : '40px' }}>
         <Banner buttonText="Close" onClose={handleClose} reverseBg={isInternalPage}>
           <Text fontWeight="medium">We use our own and third-party cookies to personalize content.</Text>
           <Text color="muted">
