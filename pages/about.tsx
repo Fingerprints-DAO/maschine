@@ -37,7 +37,8 @@ const AboutPage = () => {
                     arrangements that spin at varying speeds.
                   </Text>
                   <Text>
-                    When objects move really fast, the human eye is not able to properly process the phenomena, instead merging the images into a blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
+                    When objects move really fast, the human eye is not able to properly process the phenomena, instead merging the images into a
+                    blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
                   </Text>
                   <Text>
                     It's hard to observe it in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
@@ -49,7 +50,8 @@ const AboutPage = () => {
                     aesthetic parameters.
                   </Text>
                   <Text>
-                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations during the making of this collection.
+                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations
+                    during the making of this collection.
                   </Text>
                 </Stack>
               </Box>
@@ -68,7 +70,7 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Berlin-based artist {' '}
+                    Berlin-based artist{' '}
                     <Link isExternal color={'#6ECCDD'} href="https://harm.work/">
                       Harm van den Dorpel
                     </Link>{' '}

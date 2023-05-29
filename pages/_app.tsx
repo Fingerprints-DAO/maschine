@@ -9,6 +9,7 @@ import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import useScrollRestoration from '@ui/hooks/use-scroll-restoration'
 import Transition from '@ui/components/molecules/transition'
+import CookieBanner from '@ui/components/organisms/cookie-banner'
 
 type MaschineProps = AppProps & {
   pageProps: {
@@ -23,12 +24,13 @@ function Maschine({ Component, pageProps }: MaschineProps) {
   const router = useRouter()
 
   useScrollRestoration(router)
-
+  console.log(pageProps)
   return (
     <ChakraProvider theme={theme}>
       <MetaTags {...pageProps.meta} host={pageProps.host} />
       <Transition>
-        <Component {...pageProps} />
+        <Component {...pageProps} cookieBanner={<CookieBanner />} />
+        {(!pageProps?.meta?.navPage || !pageProps.meta.navPage.includes('home')) && <CookieBanner isInternalPage />}
       </Transition>
     </ChakraProvider>
   )
