@@ -4,7 +4,6 @@ import App, { AppContext, AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
-import { GTMProvider } from '@elgorditosalsero/react-gtm-hook'
 import MetaTags, { MetaTagsProps } from '@ui/components/molecules/metatags'
 import theme from '@ui/base/theme'
 import useScrollRestoration from '@ui/hooks/use-scroll-restoration'
@@ -22,20 +21,17 @@ type MaschineProps = AppProps & {
 NProgress.configure({ showSpinner: false })
 
 function Maschine({ Component, pageProps }: MaschineProps) {
-  const gtmParams = { id: 'G-QCETYL8QK7' }
   const router = useRouter()
 
   useScrollRestoration(router)
 
   return (
     <ChakraProvider theme={theme}>
-      <GTMProvider state={gtmParams}>
-        <MetaTags {...pageProps.meta} host={pageProps.host} />
-        <Transition>
-          <Component {...pageProps} cookieBanner={<CookieBanner />} />
-          {(!pageProps?.meta?.navPage || !pageProps.meta.navPage.includes('home')) && <CookieBanner isInternalPage />}
-        </Transition>
-      </GTMProvider>
+      <MetaTags {...pageProps.meta} host={pageProps.host} />
+      <Transition>
+        <Component {...pageProps} cookieBanner={<CookieBanner />} />
+        {(!pageProps?.meta?.navPage || !pageProps.meta.navPage.includes('home')) && <CookieBanner isInternalPage />}
+      </Transition>
     </ChakraProvider>
   )
 }
