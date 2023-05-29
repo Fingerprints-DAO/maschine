@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 import { useState, useEffect } from 'react'
 
 type CookieBannerProps = {
-  isInternalPage: boolean
+  isInternalPage?: boolean
 }
 
 const CookieBanner = ({ isInternalPage }: CookieBannerProps) => {
@@ -26,7 +26,7 @@ const CookieBanner = ({ isInternalPage }: CookieBannerProps) => {
     <SlideFade in={showBanner} offsetY={'0'} unmountOnExit>
       {/* Show the banner only if the "showBanner" state is true */}
       <Box pb={{ base: isInternalPage ? '200px' : '150px', sm: isInternalPage ? '150px' : '100px', md: isInternalPage ? '80px' : '40px' }}>
-        <Banner buttonText="Close" onClose={handleClose} reverseBg={isInternalPage}>
+        <Banner buttonText="Close" onClose={handleClose} reverseBg={isInternalPage!}>
           <Text fontWeight="medium">We use our own and third-party cookies to personalize content.</Text>
           <Text color="muted">
             Read our <Link>Tems &amp; Conditions</Link>
