@@ -23,6 +23,8 @@ export default function Home({ meta, bg, cookieBanner }: HomeProps) {
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
         <meta property="og:image" content={meta.image} />
+        <meta property="twitter:image" content={meta.image} />
+
       </Head>
       <Box as="main" bg={`url('${bg}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat" w="full" h="full" position="relative">
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.600" />
