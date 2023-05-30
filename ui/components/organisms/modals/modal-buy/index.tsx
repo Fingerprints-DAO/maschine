@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useCallback, useMemo, useState } from 'react'
+import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, Button, CloseButton, Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
 import { ModalProps } from '@ui/contexts/modal'
 import Counter from '../../counter'
@@ -19,11 +19,18 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const { showTxErrorToast, showTxExecutedToast } = useTxToast()
 
   const [quantity, setQuantity] = useState(0)
+  const [localCurrentPrice, setLocalCurrentPrice] = useState('')
 
   const { data: userData } = useGetUserData()
   const { data: currentPrice } = useGetCurrentPrice()
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
+
+  useEffect(() => {
+    if (currentPrice) {
+      setLocalCurrentPrice(currentPrice)
+    }
+  }, [currentPrice])
 
   const maxMintQuantity = useMemo(() => {
     if (!config?.limitInWei || !currentPrice || !userData?.contribution) {
@@ -66,10 +73,12 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('')
       }
 
+      setLocalCurrentPrice(mint.data.currentPrice)
+
       const payload = {
         deadline: BigNumber.from(mint.data.deadline),
         qty: quantity,
-        price: currentPrice ?? '0',
+        price: localCurrentPrice ?? '0',
         signature: mint.data.signature,
       }
 
@@ -90,7 +99,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
     }
-  }, [quantity, address, handleMint, currentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
+  }, [quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
 
   return (
     <Modal
@@ -122,7 +131,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
             Current price is
           </Text>
           <Text color="gray.700" fontWeight="bold">
-            {currentPrice} ETH
+            {localCurrentPrice} ETH
           </Text>
         </Box>
         <Box mb={10}>

@@ -11,6 +11,7 @@ const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABA
 type MintData = {
   deadline: number
   signature: Address
+  currentPrice: string
 }
 
 export type MintResponse = {
@@ -125,6 +126,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     data: {
       deadline,
       signature: signature as Address,
+      currentPrice: ethers.utils.formatEther(currentPrice),
     },
   })
 }
