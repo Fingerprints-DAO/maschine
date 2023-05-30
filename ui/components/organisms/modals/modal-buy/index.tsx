@@ -12,15 +12,16 @@ import useBid from '@web3/contracts/dutch-auction/use-bid'
 import { TransactionStatus } from 'types/transaction'
 import useTxToast from '@ui/hooks/use-tx-toast'
 import theme from '@ui/base/theme'
+import { useQueryClient } from 'react-query'
 
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
+  const queryClient = useQueryClient()
   const { address, config } = useMaschineContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { showTxErrorToast, showTxExecutedToast } = useTxToast()
 
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(1)
   const [localCurrentPrice, setLocalCurrentPrice] = useState('')
-  const [isLoadingLocalCurrentPrice, setIsLoadingLocalCurrentPrice] = useState(false)
 
   const { data: userData } = useGetUserData()
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
@@ -40,11 +41,18 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
     const limit = Number(ethers.utils.formatUnits(config.limitInWei, 18))
     const contribution = Number(ethers.utils.formatUnits(userData.contribution, 18))
-
     const qty = Math.floor((limit - contribution) / Number(currentPrice))
 
     return qty
-  }, [config?.limitInWei, currentPrice, userData?.contribution])
+  }, [config, currentPrice, userData])
+
+  useEffect(() => {
+    if (!maxMintQuantity) {
+      setQuantity(0)
+    } else {
+      setQuantity(1)
+    }
+  }, [maxMintQuantity])
 
   const handleAction = (action: 'increase' | 'decrease') => setQuantity((prev) => (action === 'increase' ? prev + 1 : prev - 1))
 
@@ -68,8 +76,6 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('Wallet is not connected')
       }
 
-      setIsLoadingLocalCurrentPrice(true)
-
       const mint = await handleMint({ address, qty: quantity })
 
       if (!mint?.data) {
@@ -87,24 +93,29 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
       const response = await handleBid(payload)
 
+      showTxExecutedToast({
+        title: `Minting ${quantity} NFTs...`,
+        txHash: response?.hash,
+        id: 'submit-mint',
+      })
+
       const wait = await response?.wait()
 
       if (wait?.status === TransactionStatus.Success) {
         showTxExecutedToast({
           title: `Minted ${quantity} NFTs`,
           txHash: wait?.transactionHash,
-          id: 'extend-stake',
+          id: 'mint-success',
         })
 
-        window.location.reload()
+        queryClient.invalidateQueries(['currentSupply'])
+        onClose()
       }
     } catch (error: any) {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
-    } finally {
-      setIsLoadingLocalCurrentPrice(false)
     }
-  }, [quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
+  }, [queryClient, quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast, onClose])
 
   return (
     <Modal
@@ -139,7 +150,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
             noOfLines={1}
             skeletonHeight="4"
             w="30"
-            isLoaded={!isLoadingCurrentPriceContract || !isLoadingLocalCurrentPrice}
+            isLoaded={!isLoadingCurrentPriceContract || !isSubmittingMint}
             startColor="gray.100"
             endColor="gray.300"
           >
@@ -163,7 +174,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         </Box>
         <ModalFooter px={0} pt={0} display="block">
           <Button
-            isDisabled={isSubmittingMint || isSubmittingBid}
+            isDisabled={isSubmittingMint || isSubmittingBid || !quantity}
             isLoading={isSubmittingMint || isSubmittingBid}
             variant="solid"
             size="lg"

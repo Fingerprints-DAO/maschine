@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 
 // const INTERVAL = 60000
-const INTERVAL = 1000
+const INTERVAL = 12000
 
 const timeToGo = (time: number) => {
   const endDateUnix = dayjs.unix(time)

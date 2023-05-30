@@ -15,6 +15,7 @@ import useTotalSupply from '@web3/contracts/maschine/use-total-supply'
 type NftCardProps = {
   cardImageNumber: string
 }
+
 const handleMinutes = (time: number) => `minute${time > 1 ? 's' : ''}`
 
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
@@ -77,7 +78,6 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
   }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal])
 
   const renderTimer = useMemo(() => {
-    console.log('countdown', countdown)
     if (auctionState === AUCTION_STATE.NOT_STARTED) {
       return (
         <Text color="gray.500">

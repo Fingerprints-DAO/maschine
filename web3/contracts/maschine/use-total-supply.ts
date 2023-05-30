@@ -1,21 +1,29 @@
-import { useQuery } from 'react-query'
+import { useQueries } from 'react-query'
 import useMaschine from './use-maschine'
 
 const useTotalSupply = () => {
   const maschineContract = useMaschine()
 
   const requestCurrentSupply = async () => {
-    return maschineContract?.totalSupply()
+    return maschineContract?.totalSupply?.()
   }
 
   const requestMaxSupply = async () => {
-    return maschineContract?.tokenIdMax()
+    return maschineContract?.tokenIdMax?.()
   }
 
-  return [
-    useQuery(['currentSupply'], requestCurrentSupply, { enabled: Boolean(maschineContract) }),
-    useQuery(['maxSupply'], requestMaxSupply, { enabled: Boolean(maschineContract) }),
-  ]
+  return useQueries([
+    {
+      queryKey: ['currentSupply'],
+      queryFn: requestCurrentSupply,
+      enabled: Boolean(maschineContract),
+    },
+    {
+      queryKey: ['maxSupply'],
+      queryFn: requestMaxSupply,
+      enabled: Boolean(maschineContract),
+    },
+  ])
 }
 
 export default useTotalSupply
