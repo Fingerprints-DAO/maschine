@@ -6,13 +6,8 @@ const refetchInterval = 10000
 const useTotalSupply = () => {
   const maschineContract = useMaschine()
 
-  const requestCurrentSupply = async () => {
-    return maschineContract?.totalSupply?.()
-  }
-
-  const requestMaxSupply = async () => {
-    return maschineContract?.tokenIdMax?.()
-  }
+  const requestCurrentSupply = async () => maschineContract?.totalSupply?.()
+  const requestMaxSupply = async () => maschineContract?.tokenIdMax?.()
 
   return useQueries([
     {

@@ -167,7 +167,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Box>
             </Box>
           </Container>
-          {!Boolean(claimableCount) && isRebateAvailable && !isMobile && isBrowser && (
+          {(Boolean(claimableCount) || isRebateAvailable) && !isMobile && isBrowser && (
             <Container mb={24}>
               {Boolean(claimableCount) && <MintCta />}
               {isRebateAvailable && <RebateCta />}
