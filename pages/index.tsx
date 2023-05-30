@@ -4,6 +4,7 @@ import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
+import { getBaseURL } from './api/helpers/_getLink'
 
 type HomeProps = {
   meta: {
@@ -12,19 +13,18 @@ type HomeProps = {
     navPage: string
     image: string
   }
-  host: string
   bg: string
   cookieBanner: JSX.Element
 }
 
-export default function Home({ meta, bg, cookieBanner, host }: HomeProps) {
+export default function Home({ meta, bg, cookieBanner }: HomeProps) {
   return (
     <>
       <Head>
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
-        <meta property="og:image" content={`${host}${meta.image}`} />
-        <meta property="twitter:image" content={`${host}${meta.image}`} />
+        <meta property="og:image" content={meta.image} />
+        <meta property="twitter:image" content={meta.image} />
       </Head>
       <Box as="main" bg={`url('${bg}')`} bgSize="cover" bgPos="center" bgRepeat="no-repeat" w="full" h="full" position="relative">
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.600" />
@@ -70,7 +70,7 @@ export async function getServerSideProps() {
     title: 'Maschine',
     description: 'A project by Harm van den Dorpel in collaboration with Mercedes-Benz and Fingerprints DAO.',
     navPage: 'home',
-    image: '/images/seo.jpg',
+    image: `${getBaseURL()}/images/seo.jpg`,
   }
 
   let bgs = [
