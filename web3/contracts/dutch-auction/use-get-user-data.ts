@@ -14,7 +14,7 @@ const useGetUserData = () => {
     return dutchAuction?.getUserData?.(address)
   }
 
-  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction) })
+  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction), cacheTime: 0 })
 }
 
 export default useGetUserData

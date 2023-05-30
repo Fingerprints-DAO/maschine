@@ -30,7 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const ip = await response.text()
 
   let { address, qty } = req.body
+
   qty = parseInt(qty)
+
   if (!ethers.utils.isAddress(address) || isNaN(qty)) {
     return res.status(400).json({
       success: false,
@@ -41,12 +43,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   let country: string, region: string, locality: string, postalCode: string
   try {
     const location = await ipToLocation(ip)
-    country = location.addressCountry
-    region = location.addressRegion
-    locality = location.addressLocality
-    postalCode = location.postalCode
 
-    if (!isAllowed(location.addressCountry)) {
+    country = location.country_name
+    region = location.region || ''
+    locality = location.city || ''
+    postalCode = location.postal || ''
+
+    if (!isAllowed(location.country_name)) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',

@@ -11,7 +11,7 @@ const useGetNftContractAddress = () => {
     return address
   }
 
-  return useQuery(getNftContractAddressKey, request)
+  return useQuery(getNftContractAddressKey, request, { cacheTime: 0 })
 }
 
 export default useGetNftContractAddress

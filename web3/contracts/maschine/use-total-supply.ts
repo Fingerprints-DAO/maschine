@@ -14,12 +14,14 @@ const useTotalSupply = () => {
       queryKey: ['currentSupply'],
       queryFn: requestCurrentSupply,
       enabled: Boolean(maschineContract),
+      cacheTime: 0,
       refetchInterval,
     },
     {
       queryKey: ['maxSupply'],
       queryFn: requestMaxSupply,
       enabled: Boolean(maschineContract),
+      cacheTime: 0,
     },
   ])
 }

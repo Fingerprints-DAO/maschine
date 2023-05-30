@@ -12,6 +12,8 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse<bo
 
     const location = await ipToLocation(ip)
 
+    console.log('location', location)
+
     return res.status(200).json(isAllowed(location.country_name))
   } catch (err) {
     return res.status(400).json(false)

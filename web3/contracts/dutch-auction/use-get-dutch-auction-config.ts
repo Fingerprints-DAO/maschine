@@ -7,7 +7,7 @@ const useGetDutchAuctionConfig = () => {
 
   const request = async () => dutchAuction?.getConfig?.()
 
-  return useQuery(getDutchActionKey, request, { enabled: Boolean(dutchAuction) })
+  return useQuery(getDutchActionKey, request, { enabled: Boolean(dutchAuction), cacheTime: 0 })
 }
 
 export default useGetDutchAuctionConfig

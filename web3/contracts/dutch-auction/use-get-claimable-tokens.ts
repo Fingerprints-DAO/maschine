@@ -14,7 +14,7 @@ const useGetClaimableTokens = () => {
     return dutchAuction?.getClaimableTokens?.(address)
   }
 
-  return useQuery(['claimable-tokens', 'count'], request, { enabled: Boolean(dutchAuction) && Boolean(address) })
+  return useQuery(['claimable-tokens', 'count'], request, { enabled: Boolean(dutchAuction) && Boolean(address), cacheTime: 0 })
 }
 
 export default useGetClaimableTokens

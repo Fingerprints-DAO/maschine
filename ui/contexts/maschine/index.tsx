@@ -43,14 +43,14 @@ const DEFAULT_CONTEXT = {
 const MaschineContext = createContext(DEFAULT_CONTEXT)
 
 const getCurrentState = (startTime?: number, endTime?: number) => {
-  if (!startTime || !endTime) return AUCTION_STATE.NOT_STARTED
+  //   if (!startTime || !endTime) return AUCTION_STATE.NOT_STARTED
 
-  const now = dayjs()
-  const start = dayjs.unix(startTime)
-  const end = dayjs.unix(endTime)
+  //   const now = dayjs()
+  //   const start = dayjs.unix(startTime)
+  //   const end = dayjs.unix(endTime)
 
-  if (now.isAfter(end)) return AUCTION_STATE.ENDED
-  if (now.isAfter(start)) return AUCTION_STATE.STARTED
+  //   if (now.isAfter(end)) return AUCTION_STATE.ENDED
+  //   if (now.isAfter(start)) return AUCTION_STATE.STARTED
 
   return AUCTION_STATE.NOT_STARTED
 }
@@ -73,6 +73,8 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber()),
     }
   }, [address, isConnected, ensName, canInteract, nftContractAddress, config])
+
+  console.log('AQUI')
 
   return <MaschineContext.Provider value={value}>{children}</MaschineContext.Provider>
 }

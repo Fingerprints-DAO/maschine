@@ -15,7 +15,7 @@ const useGetCurrentPrice = () => {
     return ethers.utils.formatUnits(price, 18)
   }
 
-  return useQuery(['current-price'], request, { enabled: Boolean(dutchAuction) })
+  return useQuery(['current-price'], request, { enabled: Boolean(dutchAuction), cacheTime: 0 })
 }
 
 export default useGetCurrentPrice
