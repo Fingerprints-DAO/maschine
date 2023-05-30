@@ -5,6 +5,7 @@ import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
 import { Address, readContracts } from 'wagmi'
 import DutchAuctionContract from '@web3/contracts/dutch-auction/abi'
+import './helpers/_wagmi-client'
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 

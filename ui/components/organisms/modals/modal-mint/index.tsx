@@ -68,7 +68,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
           <Text color="gray.500" mb={2}>
             Extra NFTs
           </Text>
-          <Counter />
+          {/* <Counter /> */}
         </Box>
         <Box>
           <Button variant="solid" size="lg" w="full" mb={6}>
