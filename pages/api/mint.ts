@@ -4,8 +4,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
 import { isAllowed, ipToLocation } from './helpers/_ip'
 import { Address, readContracts } from 'wagmi'
-import DutchAuctionContract from '@web3/contracts/dutch-auction/abi'
 import './helpers/_wagmi-client'
+import { dutchAuctionContract } from '@web3/contracts/dutch-auction/use-dutch-auction'
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
@@ -19,11 +19,6 @@ export type MintResponse = {
   success: boolean
   message?: string
   data?: MintData
-}
-
-const dutchAuctionContract = {
-  address: process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS as Address,
-  abi: DutchAuctionContract,
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<MintResponse>) {
