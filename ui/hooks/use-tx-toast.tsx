@@ -92,6 +92,18 @@ export const useTxToast = () => {
   const showTxErrorToast = (error: Error) => {
     const revertError = error as any
 
+    const toastConfig = (id: ToastId): UseToastOptions => ({
+      title: `An error occured: `,
+      status: 'error',
+      id,
+      containerStyle: {
+        width: '100%',
+        maxW: 'unset',
+        m: 0,
+        mt: 1,
+      },
+    })
+
     if (revertError.errorName) {
       const id = 'error-name'
 
@@ -99,7 +111,19 @@ export const useTxToast = () => {
         return
       }
 
-      toast({ title: `An error occured`, description: `Error reverted ${revertError.errorName}`, status: 'error', id })
+      toast({
+        ...toastConfig(id),
+        render: () => (
+          <ToastContent
+            title="An error occured: "
+            description={`Error reverted ${revertError.errorName}`}
+            status="error"
+            icon={{ as: WarningIcon, color: 'gray.900' }}
+            toastId={id}
+            onClose={toast.close}
+          />
+        ),
+      })
 
       return
     }
@@ -111,7 +135,19 @@ export const useTxToast = () => {
         return
       }
 
-      toast({ title: `An error occured`, description: `User rejected metamask tx`, status: 'error', id })
+      toast({
+        ...toastConfig(id),
+        render: () => (
+          <ToastContent
+            title="An error occured: "
+            description="user rejected metamask tx"
+            status="error"
+            icon={{ as: WarningIcon, color: 'gray.900' }}
+            toastId={id}
+            onClose={toast.close}
+          />
+        ),
+      })
 
       return
     }
@@ -123,13 +159,7 @@ export const useTxToast = () => {
     }
 
     toast({
-      id,
-      containerStyle: {
-        width: '100%',
-        maxW: 'unset',
-        m: 0,
-        mt: 1,
-      },
+      ...toastConfig(id),
       render: () => (
         <ToastContent
           title="An error occured: "

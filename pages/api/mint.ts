@@ -40,16 +40,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
-  let country: string, region: string, locality: string, postalCode: string
+  let country: string, region: string | undefined, locality: string | undefined, postalCode: string
+
   try {
     const location = await ipToLocation(ip)
 
     country = location.country_name
-    region = location.region || ''
-    locality = location.city || ''
+    region = location.region
+    locality = location.city
     postalCode = location.postal || ''
 
-    if (!isAllowed(location.country_name)) {
+    if (!isAllowed(location.country_name) || !location.region || !location.city) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',

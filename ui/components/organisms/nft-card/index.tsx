@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Text } from '@chakra-ui/react'
+import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Skeleton, Text } from '@chakra-ui/react'
 import Card from '../card'
 import Image from 'next/image'
 import Wallet from '@ui/components/molecules/wallet'
@@ -35,6 +35,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     }
 
     if (!canInteract) {
+      // TODO: verify if user spend more ether than allowed
       return (
         <Button
           color="gray.500"
@@ -59,6 +60,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Button>
       )
     }
+
     if (auctionState === AUCTION_STATE.SOLD_OUT) {
       return (
         <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
@@ -66,15 +68,12 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Button>
       )
     }
+
     if (auctionState === AUCTION_STATE.ENDED) {
       return null
     }
 
-    return (
-      <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
-        Loading
-      </Button>
-    )
+    return <Skeleton w="full" h={16} startColor="gray.100" endColor="gray.300" rounded="8px" />
   }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal])
 
   const renderTimer = useMemo(() => {

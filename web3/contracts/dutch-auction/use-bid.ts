@@ -18,12 +18,6 @@ const useBid = () => {
     const gasLimit = BigNumber.from(5000000)
     const gasPriceBuffer = gasPrice.mul(105).div(100)
 
-    console.log({
-      value: ethers.utils.parseEther(price).mul(qty),
-      gasLimit,
-      gasPrice: gasPriceBuffer,
-    })
-
     return dutchAuction?.bid?.(qty, deadline, signature, {
       value: ethers.utils.parseEther(price).mul(qty),
       gasLimit,

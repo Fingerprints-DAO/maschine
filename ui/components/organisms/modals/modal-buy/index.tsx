@@ -18,19 +18,20 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
   const { address, config } = useMaschineContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
-  const { showTxErrorToast, showTxExecutedToast } = useTxToast()
+  const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
 
   const [quantity, setQuantity] = useState(1)
   const [localCurrentPrice, setLocalCurrentPrice] = useState('')
 
   const { data: userData } = useGetUserData()
+  const { data: currentPrice } = useGetCurrentPrice()
+
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
-  const { data: currentPrice, isLoading: isLoadingCurrentPriceContract } = useGetCurrentPrice()
 
   useEffect(() => {
     if (currentPrice) {
-      setLocalCurrentPrice(currentPrice)
+      setLocalCurrentPrice(Number(currentPrice).toFixed(3))
     }
   }, [currentPrice])
 
@@ -82,7 +83,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('')
       }
 
-      setLocalCurrentPrice(mint.data.currentPrice)
+      setLocalCurrentPrice(Number(mint.data.currentPrice).toFixed(3))
 
       const payload = {
         deadline: BigNumber.from(mint.data.deadline),
@@ -93,11 +94,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
       const response = await handleBid(payload)
 
-      showTxExecutedToast({
-        title: `Minting ${quantity} NFTs...`,
-        txHash: response?.hash,
-        id: 'submit-mint',
-      })
+      showTxSentToast('submit-mint', response?.hash)
 
       const wait = await response?.wait()
 
@@ -116,7 +113,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
     }
-  }, [queryClient, quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast, onClose])
+  }, [queryClient, quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast, onClose, showTxSentToast])
 
   return (
     <Modal

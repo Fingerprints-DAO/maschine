@@ -12,7 +12,7 @@ import useMediaQuery from '@ui/hooks/use-media-query'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import Unavailability from '@ui/components/organisms/unavailability'
-import { useMaschineContext } from '@ui/contexts/maschine'
+import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import { useEffect, useMemo, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import dayjs from 'dayjs'
@@ -34,8 +34,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isBrowser = useIsBrowser()
   const isMobile = useMediaQuery('(max-width: 479px)')
 
-  const { canInteract, config } = useMaschineContext()
   const { data: claimableCount } = useGetClaimableTokens()
+  const { canInteract, config, auctionState } = useMaschineContext()
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
@@ -170,7 +170,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
           {(Boolean(claimableCount) || isRebateAvailable) && !isMobile && isBrowser && (
             <Container mb={24}>
               {Boolean(claimableCount) && <MintCta />}
-              {isRebateAvailable && <RebateCta />}
+              {auctionState === AUCTION_STATE.ENDED && <RebateCta />}
             </Container>
           )}
           <Container mb={10}>
