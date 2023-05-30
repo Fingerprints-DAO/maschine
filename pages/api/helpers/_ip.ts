@@ -1,18 +1,6 @@
-import { SuperfaceClient } from '@superfaceai/one-sdk'
+import IPData, { LookupResponse } from 'ipdata'
 
-type Location = {
-  ipAddress: string
-  addressCountryCode: string
-  addressCountry: string
-  addressRegion: string
-  addressLocality: string
-  postalCode: string
-  timeZone: string
-  latitude: number
-  longitude: number
-}
-
-const sdk = new SuperfaceClient()
+const ipdata = new IPData(process.env.IPDATA_API_KEY || '')
 
 const allowList = [
   'United States',
@@ -51,26 +39,11 @@ const allowList = [
 
 export const isAllowed = (country: string) => allowList.includes(country)
 
-export const ipToLocation = async (ipAddress: string): Promise<Location> => {
-  const profile = await sdk.getProfile('address/ip-geolocation@1.0.1')
-
-  const result = await profile.getUseCase('IpGeolocation').perform(
-    {
-      ipAddress,
-    },
-    {
-      provider: 'ipdata',
-      security: {
-        apikey: {
-          apikey: '9a511b6fc8334e1852cfbbd4ff3f1af3c42ed6abc75e96a1648b969a',
-        },
-      },
-    }
-  )
-
-  // Handle the result
+export const ipToLocation = async (ipAddress: string): Promise<LookupResponse> => {
   try {
-    return result.unwrap() as Location
+    const info = await ipdata.lookup(ipAddress)
+
+    return info
   } catch (error) {
     throw error
   }
