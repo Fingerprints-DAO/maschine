@@ -1,10 +1,11 @@
-import { defineStyleConfig, extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { extendTheme, ThemeConfig } from '@chakra-ui/react'
 import fonts from './fonts'
 import styles from './styles'
+import components from './components'
 
 const config: ThemeConfig = {
-  initialColorMode: 'dark',
   useSystemColorMode: false,
+  initialColorMode: 'dark',
 }
 
 const colors = {
@@ -15,28 +16,17 @@ const colors = {
   secondary: {
     500: '#F76B8B',
   },
-}
-
-const containerBaseStyle = {
-  maxWidth: {
-    base: '80%',
-    sm: '90%',
-    xl: '1160px',
-    '2xl': '1280px',
+  links: {
+    500: '#6ECCDD',
   },
 }
-
-// export the component theme
-export const containerTheme = defineStyleConfig({ baseStyle: containerBaseStyle })
 
 const theme = extendTheme({
   config,
   colors,
   styles,
   fonts,
-  components: {
-    Container: containerTheme,
-  },
+  components,
 })
 
 export default theme

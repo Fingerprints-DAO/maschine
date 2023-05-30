@@ -10,7 +10,8 @@ const helvetica = localFont({
   src: [
     {
       path: '../../../public/fonts/helvetica-light.ttf',
-      style: 'normal',
+      weight: '300',
+      style: 'light',
     },
     {
       path: '../../../public/fonts/helvetica.ttf',
@@ -29,14 +30,5 @@ const fonts: Partial<Theme['fonts']> = {
   body: helvetica.style.fontFamily,
   heading: mercedes.style.fontFamily,
 }
-
-// const styles: Partial<Theme['styles']> = {
-//   global: {
-//     body: {
-//       fontFamily: 'body',
-//       fontWeight: 'thin',
-//     },
-//   },
-// }
 
 export default fonts

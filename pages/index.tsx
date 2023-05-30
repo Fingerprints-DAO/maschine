@@ -13,9 +13,10 @@ type HomeProps = {
     image: string
   }
   bg: string
+  cookieBanner: JSX.Element
 }
 
-export default function Home({ meta, bg }: HomeProps) {
+export default function Home({ meta, bg, cookieBanner }: HomeProps) {
   return (
     <>
       <Head>
@@ -55,6 +56,7 @@ export default function Home({ meta, bg }: HomeProps) {
               </Flex>
             </Flex>
           </Container>
+          {cookieBanner}
         </Flex>
       </Box>
     </>
