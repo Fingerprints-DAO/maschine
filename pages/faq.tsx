@@ -6,23 +6,20 @@ import Head from 'next/head'
 const questions = [
   {
     question: 'What is Mercedes-Benz NXT?',
-    answer:
-      `Mercedes-Benz NXT is a subsidiary of Mercedes-Benz dedicated to building a presence within the Web3 community. It represents a long-term commitment by Mercedes-Benz in the space. More details are available directly in the Mercedes-Benz NXT website.`,
+    answer: `Mercedes-Benz NXT is a subsidiary of Mercedes-Benz dedicated to building a presence within the Web3 community. It represents a long-term commitment by Mercedes-Benz in the space. More details are available directly in the Mercedes-Benz NXT website.`,
   },
   {
     question: 'What is Fingerprints DAO?',
-    answer:
-      `Fingerprints DAO is an online community and platform for collecting and creating digital art. It is made up of over 250 members with a shared treasury and a decentralized governance model. It is well known for its collection of highly prized NFTs and its studio that launches collections in partnership with trending artists.`,
+    answer: `Fingerprints DAO is an online community and platform for collecting and creating digital art. It is made up of over 250 members with a shared treasury and a decentralized governance model. It is well known for its collection of highly prized NFTs and its studio that launches collections in partnership with trending artists.`,
   },
   {
     question: 'What is the collection size?',
-    answer:
-      `The collection will be capped at 1,000 unique generative pieces.`,
+    answer: `The collection will be capped at 1,000 unique generative pieces.`,
   },
   {
     question: 'How will the auction work?',
     answer:
-      'The collection will be sold in its entirety thourgh a live Dutch auction, a type of auction where the price of an item is gradually lowered over time until a buyer is found. In the context of NFTs, this means that the price of the NFTs auctioned will decrease over time during the auction period, and collectors will be able to acquire their pieces when the price reaches whatever level they\'re happy buying at.',
+      "The collection will be sold in its entirety thourgh a live Dutch auction, a type of auction where the price of an item is gradually lowered over time until a buyer is found. In the context of NFTs, this means that the price of the NFTs auctioned will decrease over time during the auction period, and collectors will be able to acquire their pieces when the price reaches whatever level they're happy buying at.",
   },
   {
     question: 'Will there be a rebate?',
@@ -49,13 +46,11 @@ const questions = [
   },
   {
     question: 'Can I sell the NFTs I purchase through the Dutch auction selling method to other users?',
-    answer:
-      'Yes, after purchasing an NFT through the Dutch auction you\'ll be able to sell it to other users on secondary marketplaces.',
+    answer: "Yes, after purchasing an NFT through the Dutch auction you'll be able to sell it to other users on secondary marketplaces.",
   },
   {
     question: 'Are there any fees associated with participating in a Dutch auction NFT sale?',
-    answer:
-      'Yes, there will be gas fees for certain interactions with the project\'s smart contracts, such as bidding and claiming your rebate.',
+    answer: "Yes, there will be gas fees for certain interactions with the project's smart contracts, such as bidding and claiming your rebate.",
   },
   {
     question: 'Can anyone participate in the auction?',
@@ -72,7 +67,7 @@ const FaqPage = () => {
       </Head>
       <Box as="main">
         <Header />
-        <Box as="section" pt={10} pb={200}>
+        <Box as="section" pt={10}>
           <Container>
             <Text as="h1" fontSize="5xl" fontWeight="bold" mb={4}>
               FAQ
@@ -100,9 +95,9 @@ const FaqPage = () => {
                 )
               })}
             </Box>
+            <Footer />
           </Container>
         </Box>
-        <Footer />
       </Box>
     </>
   )

@@ -22,7 +22,7 @@ const AboutPage = () => {
           <Box as="section" pt={10} pb={148}>
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
               <Box mt={[3]} mb={[5, 5, 0]}>
-                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={hero} alt="The Maschine Collection" />
                 </AspectRatio>
               </Box>
@@ -37,7 +37,8 @@ const AboutPage = () => {
                     arrangements that spin at varying speeds.
                   </Text>
                   <Text>
-                    When objects move really fast, the human eye is not able to properly process the phenomena, instead merging the images into a blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
+                    When objects move really fast, the human eye is not able to properly process the phenomena, instead merging the images into a
+                    blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
                   </Text>
                   <Text>
                     It's hard to observe it in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
@@ -49,7 +50,8 @@ const AboutPage = () => {
                     aesthetic parameters.
                   </Text>
                   <Text>
-                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations during the making of this collection.
+                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations
+                    during the making of this collection.
                   </Text>
                 </Stack>
               </Box>
@@ -57,7 +59,7 @@ const AboutPage = () => {
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
               <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
-                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={aHarmVanDenDorpel} alt="A Harm van den Dorpel artwork" />
                 </AspectRatio>
               </Box>
@@ -68,7 +70,7 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Berlin-based artist {' '}
+                    Berlin-based artist{' '}
                     <Link isExternal color={'#6ECCDD'} href="https://harm.work/">
                       Harm van den Dorpel
                     </Link>{' '}
@@ -89,7 +91,7 @@ const AboutPage = () => {
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
               <Box mt={[3]} mb={[5, 5, 0]}>
-                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={mercedesThumb} alt="Mercedes-Benz NXT" />
                 </AspectRatio>
               </Box>
@@ -119,7 +121,7 @@ const AboutPage = () => {
 
             <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
               <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
-                <AspectRatio w={[450]} ratio={1} borderRadius={8} overflow="hidden">
+                <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={fingerPrintsThumb} alt="And Fingerprints DAO" />
                 </AspectRatio>
               </Box>
@@ -145,8 +147,8 @@ const AboutPage = () => {
               </Box>
             </Box>
           </Box>
-        </Container>
         <Footer />
+        </Container>
       </Box>
     </>
   )

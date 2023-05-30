@@ -24,7 +24,7 @@ import { useRouter } from 'next/router'
 const nav = [
   { value: '/about', label: 'about' },
   { value: '/faq', label: 'FAQ' },
-  { value: '/terms-and-conditions', label: 'terms' },
+  // { value: '/terms-and-conditions', label: 'terms' },
 ]
 
 const Header = () => {
@@ -65,7 +65,7 @@ const Header = () => {
                     transitionProperty="color"
                     transitionDuration="0.2s"
                   >
-                    <Text as="strong" fontSize={['lg', 'lg', 'lg', 'xl']}>
+                    <Text as="strong" fontSize={['lg', 'lg', 'lg', 'xl', 'xl', '2xl']}>
                       {item.label}
                     </Text>
                   </Box>
@@ -109,7 +109,9 @@ const Header = () => {
             })}
           </DrawerBody>
           <DrawerFooter>
-            <Footer />
+            <Box mx="auto">
+              <Footer />
+            </Box>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
