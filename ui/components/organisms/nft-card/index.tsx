@@ -10,6 +10,7 @@ import { useMemo } from 'react'
 import { ethers } from 'ethers'
 import dayjs from 'dayjs'
 import useCountdownTime from '@ui/hooks/use-countdown-timer'
+import useTotalSupply from '@web3/contracts/maschine/use-total-supply'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -21,6 +22,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const { handleOpenModal } = useModalContext()
   const { isConnected, canInteract, config, auctionState } = useMaschineContext()
   const { countdown, currentPrice } = useCountdownTime()
+  const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
 
   const renderButton = useMemo(() => {
     if (!isBrowser) {
@@ -168,7 +170,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
               {auctionState === AUCTION_STATE.NOT_STARTED && '1000'}
-              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED) && '23/1000'}
+              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED) && `${currentSupply}/${maxSupply}`}
             </Text>
           </Box>
           <Box flex={1}>
