@@ -109,6 +109,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         })
 
         queryClient.invalidateQueries(['currentSupply'])
+        queryClient.invalidateQueries(['claimable-tokens', 'count'])
         onClose()
       }
     } catch (error: any) {
@@ -146,14 +147,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           <Text color="gray.500" mb={1}>
             Current price is
           </Text>
-          <SkeletonText
-            noOfLines={1}
-            skeletonHeight="4"
-            w="30"
-            isLoaded={!isLoadingCurrentPriceContract || !isSubmittingMint}
-            startColor="gray.100"
-            endColor="gray.300"
-          >
+          <SkeletonText noOfLines={1} skeletonHeight="4" w="30" isLoaded={!!localCurrentPrice} startColor="gray.100" endColor="gray.300">
             <Text color="gray.700" fontWeight="bold">
               {localCurrentPrice} ETH
             </Text>
