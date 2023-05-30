@@ -180,7 +180,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               {auctionState === AUCTION_STATE.ENDED && 'Final price'}
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {Number(currentPrice).toFixed(process.env.NODE_ENV === 'development' ? 5 : 3)} ETH
+              {Number(currentPrice).toFixed(process.env.NODE_ENV !== 'production' ? 3 : 5)} ETH
             </Text>
           </Box>
         </Flex>
