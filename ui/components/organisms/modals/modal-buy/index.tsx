@@ -30,9 +30,10 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       return 0
     }
 
-    const limit = Number(ethers.utils.formatUnits(config.limitInWei))
+    const limit = Number(ethers.utils.formatUnits(config.limitInWei), 18)
+    const contribution = Number(ethers.utils.formatUnits(userData.contribution, 18))
 
-    const qty = Math.floor((limit - userData.contribution.toNumber()) / Number(currentPrice))
+    const qty = Math.floor((limit - contribution) / Number(currentPrice))
 
     return qty
   }, [config?.limitInWei, currentPrice, userData?.contribution])
@@ -92,7 +93,13 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   }, [quantity, address, handleMint, currentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
 
   return (
-    <Modal isCentered={true} isOpen={isOpen} scrollBehavior="inside" motionPreset={isMobile ? 'slideInBottom' : 'scale'} onClose={onClose}>
+    <Modal
+      isCentered={true}
+      isOpen={isOpen}
+      scrollBehavior={isMobile ? 'inside' : 'outside'}
+      motionPreset={isMobile ? 'slideInBottom' : 'scale'}
+      onClose={onClose}
+    >
       <ModalOverlay height="100vh" />
       <ModalContent
         bg="white"
