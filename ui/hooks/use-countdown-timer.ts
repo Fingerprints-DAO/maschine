@@ -1,4 +1,4 @@
-import { useMaschineContext } from '@ui/contexts/maschine'
+import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import dayjs from 'dayjs'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
@@ -7,32 +7,25 @@ const INTERVAL = 60000
 // const INTERVAL = 1000
 
 const timeToGo = (time: number) => {
-  if (!time) {
-    return
-  }
-
   const endDateUnix = dayjs.unix(time)
-
   return endDateUnix
 }
 
 const handleMinutes = (time: number) => {
   const currentTime = dayjs()
-  const remainingTime = dayjs(time).diff(currentTime, 'seconds')
+  const remainingTime = dayjs(timeToGo(time)).diff(currentTime, 'seconds')
 
   if (remainingTime <= 0) {
     return 0
   }
-
   const minutes = Math.ceil(remainingTime / 60)
-
   return minutes
 }
 
 const useCountdownTime = () => {
-  const { config } = useMaschineContext()
+  const { config, auctionState } = useMaschineContext()
   const [currentPrice, setCurrentPrice] = useState('')
-  const [countdown, setCountdown] = useState<number>(handleMinutes(config?.endTime?.toNumber() ?? 0))
+  const [countdown, setCountdown] = useState(0)
 
   const handlePrice = useCallback(() => {
     if (!config?.startTime || !config.endTime || !config.startAmountInWei) {
@@ -54,9 +47,10 @@ const useCountdownTime = () => {
     return price
   }, [config?.startAmountInWei, config?.endTime, config?.startTime])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const minutes = handleMinutes(config?.endTime?.toNumber() ?? 0)
+  const handleTime = useCallback(
+    (interval: number) => {
+      const time = auctionState === AUCTION_STATE.ENDED ? config?.endTime?.toNumber() : config?.startTime?.toNumber()
+      const minutes = handleMinutes(time ?? 0)
       const price = handlePrice()
       const endPrice = !!config?.endAmountInWei ? ethers.utils.formatUnits(config?.endAmountInWei, 18) : ''
 
@@ -66,27 +60,30 @@ const useCountdownTime = () => {
       }
 
       setCountdown(minutes)
+      if (auctionState === AUCTION_STATE.NOT_STARTED)
+        return setCurrentPrice(!!config?.startAmountInWei ? ethers.utils.formatUnits(config?.startAmountInWei, 18) : '')
 
-      if (!!config?.endAmountInWei) {
-        const endPrice = ethers.utils.formatUnits(config.endAmountInWei, 18)
+      // Check if the countdown timer has ended
+      if (price <= Number(endPrice)) {
+        clearInterval(interval)
 
-        // Check if the countdown timer has ended
-        if (price <= Number(endPrice)) {
-          clearInterval(interval)
-
-          return setCurrentPrice(ethers.utils.formatUnits(config.endAmountInWei, 18))
-        } else {
-          const eth = ethers.utils.parseEther(price.toString())
-
-          setCurrentPrice(ethers.utils.formatUnits(eth, 18))
-        }
+        return setCurrentPrice(endPrice)
       }
-    }, INTERVAL)
+
+      const eth = ethers.utils.parseEther(price.toString())
+      setCurrentPrice(ethers.utils.formatUnits(eth, 18))
+    },
+    [auctionState, config?.endAmountInWei, config?.endTime, config?.startAmountInWei, config?.startTime, handlePrice]
+  )
+
+  useEffect(() => {
+    const interval = setInterval(handleTime, INTERVAL)
+    handleTime(interval)
 
     return () => {
       clearInterval(interval)
     }
-  }, [handlePrice, config?.endAmountInWei, config?.endTime])
+  }, [handlePrice, handleTime])
 
   useEffect(() => {
     if (config?.startAmountInWei) {
