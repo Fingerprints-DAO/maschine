@@ -30,7 +30,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       return 0
     }
 
-    const limit = Number(ethers.utils.formatUnits(config.limitInWei), 18)
+    const limit = Number(ethers.utils.formatUnits(config.limitInWei, 18))
     const contribution = Number(ethers.utils.formatUnits(userData.contribution, 18))
 
     const qty = Math.floor((limit - contribution) / Number(currentPrice))
