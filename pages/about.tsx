@@ -4,6 +4,7 @@ import Header from '@ui/components/organisms/header'
 import Head from 'next/head'
 import Image from 'next/image'
 import hero from 'public/images/still.jpg'
+import image2 from 'public/images/aboutanimation.gif'
 import aHarmVanDenDorpel from 'public/images/harm-profile.webp'
 import fingerPrintsThumb from 'public/images/fpthumb.jpg'
 import mercedesThumb from 'public/images/mnxt.png'
@@ -19,8 +20,20 @@ const AboutPage = () => {
       <Box as="main">
         <Header />
         <Container>
-          <Box as="section" pt={10} pb={148}>
-            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+          <Box as="section" display={'flex'} flexDir={'column'} pt={10} gap={28}>
+            <Box borderRadius={8} overflow={'hidden'} order={[3,3,1]}>
+              <AspectRatio maxW="100%" ratio={1.5}>
+                <iframe
+                  height="500"
+                  title="Harm Interview"
+                  src="https://www.youtube-nocookie.com/embed/HrRGckSIiEQ?autohide=1&showinfo=0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </AspectRatio>
+            </Box>
+
+            <Box display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12} order={1}>
               <Box mt={[3]} mb={[5, 5, 0]}>
                 <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={hero} alt="The Maschine Collection" />
@@ -41,30 +54,59 @@ const AboutPage = () => {
                     blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
                   </Text>
                   <Text>
-                    It's hard to observe it in nature due to the fast speeds required to produce it, but with the advent of the machine age, the
-                    stroboscopic effect became a common occurence in people's lives. It can since be observed in car wheels, propellers, turbines and
-                    all sorts of engine-driven machines.
+                    It's rare to observe it in nature due to the fast speeds involved, but with the advent of the machine age, the stroboscopic effect
+                    could be seen in car wheels, propellers, turbines and all sorts of engine-driven machines.
                   </Text>
                   <Text>
-                    Maschine reproduces this illusion with a 3D webGL animation. Each piece is made unique through the generation of a large number of
-                    aesthetic parameters.
-                  </Text>
-                  <Text>
-                    Due to the large number of possible variations, the artist chose to program a neural network to curate the best combinations
-                    during the making of this collection.
+                    With rotating objects, depending on the ratio of the object's radial speed to your eyes' maximum frame rate, it will appear to
+                    stay stationary or even move backwards.
                   </Text>
                 </Stack>
               </Box>
             </Box>
 
-            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
+            <Box display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12} order={2}>
+              <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
+                <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
+                  <Image src={image2} alt="A Harm van den Dorpel artwork" />
+                </AspectRatio>
+              </Box>
+
+              <Box flex={1} order={[2, 2, 1]}>
+                <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
+                  How it Works
+                </Text>
+                <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
+                  <Text>
+                    Maschine reproduces this illusion with a 3D WebGL script, which allows the image to be rendered natively in web browsers without
+                    the use of plug-ins. It also allows for very low-level control of 3D rendering.
+                  </Text>
+                  <Text>
+                    To be able to reproduce the stroboscopic effect, large media assets and libraries were coupled with the source code created by the
+                    artist.
+                  </Text>
+                  <Text>This produced the mesmerizing aesthetics in the final artwork, but made it too large for direct on-chain storage.</Text>
+                  <Text>
+                    As the pieces are generated, they are stored on IPFS and assigned to collectors in the collections' smart contract during the
+                    minting process.
+                  </Text>
+                  <Text>
+                    Each piece is made unique through the randomization of a large number of aesthetic parameters, such as number of spokes, colors,
+                    rotation speed and lighting effects.
+                  </Text>
+                  <Text></Text>
+                </Stack>
+              </Box>
+            </Box>
+
+            <Box display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12} order={4}>
               <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
                 <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={aHarmVanDenDorpel} alt="A Harm van den Dorpel artwork" />
                 </AspectRatio>
               </Box>
 
-              <Box flex={1} order={[2, 2, 1]}>
+              <Box flex={1} order={[1, 1, 2]}>
                 <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
                   A Harm van den Dorpel Artwork
                 </Text>
@@ -89,8 +131,8 @@ const AboutPage = () => {
               </Box>
             </Box>
 
-            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mt={[3]} mb={[5, 5, 0]}>
+            <Box display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12} order={5}>
+              <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
                 <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={mercedesThumb} alt="Mercedes-Benz NXT" />
                 </AspectRatio>
@@ -119,14 +161,14 @@ const AboutPage = () => {
               </Box>
             </Box>
 
-            <Box mb={[16, 28]} display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12}>
-              <Box mt={[3]} mb={[5, 5, 0]} order={[1, 1, 2]}>
+            <Box display={['block', 'flex']} flexDir={['column', 'column', 'row']} gap={12} order={6}>
+              <Box mt={[3]} mb={[5, 5, 0]} order={[2, 2, 1]}>
                 <AspectRatio w={['100%', '100%', 250, 350, 450]} ratio={1} borderRadius={8} overflow="hidden">
                   <Image src={fingerPrintsThumb} alt="And Fingerprints DAO" />
                 </AspectRatio>
               </Box>
 
-              <Box flex={1} order={[2, 2, 1]}>
+              <Box flex={1} order={[1, 1, 2]}>
                 <Text as="h3" fontWeight="bold" fontSize={['4xl']} mb={6}>
                   And Fingerprints DAO
                 </Text>
@@ -147,7 +189,7 @@ const AboutPage = () => {
               </Box>
             </Box>
           </Box>
-        <Footer />
+          <Footer />
         </Container>
       </Box>
     </>

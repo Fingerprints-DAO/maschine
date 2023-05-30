@@ -6,7 +6,7 @@ import Head from 'next/head'
 const questions = [
   {
     question: 'What is Mercedes-Benz NXT?',
-    answer: `Mercedes-Benz NXT is a subsidiary of Mercedes-Benz dedicated to building a presence within the Web3 community. It represents a long-term commitment by Mercedes-Benz in the space. More details are available directly in the Mercedes-Benz NXT website.`,
+    answer: `Mercedes-Benz NXT is a brand of Mercedes-Benz dedicated to building a presence within the Web3 community. It represents a long-term commitment by Mercedes-Benz in the space. For more information, please visit the Mercedes-Benz NXT website at https://nxt.mercedes-benz.com.`,
   },
   {
     question: 'What is Fingerprints DAO?',

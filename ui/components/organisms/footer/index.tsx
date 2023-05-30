@@ -6,9 +6,9 @@ import { Link } from '@chakra-ui/react'
 
 const Footer = () => {
   return (
-    <Box as="footer" py={[6, 4]} mt={150}>
+    <Box as="footer" py={[6, 4]} mt={[25]}>
       <Flex flexDir={'column'} mx="auto" mb={4}>
-        <Flex alignItems={'end'} flexDir={'row'} justifyContent={'space-between'}>
+        <Flex alignItems={['center','center','end']} flexDir={['column','row']} justifyContent={['space-between']}>
           <Box>
             <Box
               as={Link}
@@ -85,7 +85,7 @@ const Footer = () => {
           </Flex>
         </Flex>
 
-        <Text align={'left'} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
+        <Text align={['center','center','left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
           Developed by{' '}
           <Text
             as="a"

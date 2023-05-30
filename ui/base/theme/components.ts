@@ -3,7 +3,7 @@ import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
 const containerTheme = defineStyleConfig({
   baseStyle: {
     maxWidth: {
-      base: '80%', // TODO: change it to 90% on dutch auction phase
+      base: '90%', // TODO: change it to 90% on dutch auction phase
       sm: '90%',
       xl: '1160px',
       '2xl': '1280px',

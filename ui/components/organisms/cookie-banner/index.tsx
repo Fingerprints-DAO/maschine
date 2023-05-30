@@ -27,9 +27,10 @@ const CookieBanner = ({ isInternalPage }: CookieBannerProps) => {
       {/* Show the banner only if the "showBanner" state is true */}
       <Box pb={{ base: isInternalPage ? '200px' : '150px', sm: isInternalPage ? '150px' : '100px', md: isInternalPage ? '80px' : '40px' }}>
         <Banner buttonText="Close" onClose={handleClose} reverseBg={isInternalPage!}>
-          <Text fontWeight="medium">By continuing to navigate this website you agree to our privacy policy and allow us to collect cookies.</Text>
+          <Text fontWeight="medium">By continuing to navigate this website you agree to our privacy policy and allow us to collect cookies.
+          </Text>
           <Text color="muted">
-            Read our <Link href="/terms-and-conditions">Terms &amp; Conditions</Link>
+            Read our <Link href="/terms-and-conditions">Terms &amp; Conditions</Link>.
           </Text>
         </Banner>
       </Box>

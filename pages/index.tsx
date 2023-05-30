@@ -50,7 +50,7 @@ export default function Home({ meta, bg, cookieBanner }: HomeProps) {
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Image src={logoHarmStudio} alt="Harm Studio" width={50} height={50} />
                 </Box>
-                <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
+                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank">
                   <Image src={logoMercedes} alt="Harm Studio" width={110} height={110} />
                 </Box>
               </Flex>
