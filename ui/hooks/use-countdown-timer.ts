@@ -3,8 +3,8 @@ import dayjs from 'dayjs'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 
-const INTERVAL = 60000
-// const INTERVAL = 1000
+// const INTERVAL = 60000
+const INTERVAL = 1000
 
 const timeToGo = (time: number) => {
   const endDateUnix = dayjs.unix(time)
@@ -33,11 +33,12 @@ const useCountdownTime = () => {
     }
 
     const currentTime = dayjs()
+    const startTime = dayjs.unix(config?.startTime?.toNumber())
     const endTime = dayjs.unix(config?.endTime?.toNumber())
-    const totalTime = endTime.diff(dayjs.unix(config?.startTime?.toNumber()))
+    const diffTime = endTime.diff(startTime)
     const elapsedTime = currentTime.diff(dayjs.unix(config?.startTime?.toNumber()))
 
-    const percentage = elapsedTime / totalTime
+    const percentage = elapsedTime / diffTime
 
     const startPrice = Number(ethers.utils.formatUnits(config.startAmountInWei, 18))
 
@@ -49,7 +50,10 @@ const useCountdownTime = () => {
 
   const handleTime = useCallback(
     (interval: number) => {
-      const time = auctionState === AUCTION_STATE.ENDED ? config?.endTime?.toNumber() : config?.startTime?.toNumber()
+      let time = 0
+      if (auctionState === AUCTION_STATE.NOT_STARTED) time = config?.startTime?.toNumber() ?? 0
+      if (auctionState === AUCTION_STATE.STARTED) time = config?.endTime?.toNumber() ?? 0
+
       const minutes = handleMinutes(time ?? 0)
       const price = handlePrice()
       const endPrice = !!config?.endAmountInWei ? ethers.utils.formatUnits(config?.endAmountInWei, 18) : ''
@@ -83,13 +87,7 @@ const useCountdownTime = () => {
     return () => {
       clearInterval(interval)
     }
-  }, [handlePrice, handleTime])
-
-  useEffect(() => {
-    if (config?.startAmountInWei) {
-      setCurrentPrice(ethers.utils.formatUnits(config?.startAmountInWei, 18))
-    }
-  }, [config?.startAmountInWei])
+  }, [handleTime])
 
   return {
     countdown,
