@@ -1,6 +1,8 @@
 import { useQueries } from 'react-query'
 import useMaschine from './use-maschine'
 
+const refetchInterval = 10000
+
 const useTotalSupply = () => {
   const maschineContract = useMaschine()
 
@@ -17,6 +19,7 @@ const useTotalSupply = () => {
       queryKey: ['currentSupply'],
       queryFn: requestCurrentSupply,
       enabled: Boolean(maschineContract),
+      refetchInterval,
     },
     {
       queryKey: ['maxSupply'],
