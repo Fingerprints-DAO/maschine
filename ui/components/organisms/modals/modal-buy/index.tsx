@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, CloseButton, Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
+import { Box, Button, CloseButton, Modal, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SkeletonText, Text } from '@chakra-ui/react'
 import { ModalProps } from '@ui/contexts/modal'
 import Counter from '../../counter'
 import useMediaQuery from '@ui/hooks/use-media-query'
@@ -20,11 +20,12 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
   const [quantity, setQuantity] = useState(0)
   const [localCurrentPrice, setLocalCurrentPrice] = useState('')
+  const [isLoadingLocalCurrentPrice, setIsLoadingLocalCurrentPrice] = useState(false)
 
   const { data: userData } = useGetUserData()
-  const { data: currentPrice } = useGetCurrentPrice()
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
+  const { data: currentPrice, isLoading: isLoadingCurrentPriceContract } = useGetCurrentPrice()
 
   useEffect(() => {
     if (currentPrice) {
@@ -67,6 +68,8 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('Wallet is not connected')
       }
 
+      setIsLoadingLocalCurrentPrice(true)
+
       const mint = await handleMint({ address, qty: quantity })
 
       if (!mint?.data) {
@@ -98,6 +101,8 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
     } catch (error: any) {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
+    } finally {
+      setIsLoadingLocalCurrentPrice(false)
     }
   }, [quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast])
 
@@ -130,9 +135,18 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           <Text color="gray.500" mb={1}>
             Current price is
           </Text>
-          <Text color="gray.700" fontWeight="bold">
-            {localCurrentPrice} ETH
-          </Text>
+          <SkeletonText
+            noOfLines={1}
+            skeletonHeight="4"
+            w="30"
+            isLoaded={!isLoadingCurrentPriceContract || !isLoadingLocalCurrentPrice}
+            startColor="gray.100"
+            endColor="gray.300"
+          >
+            <Text color="gray.700" fontWeight="bold">
+              {localCurrentPrice} ETH
+            </Text>
+          </SkeletonText>
         </Box>
         <Box mb={10}>
           <Text color="gray.500" mb={10}>
