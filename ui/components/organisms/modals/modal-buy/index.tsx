@@ -5,7 +5,7 @@ import Counter from '../../counter'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import { useMaschineContext } from '@ui/contexts/maschine'
-import { BigNumber, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 import useMint from '@web3/contracts/dutch-auction/use-mint'
 import useBid from '@web3/contracts/dutch-auction/use-bid'
@@ -13,6 +13,7 @@ import { TransactionStatus } from 'types/transaction'
 import useTxToast from '@ui/hooks/use-tx-toast'
 import theme from '@ui/base/theme'
 import { useQueryClient } from 'react-query'
+import BigNumber from 'bignumber.js'
 
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
@@ -25,7 +26,8 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
   const { data: userData } = useGetUserData()
   console.log('userData', userData?.contribution ? ethers.utils.formatUnits(userData?.contribution, 18) : '')
-  const { data: currentPrice } = useGetCurrentPrice()
+  const { data: currentPriceArray } = useGetCurrentPrice()
+  const { price: currentPrice } = currentPriceArray ?? { price: '0', priceBN: BigNumber(0) }
 
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
@@ -41,11 +43,11 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       return 0
     }
 
-    const limit = Number(ethers.utils.formatUnits(config.limitInWei, 18))
-    const contribution = Number(ethers.utils.formatUnits(userData.contribution, 18))
-    const qty = Math.floor((limit - contribution) / Number(currentPrice))
+    const limit = BigNumber(config.limitInWei.toString())
+    const contribution = BigNumber(userData.contribution.toString())
+    const qty = limit.minus(contribution).dividedBy(currentPrice)
 
-    return qty
+    return Number(qty.toFixed())
   }, [config, currentPrice, userData])
 
   useEffect(() => {
@@ -87,7 +89,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       setLocalCurrentPrice(mint.data.currentPrice)
 
       const payload = {
-        deadline: BigNumber.from(mint.data.deadline),
+        deadline: BigNumber(mint.data.deadline),
         qty: quantity,
         price: localCurrentPrice ?? '0',
         signature: mint.data.signature,
@@ -148,7 +150,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           </Text>
           <SkeletonText noOfLines={1} skeletonHeight="4" w="30" isLoaded={!!localCurrentPrice} startColor="gray.100" endColor="gray.300">
             <Text color="gray.700" fontWeight="bold">
-              {Number(localCurrentPrice).toFixed(3)} ETH
+              {localCurrentPrice} ETH
             </Text>
           </SkeletonText>
         </Box>

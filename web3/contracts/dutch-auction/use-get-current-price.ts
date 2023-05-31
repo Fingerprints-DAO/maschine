@@ -1,18 +1,23 @@
 import { useQuery } from 'react-query'
 import useDutchAuction from './use-dutch-auction'
-import { ethers } from 'ethers'
+import BigNumber from 'bignumber.js'
+import { formatEther } from 'ethers/lib/utils.js'
+import { NumberSettings } from 'types/number-settings'
 
 const useGetCurrentPrice = () => {
   const dutchAuction = useDutchAuction()
 
   const request = async () => {
-    const price = await dutchAuction?.getCurrentPriceInWei?.()
+    const price = BigNumber(formatEther((await dutchAuction?.getCurrentPriceInWei?.()) ?? 0))
 
     if (!price) {
-      return
+      return {
+        price: '0',
+        priceBN: BigNumber(0),
+      }
     }
 
-    return ethers.utils.formatUnits(price, 18)
+    return { price: price.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP), priceBN: price }
   }
 
   return useQuery(['current-price'], request, { enabled: Boolean(dutchAuction), cacheTime: 0 })

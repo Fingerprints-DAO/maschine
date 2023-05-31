@@ -1,10 +1,13 @@
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
+import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
-import { ethers } from 'ethers'
+import { formatEther } from 'ethers/lib/utils.js'
 import { useCallback, useEffect, useState } from 'react'
 import { Interval } from 'types/interval'
+import { NumberSettings } from 'types/number-settings'
 
 const INTERVAL = Interval.Timer
+const BIGZERO = BigNumber(0)
 
 const timeToGo = (time: number) => {
   const endDateUnix = dayjs.unix(time)
@@ -24,12 +27,12 @@ const handleMinutes = (time: number) => {
 
 const useCountdownTime = () => {
   const { config, auctionState } = useMaschineContext()
-  const [currentPrice, setCurrentPrice] = useState('')
+  const [currentPrice, setCurrentPrice] = useState(BIGZERO)
   const [countdown, setCountdown] = useState(0)
 
   const handlePrice = useCallback(() => {
     if (!config?.startTime || !config.endTime || !config.startAmountInWei) {
-      return 0
+      return BIGZERO
     }
 
     const currentTime = dayjs()
@@ -40,10 +43,10 @@ const useCountdownTime = () => {
 
     const percentage = elapsedTime / diffTime
 
-    const startPrice = Number(ethers.utils.formatUnits(config.startAmountInWei, 18))
+    const startPrice = BigNumber(formatEther(config.startAmountInWei))
 
     // Calculate the adjusted end price
-    const price = startPrice - startPrice * percentage
+    const price = startPrice.minus(startPrice.multipliedBy(percentage))
 
     return price
   }, [config?.startAmountInWei, config?.endTime, config?.startTime])
@@ -56,26 +59,25 @@ const useCountdownTime = () => {
 
       const minutes = handleMinutes(time ?? 0)
       const price = handlePrice()
-      const endPrice = !!config?.endAmountInWei ? ethers.utils.formatUnits(config?.endAmountInWei, 18) : ''
+      const endPrice = BigNumber(formatEther(config?.endAmountInWei ?? '0'))
+      const startPrice = BigNumber(formatEther(config?.startAmountInWei ?? '0'))
 
-      if (minutes <= 0 && price <= Number(endPrice)) {
+      if (minutes <= 0 && price.lte(endPrice)) {
         clearInterval(interval)
         return
       }
 
       setCountdown(minutes)
-      if (auctionState === AUCTION_STATE.NOT_STARTED)
-        return setCurrentPrice(!!config?.startAmountInWei ? ethers.utils.formatUnits(config?.startAmountInWei, 18) : '')
+      if (auctionState === AUCTION_STATE.NOT_STARTED) return setCurrentPrice(startPrice)
 
       // Check if the countdown timer has ended
-      if (price <= Number(endPrice)) {
+      if (price.lte(endPrice)) {
         clearInterval(interval)
 
         return setCurrentPrice(endPrice)
       }
 
-      const eth = ethers.utils.parseEther(price.toString())
-      setCurrentPrice(ethers.utils.formatUnits(eth, 18))
+      setCurrentPrice(price)
     },
     [auctionState, config?.endAmountInWei, config?.endTime, config?.startAmountInWei, config?.startTime, handlePrice]
   )
@@ -91,7 +93,8 @@ const useCountdownTime = () => {
 
   return {
     countdown,
-    currentPrice,
+    currentPrice: currentPrice.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP),
+    currentPriceBN: currentPrice,
   }
 }
 

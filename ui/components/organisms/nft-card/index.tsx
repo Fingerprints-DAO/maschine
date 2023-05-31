@@ -11,6 +11,8 @@ import { ethers } from 'ethers'
 import dayjs from 'dayjs'
 import useCountdownTime from '@ui/hooks/use-countdown-timer'
 import useTotalSupply from '@web3/contracts/maschine/use-total-supply'
+import BigNumber from 'bignumber.js'
+import { NumberSettings } from 'types/number-settings'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -21,7 +23,7 @@ const handleMinutes = (time: number) => `minute${time > 1 ? 's' : ''}`
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
-  const { countdown, currentPrice } = useCountdownTime()
+  const { countdown, currentPriceBN } = useCountdownTime()
   const { isConnected, canInteract, config, auctionState, isLimitReached, currentSupply, maxSupply } = useMaschineContext()
 
   const renderButton = useMemo(() => {
@@ -183,7 +185,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               {(auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) && 'Final price'}
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {Number(currentPrice).toFixed(process.env.NODE_ENV !== 'production' ? 3 : 5)} ETH
+              {currentPriceBN.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP)} ETH
             </Text>
           </Box>
         </Flex>

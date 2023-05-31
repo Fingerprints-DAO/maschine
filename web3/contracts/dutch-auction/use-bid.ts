@@ -1,7 +1,8 @@
 import { useMutation } from 'react-query'
 import { Address } from 'wagmi'
 import useDutchAuction from './use-dutch-auction'
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber as BigNumberEthers, ethers } from 'ethers'
+import BigNumber from 'bignumber.js'
 
 type Payload = {
   qty: number
@@ -15,7 +16,7 @@ const useBid = () => {
   const request = async ({ deadline, qty, signature, price }: Payload) => {
     // const gasPrice = (await dutchAuction?.provider.getGasPrice()) ?? BigNumber.from(0)
 
-    return dutchAuction?.bid?.(qty, deadline, signature, {
+    return dutchAuction?.bid?.(qty, BigNumberEthers.from(deadline.toString()), signature, {
       value: ethers.utils.parseEther(price).mul(qty),
       // gasLimit: BigNumber.from(500000),
     })
