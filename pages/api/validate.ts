@@ -8,9 +8,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       headers: { 'Content-Type': 'text/plain' },
     })
     console.log('GET IP OK')
-    console.log(req.headers['X-Vercel-IP-Country'])
-    console.log(req.headers['X-Vercel-IP-Country-Region'])
-    console.log(req.headers['X-Vercel-IP-City'])
+    console.log(req.headers['x-vercel-ip-country'])
+    console.log(req.headers['x-vercel-ip-country-region'])
+    console.log(req.headers['x-vercel-ip-city'])
     console.log(req.headers['x-real-ip'])
     const ip = await response.text()
 
