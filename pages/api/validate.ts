@@ -8,8 +8,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       headers: { 'Content-Type': 'text/plain' },
     })
     console.log('GET IP OK')
+    console.log(req.headers['X-Vercel-IP-Country'])
+    console.log(req.headers['X-Vercel-IP-Country-Region'])
+    console.log(req.headers['X-Vercel-IP-City'])
+    console.log(req.headers['x-real-ip'])
     const ip = await response.text()
 
+    console.log(ip)
     console.log('Getting geolocation')
     const location = await ipToLocation(ip)
 
