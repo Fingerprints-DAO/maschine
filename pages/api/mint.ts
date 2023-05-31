@@ -113,6 +113,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   })
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
+  console.log('signerAddress', signer.address)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
   const signature = await signBid(signer, process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS as string, {
     account: address,

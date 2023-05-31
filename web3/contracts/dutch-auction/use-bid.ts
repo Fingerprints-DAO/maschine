@@ -9,19 +9,15 @@ type Payload = {
   signature: Address
   price: string
 }
-
 const useBid = () => {
   const dutchAuction = useDutchAuction()
 
   const request = async ({ deadline, qty, signature, price }: Payload) => {
-    const gasPrice = (await dutchAuction?.provider.getGasPrice()) ?? BigNumber.from(0)
-    const gasLimit = BigNumber.from(5000000)
-    const gasPriceBuffer = gasPrice.mul(105).div(100)
+    // const gasPrice = (await dutchAuction?.provider.getGasPrice()) ?? BigNumber.from(0)
 
     return dutchAuction?.bid?.(qty, deadline, signature, {
       value: ethers.utils.parseEther(price).mul(qty),
-      gasLimit,
-      gasPrice: gasPriceBuffer,
+      // gasLimit: BigNumber.from(500000),
     })
   }
 
