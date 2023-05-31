@@ -25,7 +25,7 @@ const ToastContent = ({ title, description, txHash, status, toastId, icon, onClo
       position="relative"
     >
       {Boolean(icon) && <Icon {...icon} mr={2} />}
-      <Text color="gray.900" fontSize="lg" fontWeight="bold" textAlign="center">
+      <Text color="gray.900" fontSize="lg" fontWeight="bold">
         {title}
         {description || (
           <>

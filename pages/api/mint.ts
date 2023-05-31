@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     locality = location.city
     postalCode = location.postal || ''
 
-    if (!isAllowed(location.country_name) || !location.region || !location.city) {
+    if (!isAllowed(location.country_name) || !location.region) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',

@@ -31,7 +31,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
   useEffect(() => {
     if (currentPrice) {
-      setLocalCurrentPrice(Number(currentPrice).toFixed(3))
+      setLocalCurrentPrice(currentPrice)
     }
   }, [currentPrice])
 
@@ -83,7 +83,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('')
       }
 
-      setLocalCurrentPrice(Number(mint.data.currentPrice).toFixed(3))
+      setLocalCurrentPrice(mint.data.currentPrice)
 
       const payload = {
         deadline: BigNumber.from(mint.data.deadline),
@@ -146,7 +146,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           </Text>
           <SkeletonText noOfLines={1} skeletonHeight="4" w="30" isLoaded={!!localCurrentPrice} startColor="gray.100" endColor="gray.300">
             <Text color="gray.700" fontWeight="bold">
-              {localCurrentPrice} ETH
+              {Number(localCurrentPrice).toFixed(3)} ETH
             </Text>
           </SkeletonText>
         </Box>

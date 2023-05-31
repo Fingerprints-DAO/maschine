@@ -11,11 +11,13 @@ import MintCta from '@ui/components/organisms/mint-cta'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
-import Unavailability from '@ui/components/organisms/unavailability'
+import BannerMessage from '@ui/components/organisms/banner-message'
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import { useEffect, useMemo, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import dayjs from 'dayjs'
+import { HiOutlineLockClosed } from 'react-icons/hi'
+import Link from 'next/link'
 
 type HomeProps = {
   meta: {
@@ -76,7 +78,17 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
         <Box position="relative" zIndex={2}>
-          {!isWarningVisible && <Unavailability onClose={handleCloseWarning} />}
+          {!isWarningVisible && (
+            <BannerMessage bg="#F76B8B" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
+              <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2}>
+                It seems like you are not eligible to mint an Maschine NFT. Please{' '}
+                <Box as={Link} href="terms-and-conditions" textDecoration="underline">
+                  read our terms
+                </Box>{' '}
+                for more information.
+              </Text>
+            </BannerMessage>
+          )}
           <Header />
           <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
             <Box mb={12} display={['block', 'none']}>

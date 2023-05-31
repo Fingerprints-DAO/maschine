@@ -30,12 +30,20 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       return <div />
     }
 
-    if (!isConnected) {
-      return <Wallet variant="card" />
+    if (auctionState === AUCTION_STATE.ENDED) {
+      return null
     }
 
+    if (!isConnected) {
+      return (
+        <Box mt={8}>
+          <Wallet variant="card" />
+        </Box>
+      )
+    }
+
+    // TODO: verify if user spend more ether than allowed
     if (!canInteract) {
-      // TODO: verify if user spend more ether than allowed
       return (
         <Button
           color="gray.500"
@@ -47,6 +55,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           h={16}
           w="full"
           size="lg"
+          mt={8}
         >
           Mint unavailable
         </Button>
@@ -55,7 +64,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
     if (auctionState === AUCTION_STATE.STARTED) {
       return (
-        <Button variant="white" size="lg" w="full" onClick={handleOpenModal(ModalElement.Buy)}>
+        <Button variant="white" size="lg" w="full" mt={8} onClick={handleOpenModal(ModalElement.Buy)}>
           Buy
         </Button>
       )
@@ -63,17 +72,13 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
     if (auctionState === AUCTION_STATE.SOLD_OUT) {
       return (
-        <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg">
+        <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg" mt={8}>
           Sold out
         </Button>
       )
     }
 
-    if (auctionState === AUCTION_STATE.ENDED) {
-      return null
-    }
-
-    return <Skeleton w="full" h={16} startColor="gray.100" endColor="gray.300" rounded="8px" />
+    return <Skeleton w="full" h={16} startColor="gray.100" endColor="gray.300" rounded="8px" mt={8} />
   }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal])
 
   const renderTimer = useMemo(() => {
@@ -161,7 +166,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             </Box>
           </Text>
         </Box>
-        <Flex mb={8}>
+        <Flex>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
               {auctionState === AUCTION_STATE.NOT_STARTED && 'Supply'}
