@@ -1,5 +1,7 @@
 import useGetDutchAuctionConfig from '@web3/contracts/dutch-auction/use-get-dutch-auction-config'
 import useGetNftContractAddress from '@web3/contracts/dutch-auction/use-get-nft-contract-address'
+import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
+import useTotalSupply from '@web3/contracts/maschine/use-total-supply'
 import useLocationValidation from '@web3/maschine/use-location-validation'
 import dayjs from 'dayjs'
 import { BigNumber } from 'ethers'
@@ -15,10 +17,12 @@ export enum AUCTION_STATE {
 
 type MaschineContextState = {
   isConnected: boolean
+  canInteract: boolean
+  isLimitReached: boolean
+  auctionState: AUCTION_STATE
   address?: Address
   nftContractAddress?: Address
   ensName?: string | null
-  canInteract: boolean
   config?: Partial<{
     startAmountInWei: BigNumber
     endAmountInWei: BigNumber
@@ -27,23 +31,22 @@ type MaschineContextState = {
     startTime: BigNumber
     endTime: BigNumber
   }>
-  auctionState: AUCTION_STATE
+  currentSupply?: BigNumber
+  maxSupply?: number
 }
 
 const DEFAULT_CONTEXT = {
-  isAdmin: false,
-  isAdminOrEditor: false,
-  isEditor: false,
   isConnected: false,
-  isUnavailabilityWarningVisible: false,
+  isLimitReached: false,
   canInteract: true,
   auctionState: AUCTION_STATE.NOT_STARTED,
 } as MaschineContextState
 
 const MaschineContext = createContext(DEFAULT_CONTEXT)
 
-const getCurrentState = (startTime?: number, endTime?: number) => {
-  if (!startTime || !endTime) return AUCTION_STATE.NOT_STARTED
+const getCurrentState = (startTime?: number, endTime?: number, currentSupply?: number, maxSupply?: number) => {
+  if (!startTime || !endTime || !currentSupply || !maxSupply) return AUCTION_STATE.NOT_STARTED
+  if (currentSupply >= maxSupply) return AUCTION_STATE.SOLD_OUT
 
   const now = dayjs()
   const start = dayjs.unix(startTime)
@@ -57,10 +60,20 @@ const getCurrentState = (startTime?: number, endTime?: number) => {
 
 const MaschineProvider = ({ children }: PropsWithChildren) => {
   const { address, isConnected } = useAccount()
-  const { data: canInteract } = useLocationValidation()
+  const { data: userData } = useGetUserData()
   const { data: config } = useGetDutchAuctionConfig()
+  const { data: canInteract } = useLocationValidation()
   const { data: nftContractAddress } = useGetNftContractAddress()
+  const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
   const { data: ensName } = useEnsName({ address, enabled: Boolean(address) })
+
+  const isLimitReached = useMemo(() => {
+    if (!config?.limitInWei || !userData?.contribution) {
+      return false
+    }
+
+    return userData.contribution.gt(config.limitInWei)
+  }, [config?.limitInWei, userData?.contribution])
 
   const value: MaschineContextState = useMemo(() => {
     return {
@@ -70,9 +83,12 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       canInteract: canInteract ?? DEFAULT_CONTEXT.canInteract,
       nftContractAddress,
       config,
-      auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber()),
+      isLimitReached,
+      currentSupply,
+      maxSupply,
+      auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber(), currentSupply?.toNumber(), maxSupply),
     }
-  }, [address, isConnected, ensName, canInteract, nftContractAddress, config])
+  }, [address, isConnected, ensName, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
 
   return <MaschineContext.Provider value={value}>{children}</MaschineContext.Provider>
 }

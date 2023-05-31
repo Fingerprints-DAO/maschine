@@ -4,18 +4,19 @@ import { ChangeEventHandler } from 'react'
 
 type CounterProps = {
   value: number
+  minValue?: number
   maxValue: number
   onAction: (action: 'increase' | 'decrease') => void
   onChange: ChangeEventHandler<HTMLInputElement>
 }
 
-const Counter = ({ value, maxValue, onAction, onChange }: CounterProps) => {
+const Counter = ({ value, minValue = 1, maxValue, onAction, onChange }: CounterProps) => {
   const handleAction = (action: 'increase' | 'decrease') => () => onAction(action)
 
   return (
     <Flex>
       <IconButton
-        isDisabled={value === 0}
+        isDisabled={!value || value === minValue}
         color="gray.900"
         mr={4}
         size="lg"

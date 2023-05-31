@@ -21,17 +21,12 @@ const handleMinutes = (time: number) => `minute${time > 1 ? 's' : ''}`
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
-  const { isConnected, canInteract, config, auctionState } = useMaschineContext()
   const { countdown, currentPrice } = useCountdownTime()
-  const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
+  const { isConnected, canInteract, config, auctionState, isLimitReached, currentSupply, maxSupply } = useMaschineContext()
 
   const renderButton = useMemo(() => {
     if (!isBrowser) {
       return <div />
-    }
-
-    if (auctionState === AUCTION_STATE.ENDED) {
-      return null
     }
 
     if (!isConnected) {
@@ -42,8 +37,15 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
-    // TODO: verify if user spend more ether than allowed
-    if (!canInteract) {
+    if (auctionState === AUCTION_STATE.SOLD_OUT) {
+      return (
+        <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg" mt={8}>
+          Sold out
+        </Button>
+      )
+    }
+
+    if (!canInteract || isLimitReached || auctionState === AUCTION_STATE.ENDED) {
       return (
         <Button
           color="gray.500"
@@ -70,16 +72,8 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
-    if (auctionState === AUCTION_STATE.SOLD_OUT) {
-      return (
-        <Button color="gray.500" cursor="no-drop" borderColor="gray.500" variant="outline" disabled={true} h={16} w="full" size="lg" mt={8}>
-          Sold out
-        </Button>
-      )
-    }
-
     return <Skeleton w="full" h={16} startColor="gray.100" endColor="gray.300" rounded="8px" mt={8} />
-  }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal])
+  }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal, isLimitReached])
 
   const renderTimer = useMemo(() => {
     if (auctionState === AUCTION_STATE.NOT_STARTED) {
@@ -96,6 +90,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Text>
       )
     }
+
     if (auctionState === AUCTION_STATE.STARTED) {
       return (
         <Text color="gray.500">
@@ -110,6 +105,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Text>
       )
     }
+
     if (auctionState === AUCTION_STATE.ENDED) {
       const endTime = dayjs.unix(config?.endTime?.toNumber() || 0)
       const endTimeWithDelay = endTime.add(config?.refundDelayTime || 0, 'seconds')
@@ -126,6 +122,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         </Text>
       )
     }
+
     return null
   }, [countdown, auctionState, config?.startTime, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
 
@@ -170,18 +167,20 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
               {auctionState === AUCTION_STATE.NOT_STARTED && 'Supply'}
-              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED) && 'NFTs minted'}
+              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) &&
+                'NFTs minted'}
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
               {auctionState === AUCTION_STATE.NOT_STARTED && '1000'}
-              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED) && `${currentSupply}/${maxSupply}`}
+              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) &&
+                `${currentSupply}/${maxSupply}`}
             </Text>
           </Box>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
               {auctionState === AUCTION_STATE.NOT_STARTED && 'Initial price'}
               {auctionState === AUCTION_STATE.STARTED && 'Current price'}
-              {auctionState === AUCTION_STATE.ENDED && 'Final price'}
+              {(auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) && 'Final price'}
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
               {Number(currentPrice).toFixed(process.env.NODE_ENV !== 'production' ? 3 : 5)} ETH

@@ -18,6 +18,7 @@ import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimab
 import dayjs from 'dayjs'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
+import { ethers } from 'ethers'
 
 type HomeProps = {
   meta: {
@@ -30,14 +31,12 @@ type HomeProps = {
   cardImageNumber: string
 }
 
-const now = dayjs()
-
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isBrowser = useIsBrowser()
   const isMobile = useMediaQuery('(max-width: 479px)')
 
   const { data: claimableCount } = useGetClaimableTokens()
-  const { canInteract, config, auctionState } = useMaschineContext()
+  const { canInteract, config, auctionState, isLimitReached } = useMaschineContext()
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
@@ -46,18 +45,6 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   }, [canInteract])
 
   const handleCloseWarning = () => setIsWarningVisible(false)
-
-  const isRebateAvailable = useMemo(() => {
-    const end = config?.endTime?.toNumber()
-
-    if (!end || !config?.refundDelayTime) {
-      return false
-    }
-
-    const delay = dayjs.unix(end).add(config.refundDelayTime, 'minutes')
-
-    return now.isAfter(delay)
-  }, [config?.refundDelayTime, config?.endTime])
 
   return (
     <>
@@ -89,6 +76,14 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </BannerMessage>
           )}
+          {isLimitReached && (
+            <BannerMessage bg="gray.300" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
+              <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2}>
+                It seems like you are not eligible to mint an Maschine NFT, the maximum amount allowed per wallet is{' '}
+                {config?.limitInWei && ethers.utils.formatUnits(config?.limitInWei, 18)} ETH.
+              </Text>
+            </BannerMessage>
+          )}
           <Header />
           <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
             <Box mb={12} display={['block', 'none']}>
@@ -102,8 +97,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             <NftCard cardImageNumber={cardImageNumber} />
             {isMobile && isBrowser && (
               <>
-                <MintCta />
-                <RebateCta />
+                {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
+                {auctionState === AUCTION_STATE.ENDED && <RebateCta />}
               </>
             )}
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0, 106]}>
@@ -179,12 +174,10 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Box>
             </Box>
           </Container>
-          {(Boolean(claimableCount) || isRebateAvailable) && !isMobile && isBrowser && (
-            <Container mb={24}>
-              {Boolean(claimableCount) && <MintCta />}
-              {auctionState === AUCTION_STATE.ENDED && <RebateCta />}
-            </Container>
-          )}
+          <Container mb={24}>
+            {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
+            {(auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) && <RebateCta />}
+          </Container>
           <Container mb={10}>
             <Flex
               alignItems={['unset', 'unset', 'unset', 'unset', 'center']}

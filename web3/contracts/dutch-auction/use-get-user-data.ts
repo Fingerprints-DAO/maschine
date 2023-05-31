@@ -6,15 +6,9 @@ const useGetUserData = () => {
   const dutchAuction = useDutchAuction()
   const { address } = useMaschineContext()
 
-  const request = async () => {
-    if (!address) {
-      throw new Error('Wallet is not connected')
-    }
+  const request = async () => dutchAuction?.getUserData?.(address!)
 
-    return dutchAuction?.getUserData?.(address)
-  }
-
-  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction), cacheTime: 0 })
+  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction) && Boolean(address), cacheTime: 0 })
 }
 
 export default useGetUserData

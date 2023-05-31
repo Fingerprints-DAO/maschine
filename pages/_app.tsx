@@ -28,6 +28,29 @@ type MaschineProps = AppProps & {
 
 NProgress.configure({ showSpinner: false })
 
+const toastOptions = {
+  motionVariants: {
+    animate: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
+    exit: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.2,
+        ease: [0.4, 0, 1, 1],
+      },
+    },
+  },
+}
+
 function Maschine({ Component, pageProps }: MaschineProps) {
   const router = useRouter()
 
@@ -36,7 +59,7 @@ function Maschine({ Component, pageProps }: MaschineProps) {
   return (
     <ReactQueryProvider>
       <Web3Provider>
-        <ChakraProvider theme={theme}>
+        <ChakraProvider theme={theme} toastOptions={toastOptions}>
           <MaschineProvider>
             <ModalProvider>
               <MetaTags {...pageProps.meta} host={pageProps.host} />

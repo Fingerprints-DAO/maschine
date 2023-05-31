@@ -24,6 +24,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const [localCurrentPrice, setLocalCurrentPrice] = useState('')
 
   const { data: userData } = useGetUserData()
+  console.log('userData', userData?.contribution ? ethers.utils.formatUnits(userData?.contribution, 18) : '')
   const { data: currentPrice } = useGetCurrentPrice()
 
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
@@ -96,6 +97,8 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
       showTxSentToast('submit-mint', response?.hash)
 
+      onClose()
+
       const wait = await response?.wait()
 
       if (wait?.status === TransactionStatus.Success) {
@@ -107,7 +110,6 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
         queryClient.invalidateQueries(['currentSupply'])
         queryClient.invalidateQueries(['claimable-tokens', 'count'])
-        onClose()
       }
     } catch (error: any) {
       console.log('handleSubmit', error)

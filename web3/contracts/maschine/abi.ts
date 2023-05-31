@@ -730,6 +730,6 @@ const MaschineContract = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-]
+] as const
 
 export default MaschineContract
