@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import { createClient } from '@supabase/supabase-js'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import signBid from './helpers/_sign'
-import { isAllowed, ipToLocation } from './helpers/_ip'
+import { isAllowed } from './helpers/_ip'
 import { Address, readContracts } from 'wagmi'
 import './helpers/_wagmi-client'
 import { dutchAuctionContract } from '@web3/contracts/dutch-auction/use-dutch-auction'
@@ -22,12 +22,12 @@ export type MintResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<MintResponse>) {
-  const response = await fetch('https://api.ipify.org', {
-    method: 'GET',
-    headers: { 'Content-Type': 'text/plain' },
-  })
+  // const response = await fetch('https://api.ipify.org', {
+  //   method: 'GET',
+  //   headers: { 'Content-Type': 'text/plain' },
+  // })
 
-  const ip = await response.text()
+  // const ip = await response.text()
 
   let { address, qty } = req.body
 
@@ -40,17 +40,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
-  let country: string, region: string | undefined, locality: string | undefined, postalCode: string
+  let country_name: string | undefined, regionName: string | undefined, localityName: string | undefined
 
   try {
-    const location = await ipToLocation(ip)
+    // const location = await ipToLocation(ip)
+    if (process.env.NODE_ENV === 'development') return
 
-    country = location.country_name
-    region = location.region
-    locality = location.city
-    postalCode = location.postal || ''
+    const country = req.headers['x-vercel-ip-country']
+    country_name = Array.isArray(country) ? country[0] : country
 
-    if (!isAllowed(location.country_name) || !location.region) {
+    const region = req.headers['x-vercel-ip-country-region']
+    regionName = Array.isArray(region) ? region[0] : region
+
+    const locality = req.headers['x-vercel-ip-city']
+    localityName = Array.isArray(locality) ? locality[0] : locality
+
+    console.log(country)
+    console.log(region)
+    console.log(locality)
+    console.log(req.headers['x-real-ip'])
+
+    if (!isAllowed(country_name) || !regionName) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',
@@ -101,16 +111,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   nonce = parseInt(rawNonce.toString())
 
   // store to supabase
-  await supabase.from(process.env.SUPABASE_TABLE ?? '').insert({
-    address,
-    qty,
-    price: ethers.utils.formatEther(currentPrice),
-    ip: ip as string,
-    country,
-    region,
-    locality,
-    postalCode,
-  })
+  if (process.env.NODE_ENV === 'production') {
+    await supabase.from(process.env.SUPABASE_TABLE ?? '').insert({
+      address,
+      qty,
+      price: ethers.utils.formatEther(currentPrice),
+      // ip: ip as string,
+      country: country_name,
+      region: regionName,
+      locality: localityName,
+      // postalCode,
+    })
+  }
 
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   console.log('signerAddress', signer.address)
