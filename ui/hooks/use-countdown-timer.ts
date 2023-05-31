@@ -2,9 +2,9 @@ import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import dayjs from 'dayjs'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
+import { Interval } from 'types/interval'
 
-// const INTERVAL = 60000
-const INTERVAL = 12000
+const INTERVAL = Interval.Timer
 
 const timeToGo = (time: number) => {
   const endDateUnix = dayjs.unix(time)
