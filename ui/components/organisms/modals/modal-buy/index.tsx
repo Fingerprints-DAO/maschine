@@ -48,7 +48,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
     const contribution = BigNumber(formatEther(userData.contribution))
     const qty = limit.minus(contribution).dividedBy(currentPrice)
 
-    return Number(qty.toFixed(0))
+    return Number(qty.toFormat(0, 1))
   }, [config, currentPrice, userData])
 
   useEffect(() => {

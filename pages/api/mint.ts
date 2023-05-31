@@ -6,6 +6,7 @@ import { isAllowed } from './helpers/_ip'
 import { Address, readContracts } from 'wagmi'
 import './helpers/_wagmi-client'
 import { dutchAuctionContract } from '@web3/contracts/dutch-auction/use-dutch-auction'
+import { formatEther } from 'ethers/lib/utils.js'
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
@@ -22,13 +23,7 @@ export type MintResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<MintResponse>) {
-  // const response = await fetch('https://api.ipify.org', {
-  //   method: 'GET',
-  //   headers: { 'Content-Type': 'text/plain' },
-  // })
-
-  // const ip = await response.text()
-
+  console.log('Calling mint')
   let { address, qty } = req.body
 
   qty = parseInt(qty)
@@ -40,12 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
+  console.log('req.body is ok')
   let country_name: string | undefined, regionName: string | undefined, localityName: string | undefined
 
   try {
-    // const location = await ipToLocation(ip)
-    if (process.env.NODE_ENV === 'development') return
-
     const country = req.headers['x-vercel-ip-country']
     country_name = Array.isArray(country) ? country[0] : country
 
@@ -60,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     console.log(locality)
     console.log(req.headers['x-real-ip'])
 
-    if (!isAllowed(country_name) || !regionName) {
+    if (!(process.env.NODE_ENV === 'development') && (!isAllowed(country_name) || !regionName)) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',
@@ -73,6 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
+  console.log('lets call contract')
   const multiCalls = await readContracts({
     contracts: [
       {
@@ -101,6 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const [rawNonce, currentPrice, userData, config] = multiCalls
   const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
 
+  console.log('checking limit', formatEther(totalAfterMint.toString()), formatEther(config.limitInWei))
   if (totalAfterMint.gt(config.limitInWei)) {
     return res.status(400).json({
       success: false,
@@ -112,6 +107,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   // store to supabase
   if (process.env.NODE_ENV === 'production') {
+    console.log('storing on supabase')
     await supabase.from(process.env.SUPABASE_TABLE ?? '').insert({
       address,
       qty,
@@ -124,6 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
+  console.log('start signing')
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY as string)
   console.log('signerAddress', signer.address)
   const deadline = Math.floor(Date.now() / 1000) + 90 * 60
@@ -133,6 +130,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     nonce,
     deadline,
   })
+
+  console.log('signed!')
 
   res.status(200).json({
     success: true,
