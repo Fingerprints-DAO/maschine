@@ -114,8 +114,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       price: ethers.utils.formatEther(currentPrice),
       // ip: ip as string,
       country: country_name,
-      region: regionName,
-      locality: localityName,
+      region: decodeURIComponent(regionName ?? ''),
+      locality: decodeURIComponent(localityName ?? ''),
       // postalCode,
     })
   }
