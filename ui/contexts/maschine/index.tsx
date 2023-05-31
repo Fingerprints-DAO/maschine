@@ -45,8 +45,8 @@ const DEFAULT_CONTEXT = {
 const MaschineContext = createContext(DEFAULT_CONTEXT)
 
 const getCurrentState = (startTime?: number, endTime?: number, currentSupply?: number, maxSupply?: number) => {
-  if (!startTime || !endTime || !currentSupply || !maxSupply) return AUCTION_STATE.NOT_STARTED
-  if (currentSupply >= maxSupply) return AUCTION_STATE.SOLD_OUT
+  if (!startTime || !endTime) return AUCTION_STATE.NOT_STARTED
+  if ((currentSupply || 0) >= (maxSupply || 0)) return AUCTION_STATE.SOLD_OUT
 
   const now = dayjs()
   const start = dayjs.unix(startTime)
