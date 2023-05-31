@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
   }
 
-  console.log('req.body is ok')
+  console.log('req.body is ok', process.env.NODE_ENV)
   let country_name: string | undefined, regionName: string | undefined, localityName: string | undefined
 
   try {
@@ -95,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const [rawNonce, currentPrice, userData, config] = multiCalls
   const totalAfterMint = userData.contribution.add(currentPrice.mul(qty))
 
-  console.log('checking limit', formatEther(totalAfterMint.toString()), formatEther(config.limitInWei))
+  console.log('checking limit')
   if (totalAfterMint.gt(config.limitInWei)) {
     return res.status(400).json({
       success: false,
