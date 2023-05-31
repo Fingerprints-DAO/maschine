@@ -14,6 +14,7 @@ import useTxToast from '@ui/hooks/use-tx-toast'
 import theme from '@ui/base/theme'
 import { useQueryClient } from 'react-query'
 import BigNumber from 'bignumber.js'
+import { formatEther } from 'ethers/lib/utils.js'
 
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
@@ -43,11 +44,11 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       return 0
     }
 
-    const limit = BigNumber(config.limitInWei.toString())
-    const contribution = BigNumber(userData.contribution.toString())
+    const limit = BigNumber(formatEther(config.limitInWei))
+    const contribution = BigNumber(formatEther(userData.contribution))
     const qty = limit.minus(contribution).dividedBy(currentPrice)
 
-    return Number(qty.toFixed())
+    return Number(qty.toFixed(0))
   }, [config, currentPrice, userData])
 
   useEffect(() => {
