@@ -34,8 +34,17 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const limitBannerRef = useRef<HTMLDivElement>(null)
   const [limitBannerHeight, setLimitBannerHeight] = useState(0)
   const [isWarningVisible, setIsWarningVisible] = useState(true)
+  const [isLimitBannerVisible, setIsLimitBannerVisible] = useState(false)
 
-  const handleCloseWarning = () => setIsWarningVisible(false)
+  const handleCloseWarning = () => {
+    setIsWarningVisible(false)
+    setLimitBannerHeight(0)
+  }
+
+  const handleCloseLimitBanner = () => {
+    setIsLimitBannerVisible(false)
+    setLimitBannerHeight(0)
+  }
 
   const renderStageFeatures = useMemo(
     () => (
@@ -50,6 +59,10 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   useEffect(() => {
     setIsWarningVisible(canInteract)
   }, [canInteract])
+
+  useEffect(() => {
+    setIsLimitBannerVisible(auctionState === AUCTION_STATE.STARTED && !!isLimitReached)
+  }, [auctionState, isLimitReached])
 
   useEffect(() => {
     if (limitBannerRef.current) {
@@ -89,8 +102,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </BannerMessage>
           )}
-          {auctionState === AUCTION_STATE.STARTED && isLimitReached && (
-            <BannerMessage ref={limitBannerRef} bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
+          {isLimitBannerVisible && (
+            <BannerMessage ref={limitBannerRef} bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseLimitBanner}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2} pr={6}>
                 You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more
                 during price drops.
