@@ -13,7 +13,7 @@ import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import BannerMessage from '@ui/components/organisms/banner-message'
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
@@ -39,11 +39,21 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
+  const handleCloseWarning = () => setIsWarningVisible(false)
+
+  const renderStageFeatures = useMemo(
+    () => (
+      <>
+        {auctionState === AUCTION_STATE.STARTED && <MintCta claimableCount={claimableCount ?? 0} />}
+        {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
+      </>
+    ),
+    [auctionState, claimableCount]
+  )
+
   useEffect(() => {
     setIsWarningVisible(canInteract)
   }, [canInteract])
-
-  const handleCloseWarning = () => setIsWarningVisible(false)
 
   return (
     <>
@@ -94,12 +104,9 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </Box>
             <NftCard cardImageNumber={cardImageNumber} />
-            {isMobile && isBrowser && (
-              <>
-                {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
-                {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
-              </>
-            )}
+            <Box hideFrom={'lg'} mb={8}>
+              {renderStageFeatures}
+            </Box>
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
               <Box mb={8} display={['none', 'none', 'none', 'block']}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
@@ -173,9 +180,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Box>
             </Box>
           </Container>
-          <Container mb={24}>
-            {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
-            {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
+          <Container mb={24} hideBelow={'lg'}>
+            {renderStageFeatures}
           </Container>
           <Container mb={10}>
             <Flex
@@ -195,8 +201,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 </Box>
               </Flex>
             </Flex>
+            <Footer />
           </Container>
-          <Footer />
         </Box>
       </Box>
     </>
