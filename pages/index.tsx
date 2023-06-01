@@ -11,7 +11,7 @@ import MintCta from '@ui/components/organisms/mint-cta'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import BannerMessage from '@ui/components/organisms/banner-message'
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
@@ -28,8 +28,11 @@ type HomeProps = {
 }
 
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
-  const { data: claimableCount, refetch: refetchClaimableCount } = useGetClaimableTokens()
+  const { data: claimableCount } = useGetClaimableTokens()
   const { canInteract, config, isLimitReached, auctionState } = useMaschineContext()
+
+  const limitBannerRef = useRef<HTMLDivElement>(null)
+  const [limitBannerHeight, setLimitBannerHeight] = useState(0)
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
   const handleCloseWarning = () => setIsWarningVisible(false)
@@ -48,6 +51,13 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
     setIsWarningVisible(canInteract)
   }, [canInteract])
 
+  useEffect(() => {
+    if (limitBannerRef.current) {
+      const height = limitBannerRef.current.offsetHeight
+      setLimitBannerHeight(height)
+    }
+  }, [])
+
   return (
     <>
       <Head>
@@ -64,6 +74,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
         w="full"
         h={['full', 'full', 'full', 'unset']}
         position="relative"
+        pt={`${limitBannerHeight}px`}
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
         <Box position="relative" zIndex={2}>
@@ -79,7 +90,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </BannerMessage>
           )}
           {auctionState === AUCTION_STATE.STARTED && isLimitReached && (
-            <BannerMessage bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
+            <BannerMessage ref={limitBannerRef} bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2} pr={6}>
                 You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more
                 during price drops.
