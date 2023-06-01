@@ -111,7 +111,7 @@ const Header = () => {
           </DrawerBody>
           <DrawerFooter p={0}>
             <Box mx="auto">
-              <Footer withConnectButton={true} />
+              <Footer />
             </Box>
           </DrawerFooter>
         </DrawerContent>
