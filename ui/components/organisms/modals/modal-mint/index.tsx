@@ -14,6 +14,7 @@ import useTxToast from '@ui/hooks/use-tx-toast'
 import useClaimTokens from '@web3/contracts/dutch-auction/use-claim-tokens'
 import { TransactionStatus } from 'types/transaction'
 import theme from '@ui/base/theme'
+import { formatBigNumberFloor } from 'utils/price'
 
 const ModalMint = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
@@ -90,7 +91,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
           id: 'claim-tokens-success',
         })
 
-        queryClient.invalidateQueries(['currentSupply'])
+        queryClient.invalidateQueries(['currentSupply', 'claimable-tokens'])
       }
     } catch (error: any) {
       console.log('handleSubmit', error)
@@ -139,7 +140,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
                   <Text as="span" color="gray.500" fontWeight="normal">
                     per
                   </Text>{' '}
-                  {contribution.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP)} ETH
+                  {formatBigNumberFloor(contribution)} ETH
                 </Text>
               </Box>
               <Box mb={8}>

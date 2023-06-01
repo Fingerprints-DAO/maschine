@@ -12,12 +12,15 @@ import useClaimRefund from '@web3/contracts/dutch-auction/use-claim-refund'
 import theme from '@ui/base/theme'
 import { TransactionStatus } from 'types/transaction'
 import useTxToast from '@ui/hooks/use-tx-toast'
+import { formatBigNumberFloor, formatToEtherString, normalizeBigNumber } from 'utils/price'
+import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 
 const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
   const { address, config } = useMaschineContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
+  const { lastPriceBN, lastPrice, lastPriceInWei } = useGetLastPrice()
 
   const { data: userData } = useGetUserData(address)
   const { mutateAsync: claimRefund, isLoading: isSubmitting } = useClaimRefund()
@@ -26,9 +29,14 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
     queryClient.resetQueries({ queryKey: ['user-data'] })
   }, [queryClient])
 
-  const contribution = useMemo(() => BigNumber(formatEther(userData?.contribution ?? 0)), [userData])
-  const pendingRebate = useMemo(() => BigNumber(formatEther(config?.startAmountInWei ?? 0)).minus(contribution), [contribution, config])
+  const contribution = useMemo(() => formatToEtherString(userData?.contribution), [userData])
+  const pendingRebate = useMemo(() => {
+    const contributionBN = normalizeBigNumber(userData?.contribution)
+    const finalPrice = BigNumber(lastPriceInWei).multipliedBy(userData?.tokensBidded ?? '0')
+    return formatEther(contributionBN.minus(finalPrice).toString())
+  }, [lastPriceInWei, userData?.contribution, userData?.tokensBidded])
 
+  console.log(pendingRebate?.toString())
   const handleSubmit = useCallback(async () => {
     try {
       if (!address) {
@@ -45,16 +53,17 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
 
       if (wait?.status === TransactionStatus.Success) {
         showTxExecutedToast({
-          title: `Minted NFTs`, // TODO: add correct message
+          title: `Refund claimed`, // TODO: add correct message
           txHash: wait?.transactionHash,
           id: 'claim-refund-success',
         })
       }
+      queryClient.invalidateQueries('user-data')
     } catch (error: any) {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
     }
-  }, [address, showTxErrorToast, showTxExecutedToast, showTxSentToast, claimRefund, onClose])
+  }, [address, claimRefund, showTxSentToast, onClose, queryClient, showTxExecutedToast, showTxErrorToast])
 
   return (
     <Modal isCentered={true} isOpen={isOpen} scrollBehavior="inside" motionPreset={isMobile ? 'slideInBottom' : 'scale'} onClose={onClose}>
@@ -90,7 +99,7 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
                 <Text as="span" color="gray.500" fontWeight="normal">
                   per
                 </Text>{' '}
-                {contribution.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP)} ETH
+                {contribution} ETH
               </Text>
             </Box>
             <Box mb={8}>
@@ -98,13 +107,13 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
                 Final price
               </Text>
               <Text color="gray.700" fontWeight="bold">
-                2 NFTs{' '}
+                {userData?.tokensBidded ?? 0} NFTs{' '}
                 <Text as="span" color="gray.500" fontWeight="normal">
                   per
                 </Text>{' '}
-                0.4 ETH{' '}
+                {formatBigNumberFloor(lastPriceBN.multipliedBy(userData?.tokensBidded ?? 0))} ETH{' '}
                 <Text as="span" color="gray.500" fontWeight="normal">
-                  (0.2 ETH each)
+                  ({lastPrice} ETH each)
                 </Text>
               </Text>
             </Box>
@@ -113,7 +122,7 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
                 Pending rebate
               </Text>
               <Text fontSize="2xl" color="gray.700" fontWeight="bold">
-                {pendingRebate.toNumber()} ETH
+                {pendingRebate?.toString()} ETH
               </Text>
             </Box>
           </Box>

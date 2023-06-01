@@ -1,11 +1,15 @@
+import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetDutchAuctionConfig from '@web3/contracts/dutch-auction/use-get-dutch-auction-config'
 import useGetNftContractAddress from '@web3/contracts/dutch-auction/use-get-nft-contract-address'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 import useTotalSupply from '@web3/contracts/maschine/use-total-supply'
 import useLocationValidation from '@web3/maschine/use-location-validation'
+import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
-import { BigNumber } from 'ethers'
-import React, { createContext, PropsWithChildren, useContext, useMemo } from 'react'
+import { formatEther, parseEther } from 'ethers/lib/utils.js'
+// import { BigNumber } from 'ethers'
+import React, { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
+import { formatToEtherString, normalizeBigNumber } from 'utils/price'
 import { Address, useAccount } from 'wagmi'
 
 export enum AUCTION_STATE {
@@ -19,14 +23,17 @@ export enum AUCTION_STATE {
 type MaschineContextState = {
   isConnected: boolean
   canInteract: boolean
-  isLimitReached: boolean
+  isLimitReached: boolean | null
   auctionState: AUCTION_STATE
   address?: Address
   nftContractAddress?: Address
   config?: Partial<{
     startAmountInWei: BigNumber
+    startAmount: String
     endAmountInWei: BigNumber
+    endAmount: String
     limitInWei: BigNumber
+    limit: String
     refundDelayTime: number
     startTime: BigNumber
     endTime: BigNumber
@@ -37,7 +44,7 @@ type MaschineContextState = {
 
 const DEFAULT_CONTEXT = {
   isConnected: false,
-  isLimitReached: false,
+  isLimitReached: null,
   canInteract: true,
   auctionState: AUCTION_STATE.NOT_STARTED,
 } as MaschineContextState
@@ -67,14 +74,8 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
   const { data: canInteract } = useLocationValidation()
   const { data: nftContractAddress } = useGetNftContractAddress()
   const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
-
-  const isLimitReached = useMemo(() => {
-    if (!config?.limitInWei || !userData?.contribution) {
-      return false
-    }
-
-    return userData.contribution.gt(config.limitInWei)
-  }, [config?.limitInWei, userData?.contribution])
+  const { priceEther } = useGetCurrentPrice()
+  const [isLimitReached, setIslimitReache] = useState<boolean | null>(null)
 
   const value: MaschineContextState = useMemo(() => {
     return {
@@ -82,13 +83,34 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       isConnected,
       canInteract: canInteract ?? DEFAULT_CONTEXT.canInteract,
       nftContractAddress,
-      config,
+      config: {
+        ...config,
+        startAmountInWei: normalizeBigNumber(config?.startAmountInWei),
+        startAmount: formatToEtherString(config?.startAmountInWei),
+        endAmountInWei: normalizeBigNumber(config?.endAmountInWei),
+        endAmount: formatToEtherString(config?.endAmountInWei),
+        limitInWei: normalizeBigNumber(config?.limitInWei),
+        limit: formatToEtherString(config?.limitInWei),
+        startTime: normalizeBigNumber(config?.startTime),
+        endTime: normalizeBigNumber(config?.endTime),
+      },
       isLimitReached,
-      currentSupply,
+      currentSupply: normalizeBigNumber(currentSupply),
       maxSupply,
       auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber(), currentSupply?.toNumber(), maxSupply),
     }
   }, [address, isConnected, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
+
+  useEffect(() => {
+    console.log('fetch limit', userData)
+    if (!config?.limitInWei || !userData?.contribution) {
+      return setIslimitReache(isLimitReached || null)
+    }
+    console.log('calculating limit')
+    const contribution = normalizeBigNumber(userData.contribution)
+
+    setIslimitReache(contribution.plus(priceEther).gt(normalizeBigNumber(config.limitInWei)))
+  }, [config?.limitInWei, isLimitReached, priceEther, userData, userData?.contribution])
 
   return <MaschineContext.Provider value={value}>{children}</MaschineContext.Provider>
 }

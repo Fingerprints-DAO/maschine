@@ -5,7 +5,11 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 
-const MintCta = ({ claimableCount }: { claimableCount: number }) => {
+type MintCtaProps = {
+  claimableCount: number
+}
+
+const MintCta = ({ claimableCount }: MintCtaProps) => {
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { handleOpenModal } = useModalContext()
   const isElegible = useMemo(() => claimableCount > 0, [claimableCount])

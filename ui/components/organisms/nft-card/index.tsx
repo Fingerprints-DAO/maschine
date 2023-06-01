@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Skeleton, Text } from '@chakra-ui/react'
+import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Skeleton, Text, Tooltip } from '@chakra-ui/react'
 import Card from '../card'
 import Image from 'next/image'
 import Wallet from '@ui/components/molecules/wallet'
@@ -7,11 +7,11 @@ import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { useEffect, useMemo } from 'react'
-import { ethers } from 'ethers'
 import dayjs from 'dayjs'
 import useCountdownTime from '@ui/hooks/use-countdown-timer'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
+import { formatEther } from 'ethers/lib/utils.js'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -24,7 +24,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const { handleOpenModal } = useModalContext()
   const { countdown } = useCountdownTime()
   const { isConnected, canInteract, config, auctionState, isLimitReached, currentSupply, maxSupply } = useMaschineContext()
-  const { currentPrice } = useGetCurrentPrice()
+  const { currentPrice, status } = useGetCurrentPrice()
   const { lastPrice, refetch: refetchLastPrice } = useGetLastPrice()
 
   const renderButton = useMemo(() => {
@@ -50,25 +50,38 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
     if (!canInteract || isLimitReached || auctionState === AUCTION_STATE.ENDED) {
       return (
-        <Button
-          color="gray.500"
-          cursor="no-drop"
-          borderColor="gray.500"
-          leftIcon={<HiOutlineLockClosed />}
-          variant="outline"
-          disabled={true}
-          h={16}
-          w="full"
-          size="lg"
-          mt={8}
+        <Tooltip
+          label={`You've hit the Maschine NFT minting limit! Max wallet limit is ${config?.limit && config?.limit} ETH. Use your rebate to mint more
+          during price drops.`}
+          fontSize="sm"
+          bg="whiteAlpha.900"
+          color={'gray.900'}
+          textAlign="center"
+          placement="auto"
+          hasArrow={true}
+          arrowSize={8}
+          borderRadius="8px"
         >
-          {auctionState === AUCTION_STATE.ENDED && 'Mint ended'}
-          {auctionState !== AUCTION_STATE.ENDED && 'Mint unavailable'}
-        </Button>
+          <Button
+            color="gray.500"
+            cursor="no-drop"
+            borderColor="gray.500"
+            leftIcon={<HiOutlineLockClosed />}
+            variant="outline"
+            disabled={true}
+            h={16}
+            w="full"
+            size="lg"
+            mt={8}
+          >
+            {auctionState === AUCTION_STATE.ENDED && 'Mint ended'}
+            {auctionState !== AUCTION_STATE.ENDED && 'Mint unavailable'}
+          </Button>
+        </Tooltip>
       )
     }
 
-    if (auctionState === AUCTION_STATE.STARTED) {
+    if (auctionState === AUCTION_STATE.STARTED && isLimitReached !== null) {
       return (
         <Button variant="white" size="lg" w="full" mt={8} onClick={handleOpenModal(ModalElement.Buy)}>
           Buy
@@ -76,37 +89,41 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
-    return <Skeleton w="full" h={16} startColor="gray.100" endColor="gray.300" rounded="8px" mt={8} />
-  }, [isBrowser, isConnected, canInteract, auctionState, handleOpenModal, isLimitReached])
+    return <Skeleton w="full" h={16} mt={8} rounded="8px" />
+  }, [isBrowser, isConnected, auctionState, canInteract, isLimitReached, config?.limit, handleOpenModal])
 
   const renderTimer = useMemo(() => {
     if (auctionState === AUCTION_STATE.NOT_STARTED) {
       return (
-        <Text color="gray.500">
-          Sale starts in{' '}
-          <Text color="gray.300" as="span" fontWeight="bold">
-            {countdown} {handleMinutes(countdown)}
-          </Text>{' '}
-          at{' '}
-          <Text color="gray.300" as="span" fontWeight="bold">
-            {Boolean(config?.startTime) && ethers.utils.formatUnits(config?.startAmountInWei!, 18)} ETH
+        <Skeleton isLoaded={countdown > 0}>
+          <Text color="gray.500">
+            Sales starts in{' '}
+            <Text color="gray.300" as="span" fontWeight="bold">
+              {countdown} {handleMinutes(countdown)}
+            </Text>{' '}
+            at{' '}
+            <Text color="gray.300" as="span" fontWeight="bold">
+              {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
+            </Text>
           </Text>
-        </Text>
+        </Skeleton>
       )
     }
 
     if (auctionState === AUCTION_STATE.STARTED) {
       return (
-        <Text color="gray.500">
-          Sale ends in{' '}
-          <Text color="gray.300" as="span" fontWeight="bold">
-            {countdown} {handleMinutes(countdown)}
-          </Text>{' '}
-          at{' '}
-          <Text color="gray.300" as="span" fontWeight="bold">
-            {Boolean(config?.endAmountInWei) && ethers.utils.formatUnits(config?.endAmountInWei!, 18)} ETH
+        <Skeleton isLoaded={countdown > 0}>
+          <Text color="gray.500">
+            Sales ends in{' '}
+            <Text color="gray.300" as="span" fontWeight="bold">
+              {countdown} {handleMinutes(countdown)}
+            </Text>{' '}
+            at{' '}
+            <Text color="gray.300" as="span" fontWeight="bold">
+              {formatEther(config?.endAmountInWei?.toString() ?? 0)} ETH
+            </Text>
           </Text>
-        </Text>
+        </Skeleton>
       )
     }
 
@@ -131,7 +148,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     }
 
     return null
-  }, [countdown, auctionState, config?.startTime, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+  }, [countdown, auctionState, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
 
   useEffect(() => {
     if ([AUCTION_STATE.ENDED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.SOLD_OUT].includes(auctionState)) refetchLastPrice()
@@ -175,14 +192,16 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           </Text>
         </Box>
         <Flex>
-          <Box flex={1}>
+          <Box flex={1} mr={'20px'}>
             <Text color="gray.400" mb={2}>
               NFTs minted
             </Text>
-            <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {[AUCTION_STATE.STARTED, AUCTION_STATE.NOT_STARTED].includes(auctionState) && `${currentSupply}/${maxSupply}`}
-              {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && `${currentSupply}`}
-            </Text>
+            <Skeleton isLoaded={!!(currentSupply && maxSupply)}>
+              <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
+                {[AUCTION_STATE.STARTED, AUCTION_STATE.NOT_STARTED].includes(auctionState) && `${currentSupply}/${maxSupply}`}
+                {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && `${currentSupply}`}
+              </Text>
+            </Skeleton>
           </Box>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
@@ -191,11 +210,13 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT].includes(auctionState) && 'Final price'}
               {auctionState === AUCTION_STATE.REBATE_STARTED && 'Mint price'}
             </Text>
-            <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {[AUCTION_STATE.NOT_STARTED, AUCTION_STATE.STARTED].includes(auctionState) && currentPrice}
-              {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && lastPrice}
-              {` ETH`}
-            </Text>
+            <Skeleton isLoaded={!(status === 'loading')}>
+              <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
+                {[AUCTION_STATE.NOT_STARTED, AUCTION_STATE.STARTED].includes(auctionState) && currentPrice}
+                {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && lastPrice}
+                {` ETH`}
+              </Text>
+            </Skeleton>
           </Box>
         </Flex>
         {![AUCTION_STATE.NOT_STARTED, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && renderButton}

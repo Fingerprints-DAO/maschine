@@ -1,10 +1,11 @@
 import { useQuery } from 'react-query'
 import useDutchAuction from './use-dutch-auction'
 import BigNumber from 'bignumber.js'
-import { formatEther } from 'ethers/lib/utils.js'
+import { formatEther, parseEther } from 'ethers/lib/utils.js'
 import { NumberSettings } from 'types/number-settings'
 import { Interval } from 'types/interval'
 import { useEffect, useState } from 'react'
+import { formatBigNumberUp } from 'utils/price'
 
 const useGetCurrentPrice = () => {
   const request = async () => {
@@ -25,12 +26,13 @@ const useGetCurrentPrice = () => {
 
   useEffect(() => {
     if (!price) return
-    setCurrentPrice(price.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP))
+    setCurrentPrice(formatBigNumberUp(price))
   }, [price])
 
   return {
     currentPrice,
     price: price ?? BigNumber('0'),
+    priceEther: parseEther(currentPrice).toString(),
     status,
   }
 }

@@ -8,8 +8,6 @@ import Footer from '@ui/components/organisms/footer'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import NftCard from '@ui/components/organisms/nft-card'
 import MintCta from '@ui/components/organisms/mint-cta'
-import useMediaQuery from '@ui/hooks/use-media-query'
-import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import BannerMessage from '@ui/components/organisms/banner-message'
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
@@ -17,7 +15,6 @@ import { useEffect, useMemo, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
-import { ethers } from 'ethers'
 
 type HomeProps = {
   meta: {
@@ -31,12 +28,8 @@ type HomeProps = {
 }
 
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
-  const isBrowser = useIsBrowser()
-  const isMobile = useMediaQuery('(max-width: 479px)')
-
-  const { data: claimableCount } = useGetClaimableTokens()
-  const { canInteract, config, auctionState, isLimitReached } = useMaschineContext()
-
+  const { data: claimableCount, refetch: refetchClaimableCount } = useGetClaimableTokens()
+  const { canInteract, config, isLimitReached, auctionState } = useMaschineContext()
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
   const handleCloseWarning = () => setIsWarningVisible(false)
@@ -85,11 +78,11 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </BannerMessage>
           )}
-          {isLimitReached && (
+          {auctionState === AUCTION_STATE.STARTED && isLimitReached && (
             <BannerMessage bg="gray.300" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
-              <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2}>
-                It seems like you are not eligible to mint an Maschine NFT, the maximum amount allowed per wallet is{' '}
-                {config?.limitInWei && ethers.utils.formatUnits(config?.limitInWei, 18)} ETH.
+              <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2} pr={6}>
+                You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more
+                during price drops.
               </Text>
             </BannerMessage>
           )}
@@ -104,7 +97,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </Box>
             <NftCard cardImageNumber={cardImageNumber} />
-            <Box hideFrom={'lg'} mb={8}>
+            <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }}>
               {renderStageFeatures}
             </Box>
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
@@ -180,10 +173,10 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Box>
             </Box>
           </Container>
-          <Container mb={24} hideBelow={'lg'}>
+          <Container mb={{ lg: 24 }} hideBelow={'lg'}>
             {renderStageFeatures}
           </Container>
-          <Container mb={10}>
+          <Container mb={10} mt={{ base: 20, lg: 0 }}>
             <Flex
               alignItems={['unset', 'unset', 'unset', 'unset', 'center']}
               justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}

@@ -36,7 +36,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       return 0
     }
 
-    const limit = BigNumber(formatEther(config.limitInWei))
+    const limit = BigNumber(formatEther(config.limitInWei.toString()))
     const contribution = BigNumber(formatEther(userData.contribution))
     const qty = limit.minus(contribution).dividedBy(currentPrice)
 
@@ -101,8 +101,9 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           id: 'mint-success',
         })
 
-        queryClient.invalidateQueries(['currentSupply'])
-        queryClient.invalidateQueries(['claimable-tokens', 'count'])
+        queryClient.invalidateQueries(['claimable-tokens'])
+        queryClient.invalidateQueries(['count'])
+        queryClient.invalidateQueries('user-data')
       }
     } catch (error: any) {
       console.log('handleSubmit', error)
