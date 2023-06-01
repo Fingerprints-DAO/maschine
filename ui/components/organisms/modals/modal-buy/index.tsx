@@ -86,20 +86,20 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
       const mint = await handleMint({ address, qty: quantity })
 
-      if (!mint?.data) {
-        throw new Error('')
+      if (!mint.success) {
+        throw new Error(mint.message)
       }
 
-      setLocalCurrentPrice(mint.data.currentPrice)
+      setLocalCurrentPrice(mint.data?.currentPrice!)
 
       const payload = {
-        deadline: BigNumber(mint.data.deadline),
+        deadline: BigNumber(mint.data?.deadline!),
         qty: quantity,
         price: localCurrentPrice ?? '0',
-        signature: mint.data.signature,
+        signature: mint.data?.signature,
       }
 
-      const response = await handleBid(payload)
+      const response = await handleBid(payload as any)
 
       showTxSentToast('submit-mint', response?.hash)
 
@@ -119,6 +119,11 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       }
     } catch (error: any) {
       console.log('handleSubmit', error)
+
+      if (typeof error === 'string') {
+        return showTxErrorToast({ message: error, name: 'Mint' })
+      }
+
       showTxErrorToast(error)
     }
   }, [queryClient, quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast, onClose, showTxSentToast])
