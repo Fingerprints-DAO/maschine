@@ -5,7 +5,6 @@ import Counter from '../../counter'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import { useMaschineContext } from '@ui/contexts/maschine'
-import { ethers } from 'ethers'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 import useMint from '@web3/contracts/dutch-auction/use-mint'
 import useBid from '@web3/contracts/dutch-auction/use-bid'
@@ -21,26 +20,16 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { address, config } = useMaschineContext()
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
-
   const [quantity, setQuantity] = useState(1)
-  const [localCurrentPrice, setLocalCurrentPrice] = useState('')
 
   const { data: userData } = useGetUserData(address)
-  const { data: currentPriceArray } = useGetCurrentPrice()
-  const { price: currentPrice } = currentPriceArray ?? { price: '0', priceBN: BigNumber(0) }
-
+  const { currentPrice } = useGetCurrentPrice()
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
 
   useEffect(() => {
     queryClient.resetQueries({ queryKey: ['user-data'] })
   }, [queryClient])
-
-  useEffect(() => {
-    if (currentPrice) {
-      setLocalCurrentPrice(currentPrice)
-    }
-  }, [currentPrice])
 
   const maxMintQuantity = useMemo(() => {
     if (!config?.limitInWei || !currentPrice || !userData?.contribution) {
@@ -90,12 +79,10 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         throw new Error('')
       }
 
-      setLocalCurrentPrice(mint.data.currentPrice)
-
       const payload = {
         deadline: BigNumber(mint.data.deadline),
         qty: quantity,
-        price: localCurrentPrice ?? '0',
+        price: currentPrice,
         signature: mint.data.signature,
       }
 
@@ -121,7 +108,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
       console.log('handleSubmit', error)
       showTxErrorToast(error)
     }
-  }, [queryClient, quantity, address, handleMint, localCurrentPrice, handleBid, showTxExecutedToast, showTxErrorToast, onClose, showTxSentToast])
+  }, [quantity, address, handleMint, currentPrice, handleBid, showTxSentToast, onClose, showTxExecutedToast, queryClient, showTxErrorToast])
 
   return (
     <Modal
@@ -152,9 +139,9 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
           <Text color="gray.500" mb={1}>
             Current price is
           </Text>
-          <SkeletonText noOfLines={1} skeletonHeight="4" w="30" isLoaded={!!localCurrentPrice} startColor="gray.100" endColor="gray.300">
+          <SkeletonText noOfLines={1} skeletonHeight="4" w="30" isLoaded={!!currentPrice} startColor="gray.100" endColor="gray.300">
             <Text color="gray.700" fontWeight="bold">
-              {localCurrentPrice} ETH
+              {currentPrice} ETH
             </Text>
           </SkeletonText>
         </Box>
