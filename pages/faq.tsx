@@ -87,7 +87,7 @@ const FaqPage = () => {
                     borderBottomWidth={!isLastChild ? 1 : 0}
                     key={index}
                   >
-                    <Text as="strong" fontSize="2xl" display="block" mb={4} color="gray.100">
+                    <Text fontWeight={'bold'} fontSize="2xl" display="block" mb={4} color="gray.100">
                       {item.question}
                     </Text>
                     <Text color="gray.300">{item.answer}</Text>

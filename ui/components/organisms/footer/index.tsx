@@ -1,22 +1,16 @@
-import { Box, Container, Flex, Icon, Text } from '@chakra-ui/react'
-import Wallet from '@ui/components/molecules/wallet'
+import { Box, Flex, Icon, Text } from '@chakra-ui/react'
 import { BsDiscord } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 import { Link } from '@chakra-ui/react'
 
-type FooterProps = {
-  withConnectButton?: boolean
-}
-
-const Footer = ({ withConnectButton }: FooterProps) => {
+const Footer = () => {
   return (
     <Box as="footer" py={[6, 4]} mt={[25]}>
       <Flex flexDir={'column'} mx="auto" mb={4}>
         <Flex alignItems={['center', 'center', 'end']} flexDir={['column', 'row']} justifyContent={['space-between']}>
           <Box>
-            <Box
-              as={Link}
+            <Link
               href="/terms-and-conditions"
               fontSize={['xs', 'md']}
               color="gray.400"
@@ -28,9 +22,8 @@ const Footer = ({ withConnectButton }: FooterProps) => {
               fontWeight={'bold'}
             >
               Terms and Conditions
-            </Box>
-            <Box
-              as={Link}
+            </Link>
+            <Link
               href="mailto:contact@fingerprintsdao.xyz"
               fontSize={['xs', 'md']}
               color="gray.400"
@@ -43,12 +36,11 @@ const Footer = ({ withConnectButton }: FooterProps) => {
               fontWeight={'bold'}
             >
               Contact Us
-            </Box>
+            </Link>
           </Box>
 
           <Flex>
-            <Box
-              as="a"
+            <Link
               href="https://twitter.com/FingerprintsDAO"
               title="Twitter"
               target="_blank"
@@ -60,9 +52,8 @@ const Footer = ({ withConnectButton }: FooterProps) => {
               transitionDuration="0.2s"
             >
               <Icon as={BsTwitter} w={6} h={6} display="block" />
-            </Box>
-            <Box
-              as="a"
+            </Link>
+            <Link
               href="https://discord.gg/aePw7mqz6U"
               title="Discord"
               target="_blank"
@@ -74,9 +65,8 @@ const Footer = ({ withConnectButton }: FooterProps) => {
               transitionDuration="0.2s"
             >
               <Icon as={BsDiscord} w={6} h={6} display="block" />
-            </Box>
-            <Box
-              as="a"
+            </Link>
+            <Link
               href="https://opensea.io/0xbc49de68bcbd164574847a7ced47e7475179c76b"
               title="OpenSea"
               target="_blank"
@@ -88,14 +78,13 @@ const Footer = ({ withConnectButton }: FooterProps) => {
               transitionDuration="0.2s"
             >
               <Icon as={SiOpensea} w={6} h={6} display="block" />
-            </Box>
+            </Link>
           </Flex>
         </Flex>
 
-        <Text align={['center', 'center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
+        <Text as={'div'} align={['center', 'center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
           Developed by{' '}
-          <Text
-            as="a"
+          <Link
             href="https://fingerprintsdao.xyz"
             title="Fingerprints DAO"
             target="_blank"
@@ -104,10 +93,9 @@ const Footer = ({ withConnectButton }: FooterProps) => {
             _hover={{ opacity: 0.5 }}
           >
             Fingerprints DAO
-          </Text>{' '}
+          </Link>{' '}
           &{' '}
-          <Text
-            as="a"
+          <Link
             title="arod.studio"
             href="https://arod.studio"
             target="_blank"
@@ -116,7 +104,7 @@ const Footer = ({ withConnectButton }: FooterProps) => {
             _hover={{ opacity: 0.5 }}
           >
             arod.studio
-          </Text>
+          </Link>
           <Text>Fingerprints Foundation, Cricket Square, Hutchins Drive, P.O. Box 2681, Grand Cayman</Text>
         </Text>
       </Flex>
