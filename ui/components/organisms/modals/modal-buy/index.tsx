@@ -18,20 +18,23 @@ import { formatEther } from 'ethers/lib/utils.js'
 
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
-  const { address, config } = useMaschineContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
+  const { address, config } = useMaschineContext()
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
 
   const [quantity, setQuantity] = useState(1)
   const [localCurrentPrice, setLocalCurrentPrice] = useState('')
 
-  const { data: userData } = useGetUserData()
-  console.log('userData', userData?.contribution ? ethers.utils.formatUnits(userData?.contribution, 18) : '')
+  const { data: userData } = useGetUserData(address)
   const { data: currentPriceArray } = useGetCurrentPrice()
   const { price: currentPrice } = currentPriceArray ?? { price: '0', priceBN: BigNumber(0) }
 
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
+
+  useEffect(() => {
+    queryClient.resetQueries({ queryKey: ['user-data'] })
+  }, [queryClient])
 
   useEffect(() => {
     if (currentPrice) {

@@ -6,7 +6,7 @@ import useLocationValidation from '@web3/maschine/use-location-validation'
 import dayjs from 'dayjs'
 import { BigNumber } from 'ethers'
 import React, { createContext, PropsWithChildren, useContext, useMemo } from 'react'
-import { Address, useAccount, useEnsName } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 
 export enum AUCTION_STATE {
   NOT_STARTED,
@@ -22,7 +22,6 @@ type MaschineContextState = {
   auctionState: AUCTION_STATE
   address?: Address
   nftContractAddress?: Address
-  ensName?: string | null
   config?: Partial<{
     startAmountInWei: BigNumber
     endAmountInWei: BigNumber
@@ -60,12 +59,11 @@ const getCurrentState = (startTime?: number, endTime?: number, currentSupply?: n
 
 const MaschineProvider = ({ children }: PropsWithChildren) => {
   const { address, isConnected } = useAccount()
-  const { data: userData } = useGetUserData()
+  const { data: userData } = useGetUserData(address)
   const { data: config } = useGetDutchAuctionConfig()
   const { data: canInteract } = useLocationValidation()
   const { data: nftContractAddress } = useGetNftContractAddress()
   const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
-  const { data: ensName } = useEnsName({ address, enabled: Boolean(address) })
 
   const isLimitReached = useMemo(() => {
     if (!config?.limitInWei || !userData?.contribution) {
@@ -79,7 +77,6 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
     return {
       address,
       isConnected,
-      ensName,
       canInteract: canInteract ?? DEFAULT_CONTEXT.canInteract,
       nftContractAddress,
       config,
@@ -88,7 +85,7 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       maxSupply,
       auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber(), currentSupply?.toNumber(), maxSupply),
     }
-  }, [address, isConnected, ensName, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
+  }, [address, isConnected, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
 
   return <MaschineContext.Provider value={value}>{children}</MaschineContext.Provider>
 }

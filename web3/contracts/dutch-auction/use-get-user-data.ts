@@ -1,14 +1,23 @@
 import { useQuery } from 'react-query'
 import useDutchAuction from './use-dutch-auction'
-import { useMaschineContext } from '@ui/contexts/maschine'
+import { Address } from 'wagmi'
 
-const useGetUserData = () => {
+const useGetUserData = (address?: Address) => {
   const dutchAuction = useDutchAuction()
-  const { address } = useMaschineContext()
 
-  const request = async () => dutchAuction?.getUserData?.(address!)
+  const request = async () => {
+    if (!address) {
+      throw new Error('Wallet is not connected')
+    }
 
-  return useQuery(['user-data'], request, { enabled: Boolean(dutchAuction) && Boolean(address), cacheTime: 0 })
+    return dutchAuction?.getUserData?.(address)
+  }
+
+  return useQuery(['user-data'], request, {
+    enabled: Boolean(dutchAuction) && Boolean(address),
+    cacheTime: 0,
+    retry: false,
+  })
 }
 
 export default useGetUserData
