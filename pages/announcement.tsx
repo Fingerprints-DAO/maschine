@@ -4,7 +4,6 @@ import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
-import { getBaseURL } from './api/helpers/_getLink'
 
 type HomeProps = {
   meta: {
