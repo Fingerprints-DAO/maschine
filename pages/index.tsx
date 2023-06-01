@@ -13,9 +13,8 @@ import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import RebateCta from '@ui/components/organisms/rebate-cta'
 import BannerMessage from '@ui/components/organisms/banner-message'
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
-import dayjs from 'dayjs'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import Link from 'next/link'
 import { ethers } from 'ethers'
@@ -36,6 +35,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isMobile = useMediaQuery('(max-width: 479px)')
 
   const { data: claimableCount } = useGetClaimableTokens()
+  //   console.log('claimableCount', claimableCount)
   const { canInteract, config, auctionState, isLimitReached } = useMaschineContext()
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)

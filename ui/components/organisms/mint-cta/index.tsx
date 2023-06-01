@@ -1,8 +1,10 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
+import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import useMediaQuery from '@ui/hooks/use-media-query'
 
 const MintCta = () => {
   const isMobile = useMediaQuery('(max-width: 479px)')
+  const { handleOpenModal } = useModalContext()
 
   return (
     <Box
@@ -22,7 +24,7 @@ const MintCta = () => {
           You don&apos;t have to commit any more ETH to do this.
         </Text>
       </Box>
-      <Button variant="white" w={isMobile ? 'full' : undefined} size="lg" ml={isMobile ? undefined : 8}>
+      <Button variant="white" w={isMobile ? 'full' : undefined} size="lg" ml={isMobile ? undefined : 8} onClick={handleOpenModal(ModalElement.Mint)}>
         Mint new NFT
       </Button>
     </Box>

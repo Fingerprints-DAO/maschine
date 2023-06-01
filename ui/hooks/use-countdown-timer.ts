@@ -1,12 +1,7 @@
 import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
-import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
-import { formatEther } from 'ethers/lib/utils.js'
 import { useCallback, useEffect, useState } from 'react'
 import { Interval } from 'types/interval'
-import { NumberSettings } from 'types/number-settings'
-
-const BIGZERO = BigNumber(0)
 
 const timeToGo = (time: number) => {
   const endDateUnix = dayjs.unix(time)

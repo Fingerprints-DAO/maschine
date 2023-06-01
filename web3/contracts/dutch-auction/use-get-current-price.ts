@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 const useGetCurrentPrice = () => {
   const request = async () => {
-    console.log('getting price')
+    // console.log('getting price')
     const price = BigNumber(formatEther((await dutchAuction?.getCurrentPriceInWei?.()) ?? 0))
 
     if (!price) return BigNumber(0)

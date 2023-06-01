@@ -22,6 +22,7 @@ const Counter = ({ value, minValue = 1, maxValue, onAction, onChange }: CounterP
         size="lg"
         variant="outline"
         aria-label="Decrease NFTs amount"
+        _hover={{ '&:disabled': { opacity: 0.4 } }}
         icon={<MinusIcon />}
         onClick={handleAction('decrease')}
       />
@@ -33,6 +34,7 @@ const Counter = ({ value, minValue = 1, maxValue, onAction, onChange }: CounterP
         size="lg"
         variant="outline"
         aria-label="Increase NFTs amount"
+        _hover={{ '&:disabled': { opacity: 0.4 } }}
         icon={<AddIcon />}
         onClick={handleAction('increase')}
       />
