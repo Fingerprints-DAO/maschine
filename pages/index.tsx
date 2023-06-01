@@ -84,7 +84,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </BannerMessage>
           )}
           <Header />
-          <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
+          <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']} alignItems={'center'}>
             <Box mb={12} display={['block', 'none']}>
               <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                 Maschine
@@ -100,7 +100,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 {auctionState === AUCTION_STATE.ENDED && <RebateCta />}
               </>
             )}
-            <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0, 106]}>
+            <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
               <Box mb={8} display={['none', 'none', 'none', 'block']}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                   Maschine
@@ -155,7 +155,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                   disparate fields such as genetics and blockchain.
                 </Text>
               </Box>
-              <Box mb={120}>
+              <Box>
                 <Text color="gray.300" fontWeight="bold" mb="6px" fontSize="lg">
                   Benefits
                 </Text>
