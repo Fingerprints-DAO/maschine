@@ -75,18 +75,18 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
 
       const mint = await handleMint({ address, qty: quantity })
 
-      if (!mint.success) {
+      if (!mint.success || !mint.data) {
         throw new Error(mint.message)
       }
 
       const payload = {
-        deadline: BigNumber(mint.data?.deadline!),
+        deadline: BigNumber(mint.data.deadline),
         qty: quantity,
         price: currentPrice,
-        signature: mint.data?.signature!,
+        signature: mint.data.signature,
       }
 
-      const response = await handleBid(payload as any)
+      const response = await handleBid(payload)
 
       showTxSentToast('submit-mint', response?.hash)
 
