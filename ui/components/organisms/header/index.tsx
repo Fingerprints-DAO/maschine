@@ -23,9 +23,9 @@ import { useRouter } from 'next/router'
 import Wallet from '@ui/components/molecules/wallet'
 
 const nav = [
-  { value: '/', label: 'home' },
   { value: '/about', label: 'about' },
   { value: '/faq', label: 'FAQ' },
+  // { value: '/terms-and-conditions', label: 'terms' },
 ]
 
 const Header = () => {
@@ -65,7 +65,7 @@ const Header = () => {
                     transitionProperty="color"
                     transitionDuration="0.2s"
                   >
-                    <Text as="strong" fontSize={['lg', 'lg', 'lg', 'xl']}>
+                    <Text as="strong" fontSize={['lg', 'lg', 'lg', 'xl', 'xl', '2xl']}>
                       {item.label}
                     </Text>
                   </Box>
@@ -110,7 +110,9 @@ const Header = () => {
             })}
           </DrawerBody>
           <DrawerFooter p={0}>
-            <Footer withConnectButton={true} />
+            <Box mx="auto">
+              <Footer />
+            </Box>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

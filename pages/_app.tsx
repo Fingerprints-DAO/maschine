@@ -1,14 +1,15 @@
 import '../styles/globals.css'
 
-import { getBaseURL } from 'utils/_getLink'
 import App, { AppContext, AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
-import theme from '@ui/base/theme'
-import MetaTags, { MetaTagsProps } from '@ui/components/molecules/metatags'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
+import MetaTags, { MetaTagsProps } from '@ui/components/molecules/metatags'
+import theme from '@ui/base/theme'
 import useScrollRestoration from '@ui/hooks/use-scroll-restoration'
 import Transition from '@ui/components/molecules/transition'
+import CookieBanner from '@ui/components/organisms/cookie-banner'
+import { getBaseURL } from 'utils/_getLink'
 import Web3Provider from '@ui/contexts/web3'
 import { MaschineProvider } from '@ui/contexts/maschine'
 import { ModalProvider } from '@ui/contexts/modal'
@@ -64,7 +65,8 @@ function Maschine({ Component, pageProps }: MaschineProps) {
             <ModalProvider>
               <MetaTags {...pageProps.meta} host={pageProps.host} />
               <Transition>
-                <Component {...pageProps} />
+                <Component {...pageProps} cookieBanner={<CookieBanner />} />
+                {(!pageProps?.meta?.navPage || !pageProps.meta.navPage.includes('home')) && <CookieBanner isInternalPage />}
                 <Modal />
               </Transition>
             </ModalProvider>

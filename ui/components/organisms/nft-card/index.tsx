@@ -6,11 +6,12 @@ import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ethers } from 'ethers'
 import dayjs from 'dayjs'
 import useCountdownTime from '@ui/hooks/use-countdown-timer'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
+import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -24,6 +25,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const { countdown } = useCountdownTime()
   const { isConnected, canInteract, config, auctionState, isLimitReached, currentSupply, maxSupply } = useMaschineContext()
   const { currentPrice } = useGetCurrentPrice()
+  const { lastPrice, refetch: refetchLastPrice } = useGetLastPrice()
 
   const renderButton = useMemo(() => {
     if (!isBrowser) {
@@ -60,7 +62,8 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           size="lg"
           mt={8}
         >
-          Mint unavailable
+          {auctionState === AUCTION_STATE.ENDED && 'Mint ended'}
+          {auctionState !== AUCTION_STATE.ENDED && 'Mint unavailable'}
         </Button>
       )
     }
@@ -107,6 +110,9 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
+    if (auctionState === AUCTION_STATE.REBATE_STARTED) {
+      return <Text color="gray.500">Maschine auction ended</Text>
+    }
     if (auctionState === AUCTION_STATE.ENDED) {
       const endTime = dayjs.unix(config?.endTime?.toNumber() || 0)
       const endTimeWithDelay = endTime.add(config?.refundDelayTime || 0, 'seconds')
@@ -126,6 +132,10 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
     return null
   }, [countdown, auctionState, config?.startTime, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+
+  useEffect(() => {
+    if ([AUCTION_STATE.ENDED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.SOLD_OUT].includes(auctionState)) refetchLastPrice()
+  }, [auctionState, refetchLastPrice])
 
   return (
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
@@ -167,28 +177,28 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         <Flex>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
-              {auctionState === AUCTION_STATE.NOT_STARTED && 'Supply'}
-              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) &&
-                'NFTs minted'}
+              NFTs minted
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {auctionState === AUCTION_STATE.NOT_STARTED && '1000'}
-              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) &&
-                `${currentSupply}/${maxSupply}`}
+              {[AUCTION_STATE.STARTED, AUCTION_STATE.NOT_STARTED].includes(auctionState) && `${currentSupply}/${maxSupply}`}
+              {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && `${currentSupply}`}
             </Text>
           </Box>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
               {auctionState === AUCTION_STATE.NOT_STARTED && 'Initial price'}
               {auctionState === AUCTION_STATE.STARTED && 'Current price'}
-              {(auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) && 'Final price'}
+              {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT].includes(auctionState) && 'Final price'}
+              {auctionState === AUCTION_STATE.REBATE_STARTED && 'Mint price'}
             </Text>
             <Text fontSize={['1.8rem']} color="gray.100" fontWeight="bold">
-              {currentPrice} ETH
+              {[AUCTION_STATE.NOT_STARTED, AUCTION_STATE.STARTED].includes(auctionState) && currentPrice}
+              {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && lastPrice}
+              {` ETH`}
             </Text>
           </Box>
         </Flex>
-        {renderButton}
+        {![AUCTION_STATE.NOT_STARTED, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && renderButton}
       </CardBody>
     </Card>
   )
