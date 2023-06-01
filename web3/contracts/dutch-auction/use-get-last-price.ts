@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 
 const useGetLastPrice = () => {
   const request = async () => {
-    console.log('getting last price')
+    // console.log('getting last price')
     const price = BigNumber(formatEther((await dutchAuction?.getSettledPriceInWei?.()) ?? 0))
 
     if (!price) return BigNumber(0)

@@ -36,7 +36,6 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
 
   const { data: claimableCount } = useGetClaimableTokens()
   const { canInteract, config, auctionState, isLimitReached } = useMaschineContext()
-  console.log('auctionState', auctionState)
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
