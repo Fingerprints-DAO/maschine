@@ -79,7 +79,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </BannerMessage>
           )}
           {auctionState === AUCTION_STATE.STARTED && isLimitReached && (
-            <BannerMessage bg="gray.300" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
+            <BannerMessage bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2} pr={6}>
                 You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more
                 during price drops.

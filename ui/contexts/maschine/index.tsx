@@ -102,11 +102,11 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
   }, [address, isConnected, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
 
   useEffect(() => {
-    console.log('fetch limit', userData)
+    // console.log('fetch limit', userData)
     if (!config?.limitInWei || !userData?.contribution) {
       return setIslimitReache(isLimitReached || null)
     }
-    console.log('calculating limit')
+    // console.log('calculating limit')
     const contribution = normalizeBigNumber(userData.contribution)
 
     setIslimitReache(contribution.plus(priceEther).gt(normalizeBigNumber(config.limitInWei)))
