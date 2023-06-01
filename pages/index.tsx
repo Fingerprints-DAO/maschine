@@ -35,8 +35,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const isMobile = useMediaQuery('(max-width: 479px)')
 
   const { data: claimableCount } = useGetClaimableTokens()
-  //   console.log('claimableCount', claimableCount)
   const { canInteract, config, auctionState, isLimitReached } = useMaschineContext()
+  console.log('auctionState', auctionState)
 
   const [isWarningVisible, setIsWarningVisible] = useState(true)
 
@@ -98,7 +98,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             {isMobile && isBrowser && (
               <>
                 {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
-                {auctionState === AUCTION_STATE.ENDED && <RebateCta />}
+                {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
               </>
             )}
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
@@ -176,7 +176,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
           </Container>
           <Container mb={24}>
             {Boolean(claimableCount) && auctionState !== AUCTION_STATE.ENDED && <MintCta />}
-            {(auctionState === AUCTION_STATE.ENDED || auctionState === AUCTION_STATE.SOLD_OUT) && <RebateCta />}
+            {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
           </Container>
           <Container mb={10}>
             <Flex

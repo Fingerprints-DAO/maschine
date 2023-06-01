@@ -85,7 +85,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
 
       if (wait?.status === TransactionStatus.Success) {
         showTxExecutedToast({
-          title: `Minted ${quantity} NFTs`,
+          title: `Minted ${quantity} NFTs`, // TODO: add correct message
           txHash: wait?.transactionHash,
           id: 'claim-tokens-success',
         })
@@ -166,7 +166,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
           <Text as="p" fontSize="sm" fontStyle="italic" color="gray.400" mb={6}>
             You can mint{' '}
             <Text color="links.500" as="strong">
-              {maxMintQuantity}
+              {maxMintQuantity || 0}
             </Text>{' '}
             NFTS
           </Text>

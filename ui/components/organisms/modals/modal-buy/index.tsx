@@ -156,7 +156,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
             <Text as="span" fontSize="sm" fontStyle="italic" color="gray.400">
               You can mint{' '}
               <Text color="links.500" as="strong">
-                {maxMintQuantity}
+                {maxMintQuantity || 0}
               </Text>{' '}
               NFTS
             </Text>

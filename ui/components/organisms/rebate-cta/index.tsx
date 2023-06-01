@@ -1,8 +1,10 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
+import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 
 const RebateCta = () => {
+  const { handleOpenModal } = useModalContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
 
   return (
@@ -23,7 +25,13 @@ const RebateCta = () => {
           Claim your rebate and get cashback according with last auction sell.
         </Text>
       </Box>
-      <Button variant="white" w={isMobile ? 'full' : undefined} size="lg" ml={isMobile ? undefined : 8}>
+      <Button
+        variant="white"
+        w={isMobile ? 'full' : undefined}
+        size="lg"
+        ml={isMobile ? undefined : 8}
+        onClick={handleOpenModal(ModalElement.Rebate)}
+      >
         Claim rebate
       </Button>
       <Button
