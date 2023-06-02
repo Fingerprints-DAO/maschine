@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Skeleton, Text, Tooltip } from '@chakra-ui/react'
+import { AspectRatio, Box, Button, CardBody, CardHeader, Flex, Heading, Link, Skeleton, Text, Tooltip } from '@chakra-ui/react'
 import Card from '../card'
 import Image from 'next/image'
 import Wallet from '@ui/components/molecules/wallet'
@@ -55,11 +55,24 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       )
     }
 
-    if (!canInteract || isLimitReached || auctionState === AUCTION_STATE.ENDED) {
+    if (!canInteract || isLimitReached) {
       return (
         <Tooltip
-          label={`You've hit the Maschine NFT minting limit! Max wallet limit is ${config?.limit && config?.limit} ETH. Use your rebate to mint more
-          during price drops.`}
+          label={
+            canInteract ? (
+              `We regret to inform you that you have hit the Maschine NFT minting limit. The maximum wallet limit is ${
+                config?.limit && config?.limit
+              } ETH, and you cannot mint any more tokens at the moment. However, do keep a close watch on prices, and when they dip, utilize your rebate to mint more tokens.`
+            ) : (
+              <>
+                It seems like you are not eligible to mint an Maschine NFT. Please{' '}
+                <Box as={Link} href="terms-and-conditions" textDecoration="underline">
+                  read our terms
+                </Box>{' '}
+                for more information.
+              </>
+            )
+          }
           fontSize="sm"
           bg="whiteAlpha.900"
           color={'gray.900'}
@@ -81,8 +94,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             size="lg"
             mt={8}
           >
-            {auctionState === AUCTION_STATE.ENDED && 'Mint ended'}
-            {auctionState !== AUCTION_STATE.ENDED && 'Mint unavailable'}
+            Mint unavailable
           </Button>
         </Tooltip>
       )
@@ -226,7 +238,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             </Skeleton>
           </Box>
         </Flex>
-        {![AUCTION_STATE.NOT_STARTED, AUCTION_STATE.REBATE_STARTED].includes(auctionState) && renderButton}
+        {![AUCTION_STATE.NOT_STARTED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.ENDED].includes(auctionState) && renderButton}
       </CardBody>
     </Card>
   )
