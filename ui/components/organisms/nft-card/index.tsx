@@ -12,12 +12,19 @@ import useCountdownTime from '@ui/hooks/use-countdown-timer'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 import { formatEther } from 'ethers/lib/utils.js'
+import { pluralize } from 'utils/string'
 
 type NftCardProps = {
   cardImageNumber: string
 }
 
-const handleMinutes = (time: number) => `minute${time > 1 ? 's' : ''}`
+const handleMinutes = (time: number) => {
+  if (time <= 0) {
+    return 'less than a minute'
+  }
+
+  return pluralize(time, 'minutes', 'minute')
+}
 
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
@@ -99,7 +106,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           <Text color="gray.500">
             Sales starts in{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
-              {countdown} {handleMinutes(countdown)}
+              {handleMinutes(countdown)}
             </Text>{' '}
             at{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
@@ -116,7 +123,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           <Text color="gray.500">
             Sales ends in{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
-              {countdown} {handleMinutes(countdown)}
+              {handleMinutes(countdown)}
             </Text>{' '}
             at{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
@@ -141,7 +148,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         <Text color="gray.500">
           Rebate will start in{' '}
           <Text color="gray.300" as="span" fontWeight="bold">
-            {rebate} {handleMinutes(countdown)}
+            {handleMinutes(rebate)}
           </Text>
         </Text>
       )
