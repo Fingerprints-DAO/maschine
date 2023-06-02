@@ -18,6 +18,7 @@ export enum AUCTION_STATE {
   SOLD_OUT,
   ENDED,
   REBATE_STARTED,
+  REBATE_DELAY,
 }
 
 type MaschineContextState = {
@@ -56,11 +57,13 @@ const getCurrentState = (startTime?: number, endTime?: number, currentSupply = 0
   if (currentSupply >= maxSupply) return AUCTION_STATE.SOLD_OUT
 
   const now = dayjs()
-  const start = dayjs.unix(startTime)
-  const end = dayjs.unix(endTime)
   const refundStartTime = dayjs.unix(endTime + refundDelayTime)
 
   if (now.isAfter(refundStartTime)) return AUCTION_STATE.REBATE_STARTED
+
+  const start = dayjs.unix(startTime)
+  const end = dayjs.unix(endTime)
+
   if (now.isAfter(end)) return AUCTION_STATE.ENDED
   if (now.isAfter(start)) return AUCTION_STATE.STARTED
 
@@ -97,7 +100,13 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       isLimitReached,
       currentSupply: normalizeBigNumber(currentSupply),
       maxSupply,
-      auctionState: getCurrentState(config?.startTime?.toNumber(), config?.endTime?.toNumber(), currentSupply?.toNumber(), maxSupply),
+      auctionState: getCurrentState(
+        config?.startTime?.toNumber(),
+        config?.endTime?.toNumber(),
+        currentSupply?.toNumber(),
+        maxSupply,
+        config?.refundDelayTime
+      ),
     }
   }, [address, isConnected, canInteract, nftContractAddress, config, isLimitReached, maxSupply, currentSupply])
 
