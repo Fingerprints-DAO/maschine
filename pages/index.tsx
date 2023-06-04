@@ -118,7 +118,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                 Maschine
               </Heading>
-              <Text as="h2" fontSize={['2xl']} fontWeight="light" lineHeight="7">
+              <Text as="h2" fontSize={['2xl']} lineHeight="7">
                 A collection about velocity and perception.
               </Text>
             </Box>
@@ -131,7 +131,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                   Maschine
                 </Heading>
-                <Text as="h2" fontSize={['2xl']} fontWeight="light" lineHeight="7">
+                <Text as="h2" fontSize={['2xl']} lineHeight="7">
                   A collection about velocity and perception.
                 </Text>
               </Box>
@@ -194,17 +194,17 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 <Text color="gray.300" fontWeight="bold" mb="6px" fontSize="lg">
                   Description
                 </Text>
-                <Text as={'p'} color="gray.300" fontWeight="light">
+                <Text as={'p'} color="gray.300">
                   Harm van den Dorpel is an artist dedicated to discovering emergent aesthetics by composing software and language, borrowing from
                   disparate fields such as genetics and blockchain.
                 </Text>
                 <br />
-                <Text as={'p'} color="gray.300" fontWeight="light">
+                <Text as={'p'} color="gray.300">
                   Maschine reproduces the stroboscopic effect through a 3D WebGL generative script. You'll be able to view and interact with the
                   minted piece directly in Opensea once the mint is completed.
                 </Text>
                 <br />
-                <Text as={'p'} color="gray.300" fontWeight="light">
+                <Text as={'p'} color="gray.300">
                   <Link as={NextLink} href={'/about'} _hover={{ textDecor: 'underline' }} color={'white'} fontWeight={'bold'}>
                     Read more
                   </Link>{' '}

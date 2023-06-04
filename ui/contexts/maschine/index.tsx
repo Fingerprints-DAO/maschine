@@ -126,7 +126,6 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (address !== walletAddress) {
-      console.log('oi')
       setWalletAddress(address)
       queryClient.refetchQueries('user-data')
     }

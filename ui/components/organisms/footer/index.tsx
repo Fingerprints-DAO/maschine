@@ -67,7 +67,7 @@ const Footer = () => {
               <Icon as={BsDiscord} w={6} h={6} display="block" />
             </Link>
             <Link
-              href="https://opensea.io/0xbc49de68bcbd164574847a7ced47e7475179c76b"
+              href={`${process.env.NEXT_PUBLIC_OPENSEA_URL}${process.env.NEXT_PUBLIC_MASCHINE_CONTRACT_ADDRESS}`}
               title="OpenSea"
               target="_blank"
               p={2}

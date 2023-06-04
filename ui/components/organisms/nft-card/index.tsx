@@ -196,7 +196,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           <Heading as="h3" color="gray.300" fontSize={['1.75rem']} fontWeight="normal" mb={[2]}>
             Maschine
           </Heading>
-          <Text color="gray.500" fontWeight="light">
+          <Text color="gray.500">
             Created by{' '}
             <Box
               as="a"
