@@ -9,6 +9,7 @@ import dayjs from 'dayjs'
 import { formatEther, parseEther } from 'ethers/lib/utils.js'
 // import { BigNumber } from 'ethers'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
+import { useQueryClient } from 'react-query'
 import { formatToEtherString, normalizeBigNumber } from 'utils/price'
 import { Address, useAccount } from 'wagmi'
 
@@ -78,7 +79,9 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
   const { data: nftContractAddress } = useGetNftContractAddress()
   const [{ data: currentSupply }, { data: maxSupply }] = useTotalSupply()
   const { priceEther } = useGetCurrentPrice()
+  const queryClient = useQueryClient()
   const [isLimitReached, setIslimitReache] = useState<boolean | null>(null)
+  const [walletAddress, setWalletAddress] = useState(address)
 
   const value: MaschineContextState = useMemo(() => {
     return {
@@ -120,6 +123,14 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
 
     setIslimitReache(contribution.plus(priceEther).gt(normalizeBigNumber(config.limitInWei)))
   }, [config?.limitInWei, isLimitReached, priceEther, userData, userData?.contribution])
+
+  useEffect(() => {
+    if (address !== walletAddress) {
+      console.log('oi')
+      setWalletAddress(address)
+      queryClient.refetchQueries('user-data')
+    }
+  }, [address, queryClient, walletAddress])
 
   return <MaschineContext.Provider value={value}>{children}</MaschineContext.Provider>
 }

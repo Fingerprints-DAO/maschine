@@ -27,7 +27,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
   const { address } = useMaschineContext()
 
   const { data: userData } = useGetUserData(address)
-  const { currentPrice, price, priceEther } = useGetCurrentPrice()
+  const { currentPrice, priceEther } = useGetCurrentPrice()
   const { mutateAsync: claimTokens, isLoading: isSubmitting } = useClaimTokens()
 
   useEffect(() => {

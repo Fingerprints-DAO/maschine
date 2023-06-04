@@ -18,7 +18,7 @@ import { formatEther } from 'ethers/lib/utils.js'
 const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
   const isMobile = useMediaQuery('(max-width: 479px)')
-  const { address, config } = useMaschineContext()
+  const { address, config, currentSupply, maxSupply = 0 } = useMaschineContext()
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
   const [quantity, setQuantity] = useState(1)
 
@@ -26,6 +26,7 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
   const { currentPrice } = useGetCurrentPrice()
   const { mutateAsync: handleBid, isLoading: isSubmittingBid } = useBid()
   const { mutateAsync: handleMint, isLoading: isSubmittingMint } = useMint()
+  const availableToMint = useMemo(() => maxSupply - (currentSupply?.toNumber() ?? 0), [currentSupply, maxSupply])
 
   useEffect(() => {
     queryClient.resetQueries({ queryKey: ['user-data'] })
@@ -40,8 +41,10 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
     const contribution = BigNumber(formatEther(userData.contribution))
     const qty = limit.minus(contribution).dividedBy(currentPrice)
 
+    if (qty.gt(availableToMint)) return availableToMint
+
     return Number(qty.toFormat(0, 1))
-  }, [config, currentPrice, userData])
+  }, [availableToMint, config?.limitInWei, currentPrice, userData?.contribution])
 
   useEffect(() => {
     if (!maxMintQuantity) {

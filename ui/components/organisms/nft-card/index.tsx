@@ -132,10 +132,10 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               <Countdown futureTimestamp={countdownInMili} />
               {/* {handleMinutes(countdown)} */}
             </Text>{' '}
-            at{' '}
+            {/* at{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
               {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
-            </Text>
+            </Text> */}
           </Text>
         </Skeleton>
       )
@@ -180,7 +180,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     }
 
     return null
-  }, [auctionState, countdown, countdownInMili, config?.startAmountInWei, config?.endTime, config?.refundDelayTime])
+  }, [auctionState, countdown, countdownInMili, config?.endTime, config?.refundDelayTime])
 
   useEffect(() => {
     if ([AUCTION_STATE.ENDED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.SOLD_OUT].includes(auctionState)) refetchLastPrice()
