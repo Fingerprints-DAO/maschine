@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { Box, Button, Container, Flex, Heading, Link, ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
+import logoFP from 'public/images/logo-fp.svg'
 import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 import Footer from '@ui/components/organisms/footer'
@@ -227,15 +228,18 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}
               flexDir={['column', 'column', 'column', 'column', 'row']}
             >
-              <Text fontSize={['lg', 'xl', '2xl']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+              <Text fontSize={['lg', 'xl', '1.45rem']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Box as={Image} src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
+                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank" mr={[4, 6]}>
+                  <Image src={logoMercedes} alt="Harm Studio" width={108} height={108} />
+                </Box>
                 <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank">
-                  <Image src={logoMercedes} alt="Harm Studio" width={110} height={110} />
+                  <Image src={logoFP} alt="Harm Studio" width={40} height={40} />
                 </Box>
               </Flex>
             </Flex>
