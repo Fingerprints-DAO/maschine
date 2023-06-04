@@ -214,7 +214,11 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </Box>
           </Container>
 
-          <Container mb={{ lg: 24 }} hideBelow={'lg'} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
+          <Container
+            mb={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1 ? 24 : 0}
+            hideBelow={'lg'}
+            hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}
+          >
             {renderStageFeatures}
           </Container>
           <Container mb={10} mt={{ base: 20, lg: 0 }}>
