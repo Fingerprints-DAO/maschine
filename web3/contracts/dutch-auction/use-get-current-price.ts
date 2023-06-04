@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react'
 import { formatBigNumberUp } from 'utils/price'
 
 const useGetCurrentPrice = () => {
+  const [currentPrice, setCurrentPrice] = useState('0')
+  const dutchAuction = useDutchAuction()
+
   const request = async () => {
     // console.log('getting price')
     const price = BigNumber(formatEther((await dutchAuction?.getCurrentPriceInWei?.()) ?? 0))
@@ -16,13 +19,11 @@ const useGetCurrentPrice = () => {
     return price
   }
 
-  const dutchAuction = useDutchAuction()
   const { data: price, status } = useQuery(['current-price'], request, {
     enabled: Boolean(dutchAuction),
     cacheTime: 0,
     refetchInterval: Interval.Timer,
   })
-  const [currentPrice, setCurrentPrice] = useState('0')
 
   useEffect(() => {
     if (!price) return

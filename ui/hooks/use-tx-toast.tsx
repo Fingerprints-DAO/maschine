@@ -30,7 +30,7 @@ const ToastContent = ({ title, description, txHash, status, toastId, icon, onClo
         {description || (
           <>
             {Boolean(txHash) && ', click to '}
-            {Boolean(txHash) && <TxMessage hash={txHash} />}
+            {Boolean(txHash) && <TxMessage hash={txHash} toastId={toastId} />}
           </>
         )}
       </Text>
@@ -53,6 +53,7 @@ export const useTxToast = () => {
         mt: 1,
       },
       duration: 9000,
+      position: 'top',
       render: () => <ToastContent title="Transaction sent" txHash={txHash} status="success" toastId={toastId} onClose={toast.close} />,
     })
   }
@@ -62,7 +63,30 @@ export const useTxToast = () => {
     txHash,
     ...toastOptions
   }: UseToastOptions & { title?: string; txHash?: string }) => {
+    const options = {
+      ...toastOptions,
+      isClosable: true,
+      containerStyle: {
+        width: '100%',
+        maxW: 'unset',
+        m: 0,
+        mt: 1,
+      },
+      duration: 90000,
+      position: 'top',
+      render: () => (
+        <ToastContent
+          title={title}
+          txHash={txHash}
+          status="success"
+          icon={{ as: CheckIcon, color: 'gray.900' }}
+          toastId={toastOptions.id!}
+          onClose={toast.close}
+        />
+      ),
+    } as Omit<UseToastOptions, 'id'>
     if (toastOptions.id && toast.isActive(toastOptions.id)) {
+      toast.update(toastOptions.id, options)
       return
     }
 
@@ -75,7 +99,8 @@ export const useTxToast = () => {
         m: 0,
         mt: 1,
       },
-      duration: 9000,
+      duration: 20000,
+      position: 'top',
       render: () => (
         <ToastContent
           title={title}

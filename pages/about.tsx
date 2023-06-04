@@ -21,7 +21,7 @@ const AboutPage = () => {
         <Header />
         <Container>
           <Box as="section" display={'flex'} flexDir={'column'} pt={10} gap={28}>
-            <Box borderRadius={8} overflow={'hidden'} order={[3,3,1]}>
+            <Box borderRadius={8} overflow={'hidden'} order={[3, 3, 1]}>
               <AspectRatio maxW="100%" ratio={1.5}>
                 <iframe
                   height="500"

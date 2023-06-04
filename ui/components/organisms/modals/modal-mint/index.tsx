@@ -7,26 +7,27 @@ import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import { useMaschineContext } from '@ui/contexts/maschine'
 import { useQueryClient } from 'react-query'
-import { NumberSettings } from 'types/number-settings'
 import BigNumber from 'bignumber.js'
 import { formatEther } from 'ethers/lib/utils.js'
 import useTxToast from '@ui/hooks/use-tx-toast'
 import useClaimTokens from '@web3/contracts/dutch-auction/use-claim-tokens'
 import { TransactionStatus } from 'types/transaction'
 import theme from '@ui/base/theme'
-import { formatBigNumberFloor } from 'utils/price'
+import { formatBigNumberFloor, normalizeBigNumber } from 'utils/price'
+import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 
 const ModalMint = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
+  const { claimableCount } = useGetClaimableTokens()
 
   const [quantity, setQuantity] = useState(1)
 
   const { address } = useMaschineContext()
 
   const { data: userData } = useGetUserData(address)
-  const { currentPrice, price } = useGetCurrentPrice()
+  const { currentPrice, price, priceEther } = useGetCurrentPrice()
   const { mutateAsync: claimTokens, isLoading: isSubmitting } = useClaimTokens()
 
   useEffect(() => {
@@ -35,32 +36,28 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
 
   const contribution = useMemo(() => BigNumber(formatEther(userData?.contribution ?? 0)), [userData])
 
-  const pendingRebate = useMemo(() => contribution.minus(price), [contribution, price])
-
-  const maxMintQuantity = useMemo(() => {
-    return Math.floor(
-      contribution
-        .div(price)
-        .minus(userData?.tokensBidded ?? 0)
-        .toNumber()
-    )
-  }, [price, userData, contribution])
+  const tokensBidded = useMemo(() => userData?.tokensBidded ?? 0, [userData?.tokensBidded])
+  const pendingRebate = useMemo(() => {
+    const contributionBN = normalizeBigNumber(userData?.contribution)
+    const finalPrice = BigNumber(priceEther).multipliedBy(tokensBidded)
+    return formatEther(contributionBN.minus(finalPrice).toString())
+  }, [priceEther, tokensBidded, userData?.contribution])
 
   useEffect(() => {
-    if (!maxMintQuantity) {
+    if (!claimableCount) {
       setQuantity(0)
     } else {
       setQuantity(1)
     }
-  }, [maxMintQuantity])
+  }, [claimableCount])
 
   const handleAction = (action: 'increase' | 'decrease') => setQuantity((prev) => (action === 'increase' ? prev + 1 : prev - 1))
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = Number(e.currentTarget.value)
 
-    if (value >= maxMintQuantity) {
-      return setQuantity(maxMintQuantity)
+    if (value >= claimableCount) {
+      return setQuantity(claimableCount)
     }
 
     setQuantity(value || 0)
@@ -91,7 +88,9 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
           id: 'claim-tokens-success',
         })
 
-        queryClient.invalidateQueries(['currentSupply', 'claimable-tokens'])
+        queryClient.invalidateQueries(['currentSupply'])
+        queryClient.invalidateQueries(['claimable-tokens'])
+        queryClient.invalidateQueries(['user-data'])
       }
     } catch (error: any) {
       console.log('handleSubmit', error)
@@ -136,7 +135,7 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
                   You bought
                 </Text>
                 <Text color="gray.700" fontWeight="bold">
-                  {userData?.tokensBidded ?? 0} NFTs{' '}
+                  {tokensBidded} NFTs{' '}
                   <Text as="span" color="gray.500" fontWeight="normal">
                     per
                   </Text>{' '}
@@ -156,22 +155,22 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
                   Pending rebate
                 </Text>
                 <Text fontSize="2xl" color="gray.700" fontWeight="bold">
-                  {pendingRebate.toNumber()} ETH
+                  {pendingRebate} ETH
                 </Text>
               </Box>
             </Box>
           </Box>
           <Text color="gray.500" mb={1}>
-            Extra NFTs
+            Buy more with rebate
           </Text>
           <Text as="p" fontSize="sm" fontStyle="italic" color="gray.400" mb={6}>
-            You can mint{' '}
+            Up to{' '}
             <Text color="links.500" as="strong">
-              {maxMintQuantity || 0}
+              {claimableCount}
             </Text>{' '}
             NFTS
           </Text>
-          <Counter value={quantity} maxValue={maxMintQuantity} onAction={handleAction} onChange={handleChange} />
+          <Counter value={quantity} maxValue={claimableCount} onAction={handleAction} onChange={handleChange} />
         </Box>
         <Box>
           <Button

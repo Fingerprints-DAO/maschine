@@ -19,15 +19,24 @@ const handleMinutes = (time: number) => {
   return minutes
 }
 
+export const displayCountdown = (endTime: number) => {
+  const remainingSeconds = dayjs(timeToGo(endTime)).diff(dayjs(), 'seconds')
+  const minutes = Math.floor(remainingSeconds / 60)
+  const seconds = remainingSeconds % 60
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+}
+
 const useCountdownTime = () => {
   const { config, auctionState } = useMaschineContext()
   const [countdown, setCountdown] = useState(0)
+  const [countdownInMili, setCountdownInMili] = useState(0)
 
   const handleTime = useCallback(() => {
     let time = 0
     if (auctionState === AUCTION_STATE.NOT_STARTED) time = config?.startTime?.toNumber() ?? 0
     if (auctionState === AUCTION_STATE.STARTED) time = config?.endTime?.toNumber() ?? 0
 
+    setCountdownInMili(time)
     const minutes = handleMinutes(time ?? 0)
 
     setCountdown(minutes)
@@ -44,6 +53,7 @@ const useCountdownTime = () => {
 
   return {
     countdown,
+    countdownInMili,
   }
 }
 

@@ -8,11 +8,12 @@ import { useIsBrowser } from '@ui/hooks/use-is-browser'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { useEffect, useMemo } from 'react'
 import dayjs from 'dayjs'
-import useCountdownTime from '@ui/hooks/use-countdown-timer'
+import useCountdownTime, { displayCountdown } from '@ui/hooks/use-countdown-timer'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 import { formatEther } from 'ethers/lib/utils.js'
 import { pluralize } from 'utils/string'
+import Countdown from '@ui/components/molecules/countdown'
 
 type NftCardProps = {
   cardImageNumber: string
@@ -29,7 +30,7 @@ const handleMinutes = (time: number) => {
 const NftCard = ({ cardImageNumber }: NftCardProps) => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
-  const { countdown } = useCountdownTime()
+  const { countdown, countdownInMili } = useCountdownTime()
   const { isConnected, canInteract, config, auctionState, isLimitReached, currentSupply, maxSupply } = useMaschineContext()
   const { currentPrice, status } = useGetCurrentPrice()
   const { lastPrice, refetch: refetchLastPrice } = useGetLastPrice()
@@ -57,54 +58,64 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
     if (!canInteract || isLimitReached) {
       return (
-        <Tooltip
-          label={
-            canInteract ? (
-              `We regret to inform you that you have hit the Maschine NFT minting limit. The maximum wallet limit is ${
-                config?.limit && config?.limit
-              } ETH, and you cannot mint any more tokens at the moment. However, do keep a close watch on prices, and when they dip, utilize your rebate to mint more tokens.`
-            ) : (
-              <>
-                It seems like you are not eligible to mint an Maschine NFT. Please{' '}
-                <Box as={Link} href="terms-and-conditions" textDecoration="underline">
-                  read our terms
-                </Box>{' '}
-                for more information.
-              </>
-            )
-          }
-          fontSize="sm"
-          bg="whiteAlpha.900"
-          color={'gray.900'}
-          textAlign="center"
-          placement="auto"
-          hasArrow={true}
-          arrowSize={8}
-          borderRadius="8px"
-        >
-          <Button
-            color="gray.500"
-            cursor="no-drop"
-            borderColor="gray.500"
-            leftIcon={<HiOutlineLockClosed />}
-            variant="outline"
-            disabled={true}
-            h={16}
-            w="full"
-            size="lg"
-            mt={8}
+        <>
+          <Tooltip
+            label={
+              canInteract ? (
+                `We regret to inform you that you have hit the Maschine NFT minting limit. The maximum wallet limit is ${
+                  config?.limit && config?.limit
+                } ETH, and you cannot mint any more tokens at the moment. However, do keep a close watch on prices, and when they dip, utilize your rebate to mint more tokens.`
+              ) : (
+                <>
+                  It seems like you are not eligible to mint an Maschine NFT. Please{' '}
+                  <Box as={Link} href="terms-and-conditions" textDecoration="underline">
+                    read our terms
+                  </Box>{' '}
+                  for more information.
+                </>
+              )
+            }
+            fontSize="sm"
+            bg="whiteAlpha.900"
+            color={'gray.900'}
+            textAlign="center"
+            placement="auto"
+            hasArrow={true}
+            arrowSize={8}
+            borderRadius="8px"
           >
-            Mint unavailable
-          </Button>
-        </Tooltip>
+            <Button
+              color="gray.500"
+              cursor="no-drop"
+              borderColor="gray.500"
+              leftIcon={<HiOutlineLockClosed />}
+              variant="outline"
+              disabled={true}
+              h={16}
+              w="full"
+              size="lg"
+              mt={8}
+            >
+              Mint unavailable
+            </Button>
+          </Tooltip>
+          <Text fontSize={'sm'} textAlign={'center'} mt={4} color={'gray.300'}>
+            Mint limit: {config?.limit} ETH per wallet
+          </Text>
+        </>
       )
     }
 
     if (auctionState === AUCTION_STATE.STARTED && isLimitReached !== null) {
       return (
-        <Button variant="white" size="lg" w="full" mt={8} onClick={handleOpenModal(ModalElement.Buy)}>
-          Buy
-        </Button>
+        <>
+          <Button variant="white" size="lg" w="full" mt={8} onClick={handleOpenModal(ModalElement.Buy)}>
+            Buy
+          </Button>
+          <Text fontSize={'sm'} textAlign={'center'} mt={4} color={'gray.300'}>
+            Mint limit: {config?.limit} ETH per wallet
+          </Text>
+        </>
       )
     }
 
@@ -118,7 +129,8 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           <Text color="gray.500">
             Sales starts in{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
-              {handleMinutes(countdown)}
+              <Countdown futureTimestamp={countdownInMili} />
+              {/* {handleMinutes(countdown)} */}
             </Text>{' '}
             at{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
@@ -134,13 +146,14 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
         <Skeleton isLoaded={countdown > 0}>
           <Text color="gray.500">
             Sales ends in{' '}
-            <Text color="gray.300" as="span" fontWeight="bold">
-              {handleMinutes(countdown)}
-            </Text>{' '}
-            at{' '}
+            <Text color="gray.300" as="span" fontSize={'20px'} fontWeight="bold">
+              <Countdown futureTimestamp={countdownInMili} />
+              {/* {handleMinutes(countdown)} */}
+            </Text>
+            {/* at{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
               {formatEther(config?.endAmountInWei?.toString() ?? 0)} ETH
-            </Text>
+            </Text> */}
           </Text>
         </Skeleton>
       )
@@ -167,7 +180,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     }
 
     return null
-  }, [countdown, auctionState, config?.startAmountInWei, config?.endAmountInWei, config?.endTime, config?.refundDelayTime])
+  }, [auctionState, countdown, countdownInMili, config?.startAmountInWei, config?.endTime, config?.refundDelayTime])
 
   useEffect(() => {
     if ([AUCTION_STATE.ENDED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.SOLD_OUT].includes(auctionState)) refetchLastPrice()
@@ -175,21 +188,11 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
 
   return (
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
-      <CardHeader p={6} pb={2}>
-        {renderTimer}
-      </CardHeader>
-      <CardBody px={6} pt={2} pb={8}>
+      <CardBody mt={4} px={6} pt={2}>
         <AspectRatio maxW="full" w="auto" h="auto" ratio={4 / 4} borderTopRadius={8} overflow="hidden">
-          <Box
-            as={Image}
-            alt="The Maschine Collection"
-            src={require(`public/images/nfts/${cardImageNumber}.jpg`)}
-            priority={true}
-            width={470}
-            height={470}
-          />
+          <Box as={Image} alt="The Maschine Collection" src={require(`public/images/animated-6.gif`)} priority={true} width={470} height={470} />
         </AspectRatio>
-        <Box bg="gray.800" borderBottomRadius={8} p={4} mb={10}>
+        <Box bg="gray.800" borderBottomRadius={8} p={4} mb={4}>
           <Heading as="h3" color="gray.300" fontSize={['1.75rem']} fontWeight="normal" mb={[2]}>
             Maschine
           </Heading>
@@ -209,6 +212,9 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               Harm van den Dorpel
             </Box>
           </Text>
+        </Box>
+        <Box fontSize={'lg'} mb={4}>
+          {renderTimer}
         </Box>
         <Flex>
           <Box flex={1} mr={'20px'}>
@@ -236,6 +242,11 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
                 {` ETH`}
               </Text>
             </Skeleton>
+            <Text fontSize={['.8rem']} color="gray.100">
+              Start price: {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
+              <br />
+              Resting price: {formatEther(config?.endAmountInWei?.toString() ?? 0)} ETH
+            </Text>
           </Box>
         </Flex>
         {![AUCTION_STATE.NOT_STARTED, AUCTION_STATE.REBATE_STARTED, AUCTION_STATE.ENDED].includes(auctionState) && renderButton}

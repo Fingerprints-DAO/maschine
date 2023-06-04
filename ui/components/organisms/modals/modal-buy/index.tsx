@@ -102,7 +102,6 @@ const ModalBuy = ({ isOpen, onClose }: ModalProps) => {
         })
 
         queryClient.invalidateQueries(['claimable-tokens'])
-        queryClient.invalidateQueries(['count'])
         queryClient.invalidateQueries('user-data')
       }
     } catch (error: any) {

@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import { Box, Button, Container, Flex, Heading, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, Link, ListItem, Text, UnorderedList } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
-import logoMercedes from 'public/images/logo-mercedes.png'
+import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
 import Footer from '@ui/components/organisms/footer'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
@@ -14,7 +14,8 @@ import { AUCTION_STATE, useMaschineContext } from '@ui/contexts/maschine'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 import { HiOutlineLockClosed } from 'react-icons/hi'
-import Link from 'next/link'
+import NextLink from 'next/link'
+import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 
 type HomeProps = {
   meta: {
@@ -28,8 +29,9 @@ type HomeProps = {
 }
 
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
-  const { data: claimableCount } = useGetClaimableTokens()
-  const { canInteract, config, isLimitReached, auctionState } = useMaschineContext()
+  const { claimableCount } = useGetClaimableTokens()
+  const { address, canInteract, config, isLimitReached, auctionState } = useMaschineContext()
+  const { data: userData } = useGetUserData(address)
 
   const limitBannerRef = useRef<HTMLDivElement>(null)
   const [limitBannerHeight, setLimitBannerHeight] = useState(0)
@@ -49,7 +51,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
   const renderStageFeatures = useMemo(
     () => (
       <>
-        {auctionState === AUCTION_STATE.STARTED && <MintCta claimableCount={claimableCount ?? 0} />}
+        {auctionState === AUCTION_STATE.STARTED && <MintCta claimableCount={claimableCount} />}
         {auctionState === AUCTION_STATE.REBATE_STARTED && <RebateCta />}
       </>
     ),
@@ -111,7 +113,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </BannerMessage>
           )}
           <Header />
-          <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']} alignItems={'center'}>
+          <Container pt={[10]} pb={[0, 0, 0, '72px']} display={['block', 'block', 'block', 'flex']}>
             <Box mb={12} display={['block', 'none']}>
               <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                 Maschine
@@ -121,11 +123,11 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </Box>
             <NftCard cardImageNumber={cardImageNumber} />
-            <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }}>
+            <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
               {renderStageFeatures}
             </Box>
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
-              <Box mb={8} display={['none', 'none', 'none', 'block']}>
+              <Box mb={8} display={['none', 'none', 'none', 'block']} mt={3}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
                   Maschine
                 </Heading>
@@ -140,8 +142,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                   rightIcon={<ExternalLinkIcon color="links.500" transition="ease" transitionProperty="color" transitionDuration="0.2s" />}
                   bg="transparent"
                   variant="link"
-                  href="#"
-                  title="View smart contract in Etherscan"
+                  href={`${process.env.NEXT_PUBLIC_ETHERSCAN_URL}address/${process.env.NEXT_PUBLIC_MASCHINE_CONTRACT_ADDRESS}`}
+                  title="View NFT smart contract"
                   target="_blank"
                   color="links.500"
                   _hover={{ color: 'white', '> span svg': { color: 'white' } }}
@@ -150,7 +152,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                   transitionDuration="0.2s"
                   mb={2}
                 >
-                  View smart contract in Etherscan
+                  View NFT smart contract
                 </Button>
                 <Button
                   as="a"
@@ -158,8 +160,26 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                   rightIcon={<ExternalLinkIcon color="links.500" transition="ease" transitionProperty="color" transitionDuration="0.2s" />}
                   bg="transparent"
                   variant="link"
-                  href="#"
-                  title="View smart contract in Etherscan"
+                  href={`${process.env.NEXT_PUBLIC_ETHERSCAN_URL}address/${process.env.NEXT_PUBLIC_AUCTION_CONTRACT_ADDRESS}`}
+                  title="View dutch auction smart contract"
+                  target="_blank"
+                  color="links.500"
+                  _hover={{ color: 'white', '> span svg': { color: 'white' } }}
+                  transition="ease"
+                  transitionProperty="color"
+                  transitionDuration="0.2s"
+                  mb={2}
+                >
+                  View dutch auction smart contract
+                </Button>
+                <Button
+                  as="a"
+                  fontWeight="normal"
+                  rightIcon={<ExternalLinkIcon color="links.500" transition="ease" transitionProperty="color" transitionDuration="0.2s" />}
+                  bg="transparent"
+                  variant="link"
+                  href="https://github.com/Fingerprints-DAO/maschine-contracts"
+                  title="View project GitHub"
                   target="_blank"
                   color="links.500"
                   _hover={{ color: 'white', '> span svg': { color: 'white' } }}
@@ -170,34 +190,31 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                   View project GitHub
                 </Button>
               </Box>
-              <Box mb={8}>
+              <Box>
                 <Text color="gray.300" fontWeight="bold" mb="6px" fontSize="lg">
                   Description
                 </Text>
-                <Text color="gray.300" fontWeight="light">
+                <Text as={'p'} color="gray.300" fontWeight="light">
                   Harm van den Dorpel is an artist dedicated to discovering emergent aesthetics by composing software and language, borrowing from
                   disparate fields such as genetics and blockchain.
                 </Text>
-              </Box>
-              <Box>
-                <Text color="gray.300" fontWeight="bold" mb="6px" fontSize="lg">
-                  Benefits
+                <br />
+                <Text as={'p'} color="gray.300" fontWeight="light">
+                  Maschine reproduces the stroboscopic effect through a 3D WebGL generative script. You'll be able to view and interact with the
+                  minted piece directly in Opensea once the mint is completed.
                 </Text>
-                <Text color="gray.300" fontWeight="light">
-                  What Maschine NFT can do:
+                <br />
+                <Text as={'p'} color="gray.300" fontWeight="light">
+                  <Link as={NextLink} href={'/about'} _hover={{ textDecor: 'underline' }} color={'white'} fontWeight={'bold'}>
+                    Read more
+                  </Link>{' '}
+                  about the collection on our about page.
                 </Text>
-                <UnorderedList>
-                  <ListItem color="gray.300" fontWeight="light">
-                    Utility samples
-                  </ListItem>
-                  <ListItem color="gray.300" fontWeight="light">
-                    Utility samples
-                  </ListItem>
-                </UnorderedList>
               </Box>
             </Box>
           </Container>
-          <Container mb={{ lg: 24 }} hideBelow={'lg'}>
+
+          <Container mb={{ lg: 24 }} hideBelow={'lg'} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
             {renderStageFeatures}
           </Container>
           <Container mb={10} mt={{ base: 20, lg: 0 }}>
@@ -213,8 +230,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Box as={Image} src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
-                <Box as="a" href="https://www.mercedes-benz.com/en" title="Mercedes Benz" target="_blank">
-                  <Box as={Image} src={logoMercedes} alt="Harm Studio" width={42} height={42} />
+                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank">
+                  <Image src={logoMercedes} alt="Harm Studio" width={110} height={110} />
                 </Box>
               </Flex>
             </Flex>

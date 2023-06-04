@@ -17,7 +17,7 @@ import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 
 const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
   const queryClient = useQueryClient()
-  const { address, config } = useMaschineContext()
+  const { address } = useMaschineContext()
   const isMobile = useMediaQuery('(max-width: 479px)')
   const { showTxSentToast, showTxErrorToast, showTxExecutedToast } = useTxToast()
   const { lastPriceBN, lastPrice, lastPriceInWei } = useGetLastPrice()
@@ -36,7 +36,6 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
     return formatEther(contributionBN.minus(finalPrice).toString())
   }, [lastPriceInWei, userData?.contribution, userData?.tokensBidded])
 
-  console.log(pendingRebate?.toString())
   const handleSubmit = useCallback(async () => {
     try {
       if (!address) {
@@ -122,31 +121,31 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
                 Pending rebate
               </Text>
               <Text fontSize="2xl" color="gray.700" fontWeight="bold">
-                {pendingRebate?.toString()} ETH
+                {pendingRebate} ETH
               </Text>
             </Box>
           </Box>
         </Box>
         <Box>
-          <Button
-            isDisabled={isSubmitting}
-            isLoading={isSubmitting}
-            variant="solid"
-            size="lg"
-            w="full"
-            mb={6}
-            _hover={{ '&:disabled': { opacity: 0.4, background: theme.colors.gray[900] } }}
-            onClick={handleSubmit}
-          >
-            Claim amount
-          </Button>
-          <Text color="gray.500" fontSize="xs" textAlign="center">
-            By clicking {`"Mint now"`} button you agree with our{' '}
-            <Box as="a" href="#" color="links.500">
-              terms of use
-            </Box>
-            .
-          </Text>
+          {Number(pendingRebate) > 0 && (
+            <Button
+              isDisabled={isSubmitting}
+              isLoading={isSubmitting}
+              variant="solid"
+              size="lg"
+              w="full"
+              mb={6}
+              _hover={{ '&:disabled': { opacity: 0.4, background: theme.colors.gray[900] } }}
+              onClick={handleSubmit}
+            >
+              Claim amount
+            </Button>
+          )}
+          {Number(pendingRebate) === 0 && (
+            <Text color="gray.500" fontSize="xs" textAlign="center">
+              You don't have any amount to claim
+            </Text>
+          )}
         </Box>
       </ModalContent>
     </Modal>
