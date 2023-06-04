@@ -230,8 +230,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
           </Box>
           <Box flex={1}>
             <Text color="gray.400" mb={2}>
-              {auctionState === AUCTION_STATE.NOT_STARTED && 'Initial price'}
-              {auctionState === AUCTION_STATE.STARTED && 'Current price'}
+              {(auctionState === AUCTION_STATE.STARTED || auctionState === AUCTION_STATE.NOT_STARTED) && 'Current price'}
               {[AUCTION_STATE.ENDED, AUCTION_STATE.SOLD_OUT].includes(auctionState) && 'Final price'}
               {auctionState === AUCTION_STATE.REBATE_STARTED && 'Mint price'}
             </Text>
@@ -243,7 +242,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
               </Text>
             </Skeleton>
             <Text fontSize={['.8rem']} color="gray.100">
-              Start price: {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
+              Starting price: {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
               <br />
               Resting price: {formatEther(config?.endAmountInWei?.toString() ?? 0)} ETH
             </Text>
