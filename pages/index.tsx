@@ -124,9 +124,11 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </Box>
             <NftCard cardImageNumber={cardImageNumber} />
-            <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
-              {renderStageFeatures}
-            </Box>
+            {address! && (
+              <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
+                {renderStageFeatures}
+              </Box>
+            )}
             <Box maxW={['full', 'full', 'full', '420px', '664px']} pt={[0, 0, 0]}>
               <Box mb={8} display={['none', 'none', 'none', 'block']} mt={3}>
                 <Heading as="h1" fontSize={['4rem']} fontWeight="normal" mb={[2]}>
@@ -215,13 +217,15 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </Box>
           </Container>
 
-          <Container
-            mb={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1 ? 24 : 0}
-            hideBelow={'lg'}
-            hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}
-          >
-            {renderStageFeatures}
-          </Container>
+          {address! && (
+            <Container
+              mb={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1 ? 24 : 0}
+              hideBelow={'lg'}
+              hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}
+            >
+              {renderStageFeatures}
+            </Container>
+          )}
           <Container mb={10} mt={{ base: 20, lg: 0 }}>
             <Flex
               alignItems={['unset', 'unset', 'unset', 'unset', 'center']}
