@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Box, Button, Container, Flex, Heading, Link, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Heading, Link, Text } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
 import Image from 'next/image'
 import logoFP from 'public/images/logo-fp.svg'
@@ -17,6 +17,7 @@ import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimab
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import NextLink from 'next/link'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
+import { useIsBrowser } from '@ui/hooks/use-is-browser'
 
 type HomeProps = {
   meta: {
@@ -30,6 +31,7 @@ type HomeProps = {
 }
 
 const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
+  const isBrowser = useIsBrowser()
   const { claimableCount } = useGetClaimableTokens()
   const { address, canInteract, config, isLimitReached, auctionState } = useMaschineContext()
   const { data: userData } = useGetUserData(address)
@@ -124,7 +126,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               </Text>
             </Box>
             <NftCard cardImageNumber={cardImageNumber} />
-            {address! && (
+            {isBrowser && address! && (
               <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
                 {renderStageFeatures}
               </Box>
@@ -225,7 +227,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </Box>
           </Container>
 
-          {address! && (
+          {isBrowser && address! && (
             <Container
               mb={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1 ? 24 : 0}
               hideBelow={'lg'}

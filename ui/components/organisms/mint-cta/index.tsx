@@ -2,16 +2,14 @@ import { Box, Button, Flex, Link, Text, Tooltip, theme } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import useMediaQuery from '@ui/hooks/use-media-query'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { formatBigNumberFloor, normalizeBigNumber } from 'utils/price'
-import Counter from '../counter'
 import { useMaschineContext } from '@ui/contexts/maschine'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
 import BigNumber from 'bignumber.js'
 import { formatEther } from 'ethers/lib/utils.js'
-import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 
 type MintCtaProps = {
   claimableCount: number
