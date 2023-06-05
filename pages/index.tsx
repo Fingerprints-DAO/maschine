@@ -208,7 +208,15 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 </Text>
                 <br />
                 <Text as={'p'} color="gray.300">
-                  <Link as={NextLink} href={'/about'} _hover={{ textDecor: 'underline' }} color={'white'} fontWeight={'bold'}>
+                  <Link
+                    as={NextLink}
+                    href={'/about'}
+                    color="links.500"
+                    _hover={{ color: 'white' }}
+                    transition="ease"
+                    transitionProperty="color"
+                    transitionDuration="0.2s"
+                  >
                     Read more
                   </Link>{' '}
                   about the collection on our about page.
@@ -239,11 +247,11 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
                   <Box as={Image} src={logoHarmStudio} alt="Harm Studio" width={42} height={42} />
                 </Box>
-                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank" mr={[4, 6]}>
-                  <Image src={logoMercedes} alt="Harm Studio" width={108} height={108} />
+                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes-Benz NXT" target="_blank" mr={[4, 6]}>
+                  <Image src={logoMercedes} alt="Mercedes-Benz Nxt" width={108} height={108} />
                 </Box>
-                <Box as="a" href="https://nxt.mercedes-benz.com" title="Mercedes Benz" target="_blank">
-                  <Image src={logoFP} alt="Harm Studio" width={40} height={40} />
+                <Box as="a" href="https://fingerprintsdao.xyz/" title="Fingerprints DAO" target="_blank">
+                  <Image src={logoFP} alt="Fingerprints DAO" width={40} height={40} />
                 </Box>
               </Flex>
             </Flex>

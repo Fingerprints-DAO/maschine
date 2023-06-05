@@ -67,7 +67,7 @@ const Footer = () => {
               <Icon as={BsDiscord} w={6} h={6} display="block" />
             </Link>
             <Link
-              href={`${process.env.NEXT_PUBLIC_OPENSEA_URL}${process.env.NEXT_PUBLIC_MASCHINE_CONTRACT_ADDRESS}`}
+              href={`${process.env.NEXT_PUBLIC_OPENSEA_URL}collection/maschine`}
               title="OpenSea"
               target="_blank"
               p={2}
@@ -85,7 +85,7 @@ const Footer = () => {
         <Text as={'div'} align={['center', 'center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
           Developed by{' '}
           <Link
-            href="https://fingerprintsdao.xyz"
+            href="https://fingerprintsdao.xyz/"
             title="Fingerprints DAO"
             target="_blank"
             style={{ textDecoration: 'none' }}

@@ -26,7 +26,7 @@ export const TxMessage = ({ hash, toastId }: TxMessageProps) => {
           <Text as={'span'}> or see </Text>
           <Link
             as="a"
-            href={`${process.env.NEXT_PUBLIC_OPENSEA_URL}${process.env.NEXT_PUBLIC_MASCHINE_CONTRACT_ADDRESS}`}
+            href={`${process.env.NEXT_PUBLIC_OPENSEA_URL}collection/maschine`}
             target="_blank"
             color="gray.900"
             fontSize="lg"

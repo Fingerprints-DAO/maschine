@@ -1,7 +1,7 @@
-import { Box, Button, Flex, Text, Tooltip, theme } from '@chakra-ui/react'
+import { Box, Button, Flex, Link, Text, Tooltip, theme } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import useMediaQuery from '@ui/hooks/use-media-query'
-import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { HiOutlineLockClosed } from 'react-icons/hi'
 import { formatBigNumberFloor, normalizeBigNumber } from 'utils/price'
@@ -38,7 +38,7 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
     <>
       {tokensBidded > 0 && (
         <Box mb={6}>
-          <Box borderColor="gray.100" borderWidth={1} borderRadius="8px">
+          <Box borderColor="gray.100" borderWidth={2} borderRadius="8px">
             <Box py={3} display={'flex'} flexWrap={'wrap'}>
               <Box px={6} py={3} w={['100%', '100%', '50%', '30%']} display={'inline-block'}>
                 <Text color="gray.400" mb={1}>
@@ -80,14 +80,26 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
           </Box>
         </Box>
       )}
-      <Box borderWidth={2} borderColor="gray.100" p={6} mb={isMobile ? 10 : undefined} borderRadius="8px">
+      <Box borderWidth={2} borderColor="gray.100" p={6} mb={{ base: 10 }} borderRadius="8px">
         <Box as={isMobile ? 'div' : Flex} alignItems={!isMobile ? 'center' : undefined}>
           <Box flex={1}>
             <Text color="gray.300" fontSize="2xl" fontWeight="bold" lineHeight="27.6px" mb={2}>
               Mint more NFTs with your pending rebate
             </Text>
             <Text color="gray.500" mb={isMobile ? 8 : undefined}>
-              You don&apos;t have to commit any more ETH to do this. Check out our <Link href="/faq">FAQ</Link>.
+              You don&apos;t have to commit any more ETH to do this. Check out our{' '}
+              <Link
+                as={NextLink}
+                href="/faq"
+                color="links.500"
+                _hover={{ color: 'white' }}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                FAQ
+              </Link>
+              .
             </Text>
           </Box>
           {isElegible && (
@@ -126,7 +138,7 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
                 leftIcon={<HiOutlineLockClosed />}
                 variant="outline"
               >
-                Not elegible
+                Unavailable
               </Button>
             </Tooltip>
           )}

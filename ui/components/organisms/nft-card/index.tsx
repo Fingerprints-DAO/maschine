@@ -200,7 +200,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
             Created by{' '}
             <Box
               as="a"
-              href="#"
+              href="https://harm.work"
               title="Harm van den Dorpel"
               target="_blank"
               color="links.500"
