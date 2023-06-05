@@ -232,8 +232,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
               justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}
               flexDir={['column', 'column', 'column', 'column', 'row']}
             >
-              <Text fontSize={['lg', 'xl', '1.45rem']} fontWeight="200" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
-                By Harm van den Dorpel, in partnership with Mercedes-Benz and Fingerprints DAO.
+              <Text fontSize={['lg', 'xl', '1.45rem']} lineHeight="7" mb={[4, 4, 4, 4, 0]}>
+                By Harm van den Dorpel, in collaboration with Mercedes-Benz and Fingerprints DAO.
               </Text>
               <Flex>
                 <Box as="a" href="https://harm.work" title="Harm Studio" target="_blank" mr={[4, 6]}>
