@@ -41,7 +41,7 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
           <Box borderColor="gray.100" borderWidth={2} borderRadius="8px">
             <Box py={3} display={'flex'} flexWrap={'wrap'}>
               <Box px={6} py={3} w={['100%', '100%', '50%', '30%']} display={'inline-block'}>
-                <Text color="gray.400" mb={1}>
+                <Text color="gray.400" mb={1} fontWeight={'bold'}>
                   You bought
                 </Text>
                 <Text color="gray.500">
@@ -53,27 +53,23 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
                 </Text>
               </Box>
               <Box px={6} py={3} w={['100%', '100%', '50%', '20%']} display={'inline-block'}>
-                <Text color="gray.400" mb={1}>
+                <Text color="gray.400" mb={1} fontWeight={'bold'}>
                   Current price is
                 </Text>
                 <Text color="gray.500">{currentPrice} ETH</Text>
               </Box>
               <Box px={6} py={3} w={['100%', '100%', '50%', '25%']} display={'inline-block'}>
-                <Text color="gray.400" mb={1}>
+                <Text color="gray.400" mb={1} fontWeight={'bold'}>
                   Pending rebate
                 </Text>
                 <Text color="gray.500">{Number(pendingRebate) > 0 ? pendingRebate : 0} ETH</Text>
               </Box>
               <Box px={6} py={3} w={['100%', '100%', '50%', '25%']} display={'inline-block'}>
-                <Text color="gray.400" mb={1}>
+                <Text color="gray.400" mb={1} fontWeight={'bold'}>
                   Buy more with rebate
                 </Text>
-                <Text as="p" fontSize="sm" fontStyle="italic" color="gray.500">
-                  Up to{' '}
-                  <Text color="links.500" as="strong">
-                    {claimableCount < 1 ? 0 : claimableCount}
-                  </Text>{' '}
-                  NFTS
+                <Text as="p" fontSize="sm" color="gray.500">
+                  Up to {claimableCount < 1 ? 0 : claimableCount} NFTS
                 </Text>
               </Box>
             </Box>
