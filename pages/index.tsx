@@ -110,8 +110,8 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
           {isLimitBannerVisible && (
             <BannerMessage ref={limitBannerRef} bg="gray.300" position="fixed" icon={HiOutlineLockClosed} onClose={handleCloseLimitBanner}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2} pr={6}>
-                You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more
-                during price drops.
+                You've hit the Maschine NFT minting limit! Max wallet limit is {config?.limit && config?.limit} ETH. Use your rebate to mint more NFTs
+                as price drops.
               </Text>
             </BannerMessage>
           )}
@@ -125,7 +125,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
                 A collection about velocity and perception.
               </Text>
             </Box>
-            <NftCard cardImageNumber={cardImageNumber} />
+            <NftCard />
             {isBrowser && address! && (
               <Box hideFrom={'lg'} mb={{ base: 8, lg: 0 }} hidden={AUCTION_STATE.REBATE_STARTED === auctionState && userData?.tokensBidded! < 1}>
                 {renderStageFeatures}

@@ -4,7 +4,7 @@ import { ModalElement, useModalContext } from '@ui/contexts/modal'
 import useMediaQuery from '@ui/hooks/use-media-query'
 import { useMemo } from 'react'
 import { HiOutlineLockClosed } from 'react-icons/hi'
-import { formatBigNumberFloor, normalizeBigNumber } from 'utils/price'
+import { formatBigNumberFloor, formatToEtherString, normalizeBigNumber, roundEtherFloor } from 'utils/price'
 import { useMaschineContext } from '@ui/contexts/maschine'
 import useGetCurrentPrice from '@web3/contracts/dutch-auction/use-get-current-price'
 import useGetUserData from '@web3/contracts/dutch-auction/use-get-user-data'
@@ -29,7 +29,9 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
   const pendingRebate = useMemo(() => {
     const contributionBN = normalizeBigNumber(userData?.contribution)
     const finalPrice = BigNumber(priceEther).multipliedBy(tokensBidded)
-    return formatEther(contributionBN.minus(finalPrice).toString())
+    const pendingBN = contributionBN.minus(finalPrice).toString()
+
+    return formatBigNumberFloor(formatToEtherString(pendingBN))
   }, [priceEther, tokensBidded, userData?.contribution])
 
   return (
@@ -132,7 +134,7 @@ const MintCta = ({ claimableCount }: MintCtaProps) => {
                 leftIcon={<HiOutlineLockClosed />}
                 variant="outline"
               >
-                Unavailable
+                Not enough rebate
               </Button>
             </Tooltip>
           )}

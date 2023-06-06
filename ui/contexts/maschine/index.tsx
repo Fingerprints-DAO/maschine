@@ -10,7 +10,7 @@ import { formatEther, parseEther } from 'ethers/lib/utils.js'
 // import { BigNumber } from 'ethers'
 import React, { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
-import { formatToEtherString, normalizeBigNumber } from 'utils/price'
+import { formatToEtherStringBN, normalizeBigNumber } from 'utils/price'
 import { Address, useAccount } from 'wagmi'
 
 export enum AUCTION_STATE {
@@ -92,11 +92,11 @@ const MaschineProvider = ({ children }: PropsWithChildren) => {
       config: {
         ...config,
         startAmountInWei: normalizeBigNumber(config?.startAmountInWei),
-        startAmount: formatToEtherString(config?.startAmountInWei),
+        startAmount: formatToEtherStringBN(config?.startAmountInWei),
         endAmountInWei: normalizeBigNumber(config?.endAmountInWei),
-        endAmount: formatToEtherString(config?.endAmountInWei),
+        endAmount: formatToEtherStringBN(config?.endAmountInWei),
         limitInWei: normalizeBigNumber(config?.limitInWei),
-        limit: formatToEtherString(config?.limitInWei),
+        limit: formatToEtherStringBN(config?.limitInWei),
         startTime: normalizeBigNumber(config?.startTime),
         endTime: normalizeBigNumber(config?.endTime),
       },

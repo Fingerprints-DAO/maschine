@@ -19,7 +19,7 @@ export const TxMessage = ({ hash, toastId }: TxMessageProps) => {
         fontWeight="bold"
         textDecoration="underline"
       >
-        view in Etherscan
+        view on Etherscan
       </Link>
       {(toastId === 'mint-success' || toastId === 'claim-tokens-success') && (
         <>

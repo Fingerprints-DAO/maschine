@@ -13,7 +13,7 @@ import useTxToast from '@ui/hooks/use-tx-toast'
 import useClaimTokens from '@web3/contracts/dutch-auction/use-claim-tokens'
 import { TransactionStatus } from 'types/transaction'
 import theme from '@ui/base/theme'
-import { formatBigNumberFloor, normalizeBigNumber } from 'utils/price'
+import { formatBigNumberFloor, formatToEtherString, normalizeBigNumber } from 'utils/price'
 import useGetClaimableTokens from '@web3/contracts/dutch-auction/use-get-claimable-tokens'
 
 const ModalMint = ({ isOpen, onClose }: ModalProps) => {
@@ -40,7 +40,9 @@ const ModalMint = ({ isOpen, onClose }: ModalProps) => {
   const pendingRebate = useMemo(() => {
     const contributionBN = normalizeBigNumber(userData?.contribution)
     const finalPrice = BigNumber(priceEther).multipliedBy(tokensBidded)
-    return formatEther(contributionBN.minus(finalPrice).toString())
+    const pendingBN = contributionBN.minus(finalPrice).toString()
+
+    return formatBigNumberFloor(formatToEtherString(pendingBN))
   }, [priceEther, tokensBidded, userData?.contribution])
 
   useEffect(() => {

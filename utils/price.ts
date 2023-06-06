@@ -7,7 +7,8 @@ export const getNumberToStringOrZero = (n?: BN) => n?.toString() ?? 0
 
 export const normalizeBigNumber = (n?: BN) => BigNumber(getNumberToStringOrZero(n))
 
-export const formatToEtherString = (n?: BN) => BigNumber(formatEther(getNumberToStringOrZero(n))).toString()
+export const formatToEtherStringBN = (n?: BN) => BigNumber(formatEther(getNumberToStringOrZero(n))).toString()
+export const formatToEtherString = (n?: string) => BigNumber(formatEther(n ?? '0'))
 
 export const formatBigNumberUp = (n?: BigNumber) => n?.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP) ?? '0'
 export const formatBigNumberFloor = (n?: BigNumber) => n?.toFormat(NumberSettings.Decimals, BigNumber.ROUND_FLOOR) ?? '0'

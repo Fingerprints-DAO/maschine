@@ -27,7 +27,7 @@ const handleMinutes = (time: number) => {
   return pluralize(time, 'minutes', 'minute')
 }
 
-const NftCard = ({ cardImageNumber }: NftCardProps) => {
+const NftCard = () => {
   const isBrowser = useIsBrowser()
   const { handleOpenModal } = useModalContext()
   const { countdown, countdownInMili } = useCountdownTime()
@@ -127,7 +127,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       return (
         <Skeleton isLoaded={countdown > 0}>
           <Text color="gray.500">
-            Sales starts in{' '}
+            Sale starts in{' '}
             <Text color="gray.300" as="span" fontWeight="bold">
               <Countdown futureTimestamp={countdownInMili} />
               {/* {handleMinutes(countdown)} */}
@@ -145,7 +145,7 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
       return (
         <Skeleton isLoaded={countdown > 0}>
           <Text color="gray.500">
-            Sales ends in{' '}
+            Sale ends in{' '}
             <Text color="gray.300" as="span" fontSize={'20px'} fontWeight="bold">
               <Countdown futureTimestamp={countdownInMili} />
               {/* {handleMinutes(countdown)} */}
@@ -160,7 +160,11 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     }
 
     if (auctionState === AUCTION_STATE.REBATE_STARTED) {
-      return <Text color="gray.500">Maschine auction ended</Text>
+      return (
+        <Text color="gray.500" fontWeight={'bold'} fontSize={'20px'}>
+          Auction ended
+        </Text>
+      )
     }
     if (auctionState === AUCTION_STATE.ENDED) {
       const endTime = dayjs.unix(config?.endTime?.toNumber() || 0)
@@ -190,7 +194,9 @@ const NftCard = ({ cardImageNumber }: NftCardProps) => {
     <Card mb={[10, 10, 10, 0]} boxShadow="md" w={['full', 'full', 'full', '432px']} mr={[0, 0, 0, 8]}>
       <CardBody mt={4} px={6} pt={2}>
         <AspectRatio maxW="full" w="auto" h="auto" ratio={4 / 4} borderTopRadius={8} overflow="hidden">
-          <Box as={Image} alt="The Maschine Collection" src={require(`public/images/animated-6.gif`)} priority={true} width={470} height={470} />
+          <Link href={'https://maschine.2.harmvandendorpel.com/artwork/index.html?tokenId=16'} target={'_blank'}>
+            <Image alt="The Maschine Collection" src={require(`public/images/animated-cover.gif`)} priority={true} width={470} height={470} />
+          </Link>
         </AspectRatio>
         <Box bg="gray.800" borderBottomRadius={8} p={4} mb={4}>
           <Heading as="h3" color="gray.300" fontSize={['1.75rem']} fontWeight="normal" mb={[2]}>
