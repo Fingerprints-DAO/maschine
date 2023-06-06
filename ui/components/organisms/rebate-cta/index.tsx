@@ -18,16 +18,16 @@ const RebateCta = () => {
       borderWidth={2}
       borderColor="gray.100"
       p={6}
-      mb={isMobile ? 10 : undefined}
+      mb={10}
       borderRadius="8px"
     >
       <Box flex={1}>
         <Text color="gray.300" fontSize="2xl" fontWeight="bold" lineHeight="27.6px" mb={2}>
           Auction rebate is now available
         </Text>
-        <Text color="gray.500" mb={isMobile ? 8 : undefined}>
+        {/* <Text color="gray.500" mb={isMobile ? 8 : undefined}>
           Claim your rebate and get cashback according with last auction sell.
-        </Text>
+        </Text> */}
       </Box>
       {!userData?.refundClaimed && (
         <Button
