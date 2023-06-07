@@ -28,9 +28,10 @@ type HomeProps = {
   }
   bg: string
   cardImageNumber: string
+  cookieBanner: JSX.Element
 }
 
-const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
+const HomePage = ({ meta, bg, cookieBanner }: HomeProps) => {
   const isBrowser = useIsBrowser()
   const { claimableCount } = useGetClaimableTokens()
   const { address, canInteract, config, isLimitReached, auctionState } = useMaschineContext()
@@ -95,7 +96,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
         pt={`${limitBannerHeight}px`}
       >
         <Box w="full" h="full" position="absolute" zIndex={1} bg="blackAlpha.800" />
-        <Box position="relative" zIndex={2}>
+        <Box position="relative" zIndex={2} minHeight={'100vh'}>
           {!isWarningVisible && (
             <BannerMessage bg="#F76B8B" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2}>
@@ -259,6 +260,7 @@ const HomePage = ({ meta, bg, cardImageNumber }: HomeProps) => {
             </Flex>
             <Footer />
           </Container>
+          {cookieBanner}
         </Box>
       </Box>
     </>
