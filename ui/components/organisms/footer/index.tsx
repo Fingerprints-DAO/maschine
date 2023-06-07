@@ -4,7 +4,11 @@ import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 import { Link } from '@chakra-ui/react'
 
-const Footer = () => {
+type FooterProps = {
+  isHome?: boolean
+}
+
+const Footer = ({ isHome = false }: FooterProps) => {
   return (
     <Box as="footer" py={[6, 4]} mt={[25]}>
       <Flex flexDir={'column'} mx="auto" mb={4}>
@@ -13,7 +17,7 @@ const Footer = () => {
             <Link
               href="/terms-and-conditions"
               fontSize={['xs', 'md']}
-              color="gray.400"
+              color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.400'}
               style={{ textDecoration: 'none' }}
               _hover={{ color: 'white' }}
               transition="ease"
@@ -26,7 +30,7 @@ const Footer = () => {
             <Link
               href="mailto:contact@fingerprintsdao.xyz"
               fontSize={['xs', 'md']}
-              color="gray.400"
+              color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.400'}
               style={{ textDecoration: 'none' }}
               _hover={{ color: 'white' }}
               transition="ease"
@@ -82,7 +86,15 @@ const Footer = () => {
           </Flex>
         </Flex>
 
-        <Text as={'div'} align={['center', 'center', 'left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
+        <Text
+          as={'div'}
+          align={['center', 'center', 'left']}
+          fontSize="xs"
+          color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.500'}
+          flex={1}
+          mb={[2, 0]}
+          mt={2}
+        >
           Developed by{' '}
           <Link
             href="https://fingerprintsdao.xyz/"

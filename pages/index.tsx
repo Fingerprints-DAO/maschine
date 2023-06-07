@@ -259,7 +259,7 @@ const HomePage = ({ meta, bg, cookieBanner }: HomeProps) => {
                 </Box>
               </Flex>
             </Flex>
-            <Footer />
+            <Footer isHome={true} />
           </Container>
           {cookieBanner}
         </Box>
