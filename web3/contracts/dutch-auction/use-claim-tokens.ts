@@ -15,7 +15,7 @@ const useClaimTokens = () => {
         const estimate = await dutchAuction.estimateGas.claimTokens(amount)
 
         // Set the gasLimit as estimatedGas * 1.2 (for 20% extra buffer)
-        gasLimit = estimate.mul(130).div(100)
+        gasLimit = estimate.mul(150).div(100)
       } catch (err) {
         console.log('Failed to estimate gas: ', err)
       }
