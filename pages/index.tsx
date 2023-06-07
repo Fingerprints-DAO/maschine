@@ -91,7 +91,8 @@ const HomePage = ({ meta, bg, cookieBanner }: HomeProps) => {
         bgPos="center"
         bgRepeat="no-repeat"
         w="full"
-        h={['full', 'full', 'full', 'unset']}
+        h={{ base: 'auto', md: 'unset' }}
+        backgroundAttachment={{ base: 'fixed', md: 'unset' }}
         position="relative"
         pt={`${limitBannerHeight}px`}
       >
@@ -294,7 +295,8 @@ export async function getServerSideProps() {
     props: {
       cardImageNumber,
       meta,
-      ...(process.env.NODE_ENV !== 'development' && { bg }),
+      // ...(process.env.NODE_ENV !== 'development' && { bg }),
+      ...{ bg },
     },
   }
 }

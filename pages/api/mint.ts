@@ -6,7 +6,6 @@ import { isAllowed } from './helpers/_ip'
 import { Address, readContracts } from 'wagmi'
 import './helpers/_wagmi-client'
 import { dutchAuctionContract } from '@web3/contracts/dutch-auction/use-dutch-auction'
-import { formatEther } from 'ethers/lib/utils.js'
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
