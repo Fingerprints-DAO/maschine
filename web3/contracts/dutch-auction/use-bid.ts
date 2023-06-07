@@ -14,7 +14,6 @@ const useBid = () => {
   const dutchAuction = useDutchAuction()
 
   const request = async ({ deadline, qty, signature, price }: Payload) => {
-    // Define gasLimit initially
     let gasLimit = BigNumberEthers.from(500000)
 
     if (dutchAuction) {
