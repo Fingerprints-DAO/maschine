@@ -18,7 +18,6 @@ const useBid = () => {
 
     if (dutchAuction) {
       try {
-        // Estimate the gas usage for your transaction
         const estimate = await dutchAuction.estimateGas.bid(qty, BigNumberEthers.from(deadline.toString()), signature, {
           value: ethers.utils.parseEther(price).mul(qty),
         })
