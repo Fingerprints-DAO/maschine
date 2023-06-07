@@ -22,7 +22,7 @@ const useGetCurrentPrice = () => {
   const { data: price, status } = useQuery(['current-price'], request, {
     enabled: Boolean(dutchAuction),
     cacheTime: 0,
-    refetchInterval: Interval.Timer,
+    refetchInterval: Interval.TotalSupply,
   })
 
   useEffect(() => {
