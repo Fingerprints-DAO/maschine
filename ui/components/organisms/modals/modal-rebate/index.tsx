@@ -12,7 +12,7 @@ import useClaimRefund from '@web3/contracts/dutch-auction/use-claim-refund'
 import theme from '@ui/base/theme'
 import { TransactionStatus } from 'types/transaction'
 import useTxToast from '@ui/hooks/use-tx-toast'
-import { formatBigNumberFloor, formatToEtherStringBN, normalizeBigNumber } from 'utils/price'
+import { formatBigNumberFloor, formatToEtherString, formatToEtherStringBN, normalizeBigNumber } from 'utils/price'
 import useGetLastPrice from '@web3/contracts/dutch-auction/use-get-last-price'
 
 const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
@@ -29,12 +29,16 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
     queryClient.resetQueries({ queryKey: ['user-data'] })
   }, [queryClient])
 
-  const contribution = useMemo(() => formatToEtherStringBN(userData?.contribution), [userData])
+  const tokensBidded = useMemo(() => userData?.tokensBidded ?? 0, [userData?.tokensBidded])
+  const contribution = useMemo(() => BigNumber(formatEther(userData?.contribution ?? 0)), [userData])
+
   const pendingRebate = useMemo(() => {
     const contributionBN = normalizeBigNumber(userData?.contribution)
-    const finalPrice = BigNumber(lastPriceInWei).multipliedBy(userData?.tokensBidded ?? '0')
-    return formatEther(contributionBN.minus(finalPrice).toString())
-  }, [lastPriceInWei, userData?.contribution, userData?.tokensBidded])
+    const finalPrice = BigNumber(lastPriceInWei).multipliedBy(tokensBidded)
+    const pendingBN = contributionBN.minus(finalPrice).toString()
+
+    return formatBigNumberFloor(formatToEtherString(pendingBN))
+  }, [lastPriceInWei, tokensBidded, userData?.contribution])
 
   const handleSubmit = useCallback(async () => {
     try {
@@ -94,11 +98,11 @@ const ModalRebate = ({ isOpen, onClose }: ModalProps) => {
                 You bought
               </Text>
               <Text color="gray.700" fontWeight="bold">
-                {userData?.tokensBidded ?? 0} NFTs{' '}
+                {tokensBidded} NFTs{' '}
                 <Text as="span" color="gray.500" fontWeight="normal">
                   per
                 </Text>{' '}
-                {contribution} ETH
+                {formatBigNumberFloor(contribution)} ETH
               </Text>
             </Box>
             <Box mb={8}>
