@@ -55,7 +55,7 @@ const MaschineContext = createContext(DEFAULT_CONTEXT)
 
 const getCurrentState = (startTime?: number, endTime?: number, currentSupply = 0, maxSupply = 0, refundDelayTime = 0) => {
   if (!startTime || !endTime) return AUCTION_STATE.NOT_STARTED
-  if (currentSupply >= maxSupply) return AUCTION_STATE.SOLD_OUT
+  if (currentSupply >= maxSupply) return AUCTION_STATE.REBATE_STARTED
 
   const now = dayjs()
   const refundStartTime = dayjs.unix(endTime + refundDelayTime)
