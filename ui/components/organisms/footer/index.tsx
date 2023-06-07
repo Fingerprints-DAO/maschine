@@ -49,7 +49,7 @@ const Footer = ({ isHome = false }: FooterProps) => {
               title="Twitter"
               target="_blank"
               p={2}
-              color="gray.500"
+              color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.500'}
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
@@ -62,7 +62,7 @@ const Footer = ({ isHome = false }: FooterProps) => {
               title="Discord"
               target="_blank"
               p={2}
-              color="gray.500"
+              color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.500'}
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
@@ -75,7 +75,7 @@ const Footer = ({ isHome = false }: FooterProps) => {
               title="OpenSea"
               target="_blank"
               p={2}
-              color="gray.500"
+              color={isHome ? 'rgba(255,255,255,0.5)' : 'gray.500'}
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
