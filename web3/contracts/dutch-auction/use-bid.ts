@@ -14,11 +14,24 @@ const useBid = () => {
   const dutchAuction = useDutchAuction()
 
   const request = async ({ deadline, qty, signature, price }: Payload) => {
-    // const gasPrice = (await dutchAuction?.provider.getGasPrice()) ?? BigNumber.from(0)
+    let gasLimit = BigNumberEthers.from(500000)
+
+    if (dutchAuction) {
+      try {
+        const estimate = await dutchAuction.estimateGas.bid(qty, BigNumberEthers.from(deadline.toString()), signature, {
+          value: ethers.utils.parseEther(price).mul(qty),
+        })
+
+        // Set the gasLimit as estimatedGas * 1.2 (for 20% extra buffer)
+        gasLimit = estimate.mul(130).div(100)
+      } catch (err) {
+        console.log('Failed to estimate gas: ', err)
+      }
+    }
 
     return dutchAuction?.bid?.(qty, BigNumberEthers.from(deadline.toString()), signature, {
       value: ethers.utils.parseEther(price).mul(qty),
-      // gasLimit: BigNumber.from(500000),
+      gasLimit: gasLimit,
     })
   }
 
