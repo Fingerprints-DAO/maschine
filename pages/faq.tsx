@@ -22,9 +22,19 @@ const questions = [
       "The collection will be sold in its entirety thourgh a live Dutch auction, a type of auction where the price of an item is gradually lowered over time until a buyer is found. In the context of NFTs, this means that the price of the NFTs auctioned will decrease over time during the auction period, and collectors will be able to acquire their pieces when the price reaches whatever level they're happy buying at.",
   },
   {
+    question: 'What will be the price?',
+    answer:
+      'The auction will have a starting price of 2ETH and a resting price of 0.2ETH and will end after 90 minutes, regardless of whether all the 1,000 NFTs are sold.',
+  },
+  {
+    question: 'What will happen if not all NFTs in the collection are minted during the auction?',
+    answer:
+      'If not all NFTs are minted after 90 minutes, the auction will end and the collection supply will be capped at whatever amount was minted during the auction.',
+  },
+  {
     question: 'Will there be a rebate?',
     answer:
-      'Yes, collectors will also be entitled to a rebate if the price they paid is larger than the final auction price. The rebate funds will be stored trustlessly in our mint smart contract, and the rebates will be able to be claimed directly from it through this website.',
+      'Yes, collectors will be entitled to a rebate if the price they paid is larger than the final auction price. The rebate funds will be stored trustlessly in our auction smart contract, and the rebates will be able to be claimed directly from it through this website.',
   },
   {
     question: 'How does the rebate work?',
@@ -33,12 +43,12 @@ const questions = [
   },
   {
     question: `Can I participate in the Dutch auction if I don't have a cryptocurrency wallet?`,
-    answer: 'No, you must have a cryptocurrency wallet to participate in the auction.',
+    answer: 'No, you must have a cryptocurrency wallet like Metamask to participate in the auction.',
   },
   {
     question: 'Is there a limit to the number of NFTs I can purchase?',
     answer:
-      'Yes, there is a total amount limit of US$10,000 per wallet for the NFT sale, thus there will also be a limit on the number of NFTs you can purchase. The specific quantity will depend on the latest price of the auction and the total quantity of NFTs still available for the sale.',
+      'Yes, there is a total amount limit of US$10,000 per wallet for the NFT sale, thus there will also be a limit on the number of NFTs you can purchase. The specific quantity will depend on the price of ETH, the latest price of the auction and the total quantity of NFTs still available for the sale.',
   },
   {
     question: 'Is the rebate automatically refunded to my cryptocurrency wallet?',
@@ -56,6 +66,10 @@ const questions = [
     question: 'Can anyone participate in the auction?',
     answer:
       'No, only collectors based in the following countries will be allowed to participate in the auction: Austria, Belgium, Brazil, Bulgaria, Croatia, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Japan, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Republic of Cyprus, Romania, Singapore, Slovakia, Slovenia, Spain, Sweden, United Kingdom, United States.',
+  },
+  {
+    question: 'Why is the auction limited to only these countries?',
+    answer: 'The jurisdictions were limited to allow Fingerprints to more easily comply with all tax obligations relevant to this drop.',
   },
 ]
 
@@ -87,7 +101,7 @@ const FaqPage = () => {
                     borderBottomWidth={!isLastChild ? 1 : 0}
                     key={index}
                   >
-                    <Text fontWeight={'bold'} fontSize="2xl" display="block" mb={4} color="gray.100">
+                    <Text as="strong" fontSize="2xl" display="block" mb={4} color="gray.100">
                       {item.question}
                     </Text>
                     <Text color="gray.300">{item.answer}</Text>

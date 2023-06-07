@@ -54,8 +54,8 @@ const AboutPage = () => {
                     blur. This creates an illusion called the stroboscopic effect, which distances our senses from reality.
                   </Text>
                   <Text>
-                    It's rare to observe it in nature due to the fast speeds involved, but with the advent of the machine age, the stroboscopic effect
-                    could be seen in car wheels, propellers, turbines and all sorts of engine-driven machines.
+                    While rarely observed in nature due to the high speeds involved, with the advent of the machine age, the stroboscopic effect can
+                    be seen in car wheels, propellers, turbines, and all sorts of engine-driven machines.
                   </Text>
                   <Text>
                     With rotating objects, depending on the ratio of the object's radial speed to your eyes' maximum frame rate, it will appear to
@@ -78,23 +78,21 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Maschine reproduces this illusion with a 3D WebGL script, which allows the image to be rendered natively in web browsers without
-                    the use of plug-ins. It also allows for very low-level control of 3D rendering.
+                    Maschine recreates this illusion with a 3D WebGL script, rendering the image natively in web browsers without the use of plug-ins,
+                    while also allowing for low-level control of the rendered animations.
                   </Text>
                   <Text>
-                    To be able to reproduce the stroboscopic effect, large media assets and libraries were coupled with the source code created by the
-                    artist.
-                  </Text>
-                  <Text>This produced the mesmerizing aesthetics in the final artwork, but made it too large for direct on-chain storage.</Text>
-                  <Text>
-                    As the pieces are generated, they are stored on IPFS and assigned to collectors in the collections' smart contract during the
-                    minting process.
+                    Large media assets and libraries were coupled with the source code created by the artist, producing the mesmerizing aesthetics in
+                    the final artwork.
                   </Text>
                   <Text>
                     Each piece is made unique through the randomization of a large number of aesthetic parameters, such as number of spokes, colors,
                     rotation speed and lighting effects.
                   </Text>
-                  <Text></Text>
+                  <Text>
+                    Too large for direct on-chain storage due to their complexity, they are stored on IPFS as they are generated and subsequently
+                    assigned to collectors in the collection’s smart contract during the minting process.
+                  </Text>
                 </Stack>
               </Box>
             </Box>
@@ -124,8 +122,9 @@ const AboutPage = () => {
                     Fingerprints DAO is the largest holder.
                   </Text>
                   <Text>
-                    He's had institutional exhibitions at Museum Kurhaus Kleve, the New Museum in New York, The Ullens Center for Contemporary Art in
-                    Beijing, China, the Museum of Modern Art, Warsaw, and the Netherlands Media Art Institute, Amsterdam.
+                    His work has been internationally exhibited at institutions including Museum Kurhaus Kleve, the New Museum in New York, the Ullens
+                    Center for Contemporary Art in Beijing, China, the Museum of Modern Art, Warsaw, and the Netherlands Media Art Institute,
+                    Amsterdam.
                   </Text>
                 </Stack>
               </Box>
@@ -144,8 +143,8 @@ const AboutPage = () => {
                 </Text>
                 <Stack spacing={3} color="gray.300" fontSize={['lg', 'lg', 'xl']} lineHeight="7">
                   <Text>
-                    Mercedes-Benz’s history spans more than 130 years. During this time, collectors have engaged with and enjoyed all kinds of
-                    physical objects, from the vehicles themselves to model cars and memorabilia.
+                    Mercedes-Benz’s history spans more than 130 years. Throughout this period, many of its products have become collectibles — from
+                    vehicles to model cars to memorabilia and more.
                   </Text>
                   <Text>
                     Having been born in the height of the machine age, the collection rhymes with the original Mercedes-Benz's vision for universal
@@ -178,13 +177,13 @@ const AboutPage = () => {
                     <Link isExternal color={'#6ECCDD'} href="https://fingerprintsdao.xyz">
                       Fingerprints
                     </Link>{' '}
-                    is an organization dedicated to collecting and supporting the best art built on top of blockchain technology.
+                    is an organization dedicated to collecting and supporting notable art built on top of blockchain technology.
                   </Text>
                   <Text>
                     Consisting of over 250 collectors, its open community manages a shared treasury and notable collection of NFT art assembled by its
                     curatorial committee.
                   </Text>
-                  <Text>Fingerprints and its community are glad to support the making and auctioning of this collection.</Text>
+                  <Text>Fingerprints and its community are excited to support the creation and auctioning of this collection.</Text>
                 </Stack>
               </Box>
             </Box>
