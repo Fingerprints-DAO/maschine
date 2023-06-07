@@ -100,11 +100,12 @@ const HomePage = ({ meta, bg, cookieBanner }: HomeProps) => {
           {!isWarningVisible && (
             <BannerMessage bg="#F76B8B" icon={HiOutlineLockClosed} onClose={handleCloseWarning}>
               <Text color="gray.900" fontSize="lg" fontWeight="bold" ml={2}>
-                It seems like you are not eligible to mint an Maschine NFT. Please{' '}
-                <Box as={Link} href="terms-and-conditions" textDecoration="underline">
-                  read our terms
-                </Box>{' '}
-                for more information.
+                It seems the country you're accessing our website from isn't eligible to participate in this auction. Please see the list of approved
+                countries in the following{' '}
+                <Link href="/faq#q-13" textDecoration="underline">
+                  link
+                </Link>
+                .
               </Text>
             </BannerMessage>
           )}
