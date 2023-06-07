@@ -100,6 +100,7 @@ const FaqPage = () => {
                     borderBottomColor="gray.700"
                     borderBottomWidth={!isLastChild ? 1 : 0}
                     key={index}
+                    id={`q-${index}`}
                   >
                     <Text as="strong" fontSize="2xl" display="block" mb={4} color="gray.100">
                       {item.question}

@@ -67,11 +67,12 @@ const NftCard = () => {
                 } ETH, and you cannot mint any more tokens at the moment. However, do keep a close watch on prices, and when they dip, utilize your rebate to mint more tokens.`
               ) : (
                 <>
-                  It seems like you are not eligible to mint an Maschine NFT. Please{' '}
-                  <Box as={Link} href="terms-and-conditions" textDecoration="underline">
-                    read our terms
-                  </Box>{' '}
-                  for more information.
+                  It seems the country you're accessing our website from isn't eligible to participate in this auction. Please see the list of
+                  approved countries in the following{' '}
+                  <Link href="/faq#q-13" textDecoration="underline">
+                    link
+                  </Link>
+                  .
                 </>
               )
             }
