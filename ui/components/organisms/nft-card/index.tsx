@@ -223,7 +223,7 @@ const NftCard = () => {
           {renderTimer}
         </Box>
         <Flex>
-          <Box flex={1} mr={'20px'}>
+          <Box flex={1} mr={{ base: '10px', sm: '20px' }}>
             <Text color="gray.400" mb={2}>
               NFTs minted
             </Text>
@@ -247,7 +247,7 @@ const NftCard = () => {
                 {` ETH`}
               </Text>
             </Skeleton>
-            <Text fontSize={['.8rem']} color="gray.100">
+            <Text fontSize={{ base: '.7rem', sm: '0.8rem' }} color="gray.100">
               Starting price: {formatEther(config?.startAmountInWei?.toString() ?? 0)} ETH
               <br />
               Resting price: {formatEther(config?.endAmountInWei?.toString() ?? 0)} ETH
