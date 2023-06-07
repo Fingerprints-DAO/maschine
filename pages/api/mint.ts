@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     console.log(locality)
     console.log(req.headers['x-real-ip'])
 
-    if (!(process.env.NODE_ENV === 'development') && (!isAllowed(country_name) || !regionName)) {
+    if (!(process.env.NODE_ENV === 'development') && !isAllowed(country_name)) {
       return res.status(400).json({
         success: false,
         message: 'Mint is not allowed in your country',
