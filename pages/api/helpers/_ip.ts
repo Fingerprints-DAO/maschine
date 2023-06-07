@@ -5,7 +5,7 @@ const ipdata = new IPData(process.env.IPDATA_API_KEY || '')
 // prettier-ignore
 const allowList = [
   'united states', 'us',
-  'united kingdom', 'uk',
+  'united kingdom', 'uk', 'gb',
   'austria', 'at',
   'belgium', 'be',
   'bulgaria', 'bg',
