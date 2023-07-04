@@ -34,7 +34,7 @@ export default function Home({ meta, bg, cookieBanner }: HomeProps) {
                 Maschine
               </Heading>
               <Text as="h2" fontSize={['xl', '2xl']} fontWeight="light" lineHeight="7">
-                Coming soon — a collection about velocity and perception.
+                A collection about velocity and perception.
               </Text>
             </Box>
             <Flex
