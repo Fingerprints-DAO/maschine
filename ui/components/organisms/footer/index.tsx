@@ -70,7 +70,7 @@ const Footer = () => {
             </Box>
             <Box
               as="a"
-              href="https://opensea.io/0xbc49de68bcbd164574847a7ced47e7475179c76b"
+              href="https://opensea.io/collection/maschine"
               title="OpenSea"
               target="_blank"
               p={2}
