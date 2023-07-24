@@ -8,13 +8,13 @@ const Footer = () => {
   return (
     <Box as="footer" py={[6, 4]} mt={[25]}>
       <Flex flexDir={'column'} mx="auto" mb={4}>
-        <Flex alignItems={['center','center','end']} flexDir={['column','row']} justifyContent={['space-between']}>
+        <Flex alignItems={['center', 'center', 'end']} flexDir={['column', 'row']} justifyContent={['space-between']}>
           <Box>
             <Box
               as={Link}
               href="/terms-and-conditions"
               fontSize={['xs', 'md']}
-              color="gray.400"
+              color="whiteAlpha.800"
               style={{ textDecoration: 'none' }}
               _hover={{ color: 'white' }}
               transition="ease"
@@ -27,7 +27,7 @@ const Footer = () => {
               as={Link}
               href="mailto:contact@fingerprintsdao.xyz"
               fontSize={['xs', 'md']}
-              color="gray.400"
+              color="whiteAlpha.800"
               style={{ textDecoration: 'none' }}
               _hover={{ color: 'white' }}
               transition="ease"
@@ -46,7 +46,7 @@ const Footer = () => {
               title="Twitter"
               target="_blank"
               p={2}
-              color="gray.500"
+              color="whiteAlpha.900"
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
@@ -60,7 +60,7 @@ const Footer = () => {
               title="Discord"
               target="_blank"
               p={2}
-              color="gray.500"
+              color="whiteAlpha.900"
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
@@ -74,7 +74,7 @@ const Footer = () => {
               title="OpenSea"
               target="_blank"
               p={2}
-              color="gray.500"
+              color="whiteAlpha.900"
               _hover={{ color: 'white' }}
               transition="ease"
               transitionProperty="color"
@@ -85,7 +85,7 @@ const Footer = () => {
           </Flex>
         </Flex>
 
-        <Text align={['center','center','left']} fontSize="xs" color="gray.500" flex={1} mb={[2, 0]} mt={2}>
+        <Text align={['center', 'center', 'left']} fontSize="xs" color="whiteAlpha.600" flex={1} mb={[2, 0]} mt={2}>
           Developed by{' '}
           <Text
             as="a"

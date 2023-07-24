@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Box, Container, Flex, Heading, Text } from '@chakra-ui/react'
 import Header from '@ui/components/organisms/header'
+import Footer from '@ui/components/organisms/footer'
 import Image from 'next/image'
 import logoMercedes from 'public/images/logo-nxt.svg'
 import logoHarmStudio from 'public/images/logo-harm-studio.svg'
@@ -38,10 +39,12 @@ export default function Home({ meta, bg, cookieBanner }: HomeProps) {
               </Text>
             </Box>
             <Flex
+              id='123'
               alignItems={['unset', 'unset', 'unset', 'unset', 'center']}
               justifyContent={['unset', 'unset', 'unset', 'unset', 'space-between']}
               flexDir={['column', 'column', 'column', 'column', 'row']}
               mb={[0, 0, 0, 0, 6]}
+              mt="auto"
             >
               <Text fontSize={['lg', 'xl', '2xl']} fontWeight="light" lineHeight="7" mb={[4, 4, 4, 4, 0]}>
                 By Harm van den Dorpel, in collaboration with Mercedes-Benz and Fingerprints DAO.
@@ -55,6 +58,7 @@ export default function Home({ meta, bg, cookieBanner }: HomeProps) {
                 </Box>
               </Flex>
             </Flex>
+            <Footer/>
           </Container>
           {cookieBanner}
         </Flex>
